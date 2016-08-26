@@ -67,87 +67,91 @@
     </small>
   </p> <hr/>
   <div class="post">
-    <h1>Samples</h1>
+    <h1 id="samples">Samples</h1>
 
-<h1>Heading 1</h1>
+<h1 id="heading-1">Heading 1</h1>
 
-<h2>Heading 2</h2>
+<h2 id="heading-2">Heading 2</h2>
 
-<h3>Heading 3</h3>
+<h3 id="heading-3">Heading 3</h3>
 
-<h4>Heading 4</h4>
+<h4 id="heading-4">Heading 4</h4>
 
-<h5>Heading 5</h5>
+<h5 id="heading-5">Heading 5</h5>
 
-<h6>Heading 6</h6>
+<h6 id="heading-6">Heading 6</h6>
 
-<h3>Body text</h3>
+<h3 id="body-text">Body text</h3>
 
 <p><strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Quisque tempus nunc diam, non dignissim risus tincidunt a. Curabitur consequat justo vitae ipsum accumsan tempor. Quisque rhoncus eleifend ante vitae ultricies. Pellentesque suscipit nisl ut metus tincidunt, vulputate sodales dui commodo. Sed eget sapien varius, lacinia lectus nec, tempor dolor. Pellentesque sed mattis magna. Curabitur ut tristique turpis. Morbi sagittis dolor suscipit urna placerat, consectetur venenatis sapien viverra. Mauris vitae felis et sem venenatis cursus.</p>
 
-<p><img src="/herring-cove/images/cc.jpg" alt="Image"></p>
+<p><img src="/herring-cove/images/cc.jpg" alt="Image" /></p>
 
 <p>Donec ornare turpis non ullamcorper pulvinar. <em>Integer ut mauris vehicula mauris posuere adipiscing.</em> Phasellus dictum cursus convallis. Sed dapibus laoreet porttitor.</p>
 
-<h3>Blockquotes</h3>
+<h3 id="blockquotes">Blockquotes</h3>
 
 <blockquote>
-<p>Fusce non eleifend nisi. Donec pharetra sed ipsum sit amet sollicitudin. Duis dolor ante, gravida varius neque eget, semper commodo libero. In euismod tempor lobortis. Nulla eget lectus nec enim mattis aliquet a sit amet est.</p>
+  <p>Fusce non eleifend nisi. Donec pharetra sed ipsum sit amet sollicitudin. Duis dolor ante, gravida varius neque eget, semper commodo libero. In euismod tempor lobortis. Nulla eget lectus nec enim mattis aliquet a sit amet est.</p>
 </blockquote>
 
-<h2>List Types</h2>
+<h2 id="list-types">List Types</h2>
 
-<h3>Lists</h3>
-
-<ol>
-<li>Item One
+<h3 id="lists">Lists</h3>
 
 <ol>
-<li>sub one</li>
-<li>sub two</li>
-<li>sub three</li>
-</ol></li>
-<li>Item Two</li>
+  <li>Item One
+    <ol>
+      <li>sub one</li>
+      <li>sub two</li>
+      <li>sub three</li>
+    </ol>
+  </li>
+  <li>Item Two</li>
 </ol>
 
 <ul>
-<li>Uno</li>
-<li>Dos</li>
-<li>Tres</li>
+  <li>Uno</li>
+  <li>Dos</li>
+  <li>Tres</li>
 </ul>
 
-<h2>Table</h2>
+<h2 id="table">Table</h2>
 
-<table><thead>
-<tr>
-<th>Tables</th>
-<th style="text-align: center">Are</th>
-<th style="text-align: right">Cool</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>col 3 is</td>
-<td style="text-align: center">right-aligned</td>
-<td style="text-align: right">$1600</td>
-</tr>
-<tr>
-<td>col 2 is</td>
-<td style="text-align: center">centered</td>
-<td style="text-align: right">$12</td>
-</tr>
-<tr>
-<td>zebra stripes</td>
-<td style="text-align: center">are neat</td>
-<td style="text-align: right">$1</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>Tables</th>
+      <th style="text-align: center">Are</th>
+      <th style="text-align: right">Cool</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>col 3 is</td>
+      <td style="text-align: center">right-aligned</td>
+      <td style="text-align: right">$1600</td>
+    </tr>
+    <tr>
+      <td>col 2 is</td>
+      <td style="text-align: center">centered</td>
+      <td style="text-align: right">$12</td>
+    </tr>
+    <tr>
+      <td>zebra stripes</td>
+      <td style="text-align: center">are neat</td>
+      <td style="text-align: right">$1</td>
+    </tr>
+  </tbody>
+</table>
 
-<h2>Code</h2>
+<h2 id="code">Code</h2>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">node</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="nb">next</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="nb">next</span></code></pre></figure>
+
 
   </div>
 </div>
@@ -193,7 +197,7 @@
     <p class="text-muted credit">
       &copy; 2016 Herring Cove &middot;
       <a href="https://github.com/arnp/herring-cove"> Herring Cove for Jekyll </a>
-      2016-08-26 22:23:40 +0800
+      2016-08-26 22:34:07 +0800
     </p>
   </footer>
 </div>
