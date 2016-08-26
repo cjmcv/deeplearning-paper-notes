@@ -14,7 +14,7 @@ disqus: diqus-username
 
 
 highlighter: pygments
-markdown: redcarpet
+#markdown: redcarpet
 redcarpet:
   extensions: ["tables"]
 
