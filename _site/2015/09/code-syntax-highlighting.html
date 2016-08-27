@@ -1,0 +1,257 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Blog Name</title>
+  <meta name="theme-color" content="#222222" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="http://streetturtle.github.io/jekyll-clean-dark/js/jquery.min.js"></script>
+  <script src="http://streetturtle.github.io/jekyll-clean-dark/js/bootstrap.min.js"></script>
+  <script src="http://streetturtle.github.io/jekyll-clean-dark/js/header.js"></script>
+  <script src="http://streetturtle.github.io/jekyll-clean-dark/js/toc.js"></script>
+  <link href="http://streetturtle.github.io/jekyll-clean-dark/css/bootstrap.min.css" rel="stylesheet">
+  <link href="http://streetturtle.github.io/jekyll-clean-dark/css/theme.css" rel="stylesheet">
+  <link href="http://streetturtle.github.io/jekyll-clean-dark/css/syntax.css" rel="stylesheet">
+  <link href="http://streetturtle.github.io/jekyll-clean-dark/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+  
+
+  
+
+
+ <script type="text/javascript">
+  WebFontConfig = {
+    google: {
+      families: ['Ubuntu::latin']
+    }
+  };
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+  })();
+</script>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://streetturtle.github.io/jekyll-clean-dark/">Blog Name</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="http://streetturtle.github.io/jekyll-clean-dark/">/home</a></li>
+          <li><a href="http://streetturtle.github.io/jekyll-clean-dark/archive.html">/archive</a></li>
+          <li><a href="http://streetturtle.github.io/jekyll-clean-dark/tags.html">/tags</a></li>
+          <li><a href="http://streetturtle.github.io/jekyll-clean-dark/about.html">/about</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+<div class="wrapper">
+  <div class="content">
+    <div class="container container-center">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="article">
+            <div class="well">
+              <h1><a href="http://streetturtle.github.io/jekyll-clean-dark/2015/09/code-syntax-highlighting">Sample post with code snippets</a></h1>
+              <div class="post-meta">
+                <div class="post-time">
+                  <i class="fa fa-calendar"></i>
+                  <time>02 Sep 2015</time>
+                </div>
+                <ul>
+                  
+                    <li><a href="http://streetturtle.github.io/jekyll-clean-dark/tag/code">code</a></li>
+                  
+                    <li><a href="http://streetturtle.github.io/jekyll-clean-dark/tag/jekyll">jekyll</a></li>
+                  
+                </ul>
+              </div>
+              <div class="post-content">
+                <div id="toc" class="toc"></div>
+                <h2 id="introduction">Introduction</h2>
+
+<p>For code syntax coloration I’m using Darcula theme from Intellij IDEA, which I’ve found in this post <a href="http://smasue.github.io/pygments-darcula/">Darcula theme for Pygments</a>.</p>
+
+<p>XML with line numbers (linenos flag), <code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">highlight</span><span class="w"> </span><span class="err">xml</span><span class="w"> </span><span class="err">linenos</span><span class="w"> </span><span class="err">%</span><span class="p">}</span></code>:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></td><td class="code"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;rss</span> <span class="na">version=</span><span class="s">"2.0"</span> <span class="na">xmlns:atom=</span><span class="s">"http://www.w3.org/2005/Atom"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;channel&gt;</span>
+    <span class="nt">&lt;title&gt;</span>{{ site.name }}<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;description&gt;</span>{{ site.description }}<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;link&gt;</span>{{site.baseurl | prepend:site.url}}<span class="nt">&lt;/link&gt;</span>
+    <span class="nt">&lt;atom:link</span> <span class="na">href=</span><span class="s">"{{site.baseurl | prepend:site.url}}/feed.xml"</span> <span class="na">rel=</span><span class="s">"self"</span> <span class="na">type=</span><span class="s">"application/rss+xml"</span> <span class="nt">/&gt;</span>
+    {% for post in site.posts limit:10 %}
+      <span class="nt">&lt;item&gt;</span>
+        <span class="nt">&lt;title&gt;</span>{{ post.title }}<span class="nt">&lt;/title&gt;</span>
+        <span class="nt">&lt;description&gt;</span>{{ post.content | xml_escape }}<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;pubDate&gt;</span>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}<span class="nt">&lt;/pubDate&gt;</span>
+        <span class="nt">&lt;link&gt;</span>{{post.url | prepend:site.baseurl | prepend:site.url}}<span class="nt">&lt;/link&gt;</span>
+        <span class="nt">&lt;guid</span> <span class="na">isPermaLink=</span><span class="s">"true"</span><span class="nt">&gt;</span>{{post.url | prepend:site.baseurl | prepend:site.url}}<span class="nt">&lt;/guid&gt;</span>
+      <span class="nt">&lt;/item&gt;</span>
+    {% endfor %}
+  <span class="nt">&lt;/channel&gt;</span>
+<span class="nt">&lt;/rss&gt;</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></figure>
+
+<p>JSON:</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="nt">"employees"</span><span class="p">:[</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"firstName"</span><span class="p">:</span><span class="s2">"John"</span><span class="p">,</span><span class="w"> </span><span class="nt">"lastName"</span><span class="p">:</span><span class="s2">"Doe"</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"firstName"</span><span class="p">:</span><span class="s2">"Anna"</span><span class="p">,</span><span class="w"> </span><span class="nt">"lastName"</span><span class="p">:</span><span class="s2">"Smith"</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"firstName"</span><span class="p">:</span><span class="s2">"Peter"</span><span class="p">,</span><span class="w"> </span><span class="nt">"lastName"</span><span class="p">:</span><span class="s2">"Jones"</span><span class="p">}</span><span class="w">
+</span><span class="p">]}</span></code></pre></figure>
+
+<p>SQL:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm_content_nodes</span>
+<span class="k">from</span> <span class="n">alf_node</span> <span class="n">nd</span><span class="p">,</span> <span class="n">alf_qname</span> <span class="n">qn</span><span class="p">,</span> <span class="n">alf_namespace</span> <span class="n">ns</span>
+<span class="k">where</span> <span class="n">qn</span><span class="p">.</span><span class="n">ns_id</span> <span class="o">=</span> <span class="n">ns</span><span class="p">.</span><span class="n">id</span>
+  <span class="k">and</span> <span class="n">nd</span><span class="p">.</span><span class="n">type_qname_id</span> <span class="o">=</span> <span class="n">qn</span><span class="p">.</span><span class="n">id</span>
+  <span class="k">and</span> <span class="n">ns</span><span class="p">.</span><span class="n">uri</span> <span class="o">=</span> <span class="s1">'http://www.alfresco.org/model/content/1.0'</span>
+  <span class="k">and</span> <span class="n">qn</span><span class="p">.</span><span class="n">local_name</span> <span class="o">=</span> <span class="s1">'content'</span><span class="p">;</span></code></pre></figure>
+
+<p>Java:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="n">String</span> <span class="nf">getToken</span><span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">UnsupportedEncodingException</span><span class="o">{</span>
+  <span class="n">Cookie</span><span class="o">[]</span> <span class="n">cookies</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">getState</span><span class="o">().</span><span class="na">getCookies</span><span class="o">();</span>
+  <span class="k">for</span> <span class="o">(</span><span class="n">Cookie</span> <span class="n">cookie</span> <span class="o">:</span> <span class="n">cookies</span><span class="o">){</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">cookie</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"Alfresco-CSRFToken"</span><span class="o">)){</span>
+      <span class="k">return</span> <span class="n">URLDecoder</span><span class="o">.</span><span class="na">decode</span><span class="o">(</span><span class="n">cookie</span><span class="o">.</span><span class="na">getValue</span><span class="o">(),</span> <span class="s">"UTF-8"</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">}</span></code></pre></figure>
+
+                
+
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-xs">
+          <div class="sidebar ">
+  <h2>Recent Posts</h2>
+  <ul>
+    
+    <li><a href="/jekyll-clean-dark/2016/05/share-buttons">Share buttons</a></li>
+    
+    <li><a href="/jekyll-clean-dark/2015/12/jekyll-clean-theme">Jekyll Dark Clean Theme</a></li>
+    
+    <li><a href="/jekyll-clean-dark/2015/11/text-formatting">Text formatting</a></li>
+    
+    <li><a href="/jekyll-clean-dark/2015/11/installation">Installation</a></li>
+    
+    <li><a href="/jekyll-clean-dark/2015/10/images">Images</a></li>
+    
+  </ul>
+</div>
+
+<div class="sidebar">
+  <h2>Tags</h2>
+  <ul>
+    
+      <li><a href="/jekyll-clean-dark/tag/jekyll">jekyll</a></li>
+    
+      <li><a href="/jekyll-clean-dark/tag/analytics">analytics</a></li>
+    
+      <li><a href="/jekyll-clean-dark/tag/tags">tags</a></li>
+    
+      <li><a href="/jekyll-clean-dark/tag/comments">comments</a></li>
+    
+      <li><a href="/jekyll-clean-dark/tag/code">code</a></li>
+    
+      <li><a href="/jekyll-clean-dark/tag/images">images</a></li>
+    
+  </ul>
+</div>
+
+        </div>
+      </div>
+    </div>
+    
+
+  </div>
+      <footer class="footer-distributed">
+      <div class="container">
+        <div class="footer">
+          <p>Pavel Makhov &copy; 2015</p>
+          <h6>Follow me</h6>
+
+<ul class="social-media">
+
+  
+    <li>
+      <a title="streetturtle on Github" href="https://github.com/streetturtle" target="_blank"><i class="fa fa-github fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title=" on StackOverflow" href="http://stackoverflow.com/users/" target="_blank"><i class="fa fa-stack-overflow fa-2x"></i></a>
+    </li>
+  
+
+  
+
+  
+    <li>
+      <a title=" on Instagram" href="https://instagram.com/" target="_blank"><i class="fa fa-instagram fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title=" on Last.fm" href="http://lastfm.com/user/" target="_blank"><i class="fa fa-lastfm fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title="feed.xml RSS" href="/jekyll-clean-dark/feed.xml" target="_blank"><i class="fa fa-rss fa-2x"></i></a>
+    </li>
+  
+
+</ul>
+
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+</div>

@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Blog Name</title>
+		<description>Software Developer</description>
+		<link>http://streetturtle.github.io/jekyll-clean-dark</link>
+		<atom:link href="http://streetturtle.github.io/jekyll-clean-dark/feed.xml" rel="self" type="application/rss+xml" />
+		
+			<item>
+				<title>Share buttons</title>
+				<description>&lt;h1 id=&quot;share-buttons&quot;&gt;Share buttons&lt;/h1&gt;
+
+&lt;p&gt;This theme comes with built-in share buttons. You can see them in the bottom f this post.&lt;br /&gt;
+To turn them on in the header of your post add:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yml&quot; data-lang=&quot;yml&quot;&gt;&lt;span class=&quot;s&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If you want to disable some of them - go to &lt;strong&gt;_config.yml&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yml&quot; data-lang=&quot;yml&quot;&gt;&lt;span class=&quot;s&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;facebook&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;twitter&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;gplus&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;linkedin&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;pinterest&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;add-new-buttons&quot;&gt;Add new buttons&lt;/h1&gt;
+
+&lt;p&gt;To add new buttons:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;add icon name in &lt;strong&gt;_config.yml&lt;/strong&gt;;&lt;/li&gt;
+  &lt;li&gt;add section in &lt;strong&gt;_includes/share.html&lt;/strong&gt;;&lt;/li&gt;
+  &lt;li&gt;add styles in &lt;strong&gt;css/theme.css&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+				<pubDate>Mon, 16 May 2016 00:25:06 +0800</pubDate>
+				<link>http://streetturtle.github.io/jekyll-clean-dark/2016/05/share-buttons</link>
+				<guid isPermaLink="true">http://streetturtle.github.io/jekyll-clean-dark/2016/05/share-buttons</guid>
+			</item>
+		
+			<item>
+				<title>Jekyll Dark Clean Theme</title>
+				<description>&lt;p&gt;Here is a sample post for Jekyll-Clean-Dark theme.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Get it from &lt;a href=&quot;https://github.com/streetturtle/jekyll-clean-dark&quot;&gt;github&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;See the &lt;a href=&quot;http://pavelmakhov.com/jekyll-clean-dark&quot;&gt;live demo&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;See it &lt;a href=&quot;http://pavelmakhov.com&quot;&gt;in action on my blog&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This theme was created on top of &lt;a href=&quot;https://scotte.github.io&quot;&gt;Jekyll Clean theme&lt;/a&gt; by Scotte.&lt;/p&gt;
+
+&lt;p&gt;This theme uses some parts of Twitter Bootstrap, which allows it looks nice on a mobile devices using a collapsable nav bar and hiding the sidebar.&lt;/p&gt;
+
+&lt;p&gt;Here how it looks like on some portable devices:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://streetturtle.github.io/jekyll-clean-dark/images/iphone_portrait.PNG&quot; alt=&quot;My helpful screenshot&quot; class=&quot;center-image&quot; /&gt;&lt;em&gt;iPhone 5 portrait&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://streetturtle.github.io/jekyll-clean-dark/images/iphone_landscape.PNG&quot; alt=&quot;My helpful screenshot&quot; class=&quot;center-image&quot; /&gt;&lt;em&gt;iPhone 5 landscape&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://streetturtle.github.io/jekyll-clean-dark/images/ipad_portrait.PNG&quot; alt=&quot;My helpful screenshot&quot; class=&quot;center-image&quot; /&gt;&lt;em&gt;iPad mini portrait&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://streetturtle.github.io/jekyll-clean-dark/images/ipad_landscape.PNG&quot; alt=&quot;My helpful screenshot&quot; class=&quot;center-image&quot; /&gt;&lt;em&gt;iPad mini landscape&lt;/em&gt;&lt;/p&gt;
+</description>
+				<pubDate>Wed, 02 Dec 2015 00:25:06 +0800</pubDate>
+				<link>http://streetturtle.github.io/jekyll-clean-dark/2015/12/jekyll-clean-theme</link>
+				<guid isPermaLink="true">http://streetturtle.github.io/jekyll-clean-dark/2015/12/jekyll-clean-theme</guid>
+			</item>
+		
+			<item>
+				<title>Text formatting</title>
+				<description>&lt;p&gt;Some examples of text formating for some common text elements.&lt;/p&gt;
+
+&lt;h1 id=&quot;headers&quot;&gt;Headers&lt;/h1&gt;
+
+&lt;h1 id=&quot;header1&quot;&gt;Header1&lt;/h1&gt;
+
+&lt;h2 id=&quot;header2&quot;&gt;Header2&lt;/h2&gt;
+
+&lt;h3 id=&quot;header3&quot;&gt;Header3&lt;/h3&gt;
+
+&lt;h4 id=&quot;header4&quot;&gt;Header4&lt;/h4&gt;
+
+&lt;h1 id=&quot;emphasis&quot;&gt;Emphasis&lt;/h1&gt;
+
+&lt;p&gt;Italics: &lt;code class=&quot;highlighter-rouge&quot;&gt;*asterisks*&lt;/code&gt; -&amp;gt; &lt;em&gt;asterisks&lt;/em&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;_underscores_&lt;/code&gt; -&amp;gt; &lt;em&gt;underscores&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Bold: &lt;code class=&quot;highlighter-rouge&quot;&gt;**asterisks**&lt;/code&gt; -&amp;gt; &lt;strong&gt;asterisks&lt;/strong&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;__underscores__&lt;/code&gt; -&amp;gt; &lt;strong&gt;underscores&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;You also can combine them: &lt;code class=&quot;highlighter-rouge&quot;&gt;**asterisks and _underscores_**&lt;/code&gt; -&amp;gt; &lt;strong&gt;asterisks and &lt;em&gt;underscores&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h1 id=&quot;blockquotes-and-notes&quot;&gt;Blockquotes and notes&lt;/h1&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&amp;gt;Blockquotes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Blockquotes&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Using very cool &lt;a href=&quot;http://kramdown.gettalong.org/quickref.html#block-attributes&quot;&gt;feature&lt;/a&gt; of kramdown which allows to assign any attribute to a block-level element I’ve added note and warning:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&amp;gt;Note 
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;: .note&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;blockquote class=&quot;note&quot;&gt;
+  &lt;p&gt;Note&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&amp;gt;Warning 
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;: .note .warning&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;blockquote class=&quot;note warning&quot;&gt;
+  &lt;p&gt;Warning&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;keyboard-buttons&quot;&gt;Keyboard buttons&lt;/h1&gt;
+
+&lt;p&gt;In case you need to show some keyboard shortcut like &lt;code class=&quot;key highlighter-rouge&quot;&gt;Ctrl&lt;/code&gt;+&lt;code class=&quot;key highlighter-rouge&quot;&gt;A&lt;/code&gt; use following construction:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;Ctrl&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;: .key&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;+&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;A&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;:.key&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Example of keyboard shortcut in terminal:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;key highlighter-rouge&quot;&gt;Ctrl&lt;/code&gt; + &lt;code class=&quot;key highlighter-rouge&quot;&gt;A&lt;/code&gt; = Move cursor to beginning of line&lt;br /&gt;
+&lt;code class=&quot;key highlighter-rouge&quot;&gt;Ctrl&lt;/code&gt; + &lt;code class=&quot;key highlighter-rouge&quot;&gt;E&lt;/code&gt; = Move cursor to end of line&lt;br /&gt;
+&lt;code class=&quot;key highlighter-rouge&quot;&gt;Ctrl&lt;/code&gt; + &lt;code class=&quot;key highlighter-rouge&quot;&gt;C&lt;/code&gt; = kills the current process.&lt;br /&gt;
+&lt;code class=&quot;key highlighter-rouge&quot;&gt;Ctrl&lt;/code&gt; + &lt;code class=&quot;key highlighter-rouge&quot;&gt;Z&lt;/code&gt; = sends the current process to the background.&lt;br /&gt;
+&lt;code class=&quot;key highlighter-rouge&quot;&gt;Ctrl&lt;/code&gt; + &lt;code class=&quot;key highlighter-rouge&quot;&gt;D&lt;/code&gt; = logs you out.&lt;br /&gt;
+&lt;code class=&quot;key highlighter-rouge&quot;&gt;Ctrl&lt;/code&gt; + &lt;code class=&quot;key highlighter-rouge&quot;&gt;R&lt;/code&gt; = finds the last command matching the entered letters.&lt;/p&gt;
+</description>
+				<pubDate>Tue, 03 Nov 2015 00:25:06 +0800</pubDate>
+				<link>http://streetturtle.github.io/jekyll-clean-dark/2015/11/text-formatting</link>
+				<guid isPermaLink="true">http://streetturtle.github.io/jekyll-clean-dark/2015/11/text-formatting</guid>
+			</item>
+		
+			<item>
+				<title>Installation</title>
+				<description>&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;If you dont’t have your own blog you can clone this repository and put your articles in a &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; folder.&lt;br /&gt;
+If you already have your own blog then I think you can clone this repository and copy-paste content keeping your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; folder.&lt;/p&gt;
+
+&lt;p&gt;After you will have to set up your &lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
+
+&lt;p&gt;The content of this theme is distributed and licensed under a &lt;a href=&quot;https://creativecommons.org/licenses/by/4.0/legalcode&quot;&gt;Creative Commons Attribution 4.0 License&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;This license lets others distribute, remix, tweak, and build upon your work,&lt;br /&gt;
+even commercially, as long as they credit you for the original creation. This&lt;br /&gt;
+is the most accommodating of licenses offered. Recommended for maximum&lt;br /&gt;
+dissemination and use of licensed materials.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;In other words: you can do anything you want with this theme on any site, just please&lt;br /&gt;
+provide a link to the original theme on github.&lt;/p&gt;
+
+&lt;p&gt;This theme includes the following files which are the properties of their&lt;br /&gt;
+respective owners:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;js/bootstrap.min.js - &lt;a href=&quot;http://getbootstrap.com&quot;&gt;bootstrap&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;css/bootstrap.min.css - &lt;a href=&quot;http://getbootstrap.com&quot;&gt;bootstrap&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;js/jquery.min.js - &lt;a href=&quot;https://jquery.com&quot;&gt;jquery&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<pubDate>Mon, 02 Nov 2015 00:25:06 +0800</pubDate>
+				<link>http://streetturtle.github.io/jekyll-clean-dark/2015/11/installation</link>
+				<guid isPermaLink="true">http://streetturtle.github.io/jekyll-clean-dark/2015/11/installation</guid>
+			</item>
+		
+			<item>
+				<title>Images</title>
+				<description>&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;This theme supports two types of images:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;inline images: &lt;img src=&quot;http://streetturtle.github.io/jekyll-clean-dark/images/batWid1.png&quot; alt=&quot;Battery Widget&quot; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;![Battery Widget]({{ site.url | append:site.baseurl }}/images/batWid1.png)&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;centered images with caption (optionally):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://streetturtle.github.io/jekyll-clean-dark/images/iphone_landscape.PNG&quot; alt=&quot;screenshot&quot; class=&quot;center-image&quot; /&gt;&lt;em&gt;iPhone 5 landscape&lt;/em&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;![screenshot]({{ site.baseurl | prepend:site.url}}/images/iphone_landscape.PNG){: .center-image }*iPhone 5 landscape*&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;You can apply your own styles to image by creating css class with style:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-css&quot; data-lang=&quot;css&quot;&gt;&lt;span class=&quot;nc&quot;&gt;.custom-image&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;your&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;style&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And then applying your style just after the image in curly brackets with colon:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;[!image](path to image){:.custom-image}
+ &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+</description>
+				<pubDate>Fri, 02 Oct 2015 00:25:06 +0800</pubDate>
+				<link>http://streetturtle.github.io/jekyll-clean-dark/2015/10/images</link>
+				<guid isPermaLink="true">http://streetturtle.github.io/jekyll-clean-dark/2015/10/images</guid>
+			</item>
+		
+			<item>
+				<title>Sample post with code snippets</title>
+				<description>&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;For code syntax coloration I’m using Darcula theme from Intellij IDEA, which I’ve found in this post &lt;a href=&quot;http://smasue.github.io/pygments-darcula/&quot;&gt;Darcula theme for Pygments&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;XML with line numbers (linenos flag), &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;highlight&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;linenos&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;table style=&quot;border-spacing: 0&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot; style=&quot;text-align: right&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;rss&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;version=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2.0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:atom=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2005/Atom&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;channel&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;{{ site.name }}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;{{ site.description }}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;link&amp;gt;&lt;/span&gt;{{site.baseurl | prepend:site.url}}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/link&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;atom:link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{{site.baseurl | prepend:site.url}}/feed.xml&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;self&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;application/rss+xml&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    {% for post in site.posts limit:10 %}
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;item&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;{{ post.title }}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;{{ post.content | xml_escape }}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;pubDate&amp;gt;&lt;/span&gt;{{ post.date | date: &quot;%a, %d %b %Y %H:%M:%S %z&quot; }}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pubDate&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;link&amp;gt;&lt;/span&gt;{{post.url | prepend:site.baseurl | prepend:site.url}}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/link&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;guid&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;isPermaLink=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;{{post.url | prepend:site.baseurl | prepend:site.url}}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/guid&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    {% endfor %}
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/channel&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/rss&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;JSON:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;employees&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;firstName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;John&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;lastName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Doe&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;firstName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Anna&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;lastName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Smith&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;firstName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Peter&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;lastName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Jones&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;SQL:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cm_content_nodes&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alf_node&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alf_qname&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;qn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alf_namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ns&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;qn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ns_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type_qname_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;qn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uri&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;http://www.alfresco.org/model/content/1.0&#39;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;qn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;local_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;content&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Java:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpClient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UnsupportedEncodingException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;Cookie&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cookies&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCookies&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Cookie&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cookie&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cookies&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cookie&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Alfresco-CSRFToken&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;URLDecoder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;decode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cookie&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+</description>
+				<pubDate>Wed, 02 Sep 2015 00:25:06 +0800</pubDate>
+				<link>http://streetturtle.github.io/jekyll-clean-dark/2015/09/code-syntax-highlighting</link>
+				<guid isPermaLink="true">http://streetturtle.github.io/jekyll-clean-dark/2015/09/code-syntax-highlighting</guid>
+			</item>
+		
+			<item>
+				<title>Analytics, tags and comments</title>
+				<description>&lt;h2 id=&quot;analytics&quot;&gt;Analytics&lt;/h2&gt;
+
+&lt;h4 id=&quot;google-analyticshttpwwwgooglecomanalytics&quot;&gt;&lt;a href=&quot;http://www.google.com/analytics/&quot;&gt;Google Analytics&lt;/a&gt;&lt;/h4&gt;
+
+&lt;p&gt;To enable Google Analytics create an account &lt;a href=&quot;https://analytics.google.com&quot;&gt;here&lt;/a&gt;. Then add your tracking id in &lt;code class=&quot;highlighter-rouge&quot;&gt;config.xml&lt;/code&gt;, it should look something like &lt;code class=&quot;highlighter-rouge&quot;&gt;UA-********-1&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;yandex-metricahttpmetricayandexcom&quot;&gt;&lt;a href=&quot;http://metrica.yandex.com&quot;&gt;Yandex Metrica&lt;/a&gt;&lt;/h4&gt;
+
+&lt;p&gt;To enable Yandex Metrica you need to register, create a ‘counter’ and then copy-paste it’s code in &lt;code class=&quot;highlighter-rouge&quot;&gt;/_includes/yandex-metrika.html&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;h2 id=&quot;tags&quot;&gt;Tags&lt;/h2&gt;
+
+&lt;p&gt;Using tags in Jekyll is a bit tricky topic, I used this approach: &lt;a href=&quot;http://charliepark.org/tags-in-jekyll/&quot;&gt;charliepark.org/tags-in-jekyll/&lt;/a&gt;. You can read technical details there. To simply use tags provide list of tags in post header:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;tags:
+ - jekyll
+ - analytics
+ - tags
+ - comments&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And then before pushing your changes to github copy generated folder &lt;code class=&quot;highlighter-rouge&quot;&gt;/_site/tag&lt;/code&gt; in your blog’s root folder, since github pages will not generate it automatically.&lt;/p&gt;
+
+&lt;h2 id=&quot;comments&quot;&gt;Comments&lt;/h2&gt;
+
+&lt;p&gt;To enable &lt;a href=&quot;http://disqus.com&quot;&gt;Disqus&lt;/a&gt; register on the site and then just put your name in &lt;code class=&quot;highlighter-rouge&quot;&gt;_config.xml&lt;/code&gt;. Comments could be switched on and off on per post basis, just put &lt;code class=&quot;highlighter-rouge&quot;&gt;comments: true&lt;/code&gt; to enable them.&lt;/p&gt;
+</description>
+				<pubDate>Sun, 02 Aug 2015 00:25:06 +0800</pubDate>
+				<link>http://streetturtle.github.io/jekyll-clean-dark/2015/08/analytics-tags-comments</link>
+				<guid isPermaLink="true">http://streetturtle.github.io/jekyll-clean-dark/2015/08/analytics-tags-comments</guid>
+			</item>
+		
+			<item>
+				<title>Social icons</title>
+				<description>&lt;p&gt;You can have social icons which could lead to your social profile.&lt;br /&gt;
+Out-of-the box it has:&lt;/p&gt;
+
+&lt;ul class=&quot;social-media&quot;&gt;
+  &lt;li&gt;
+    &lt;a title=&quot;Github&quot; href=&quot;https://github.com/streetturtle&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;fa fa-github fa-2x&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;a title=&quot;StackOverflow&quot; href=&quot;http://stackoverflow.com/users/1252056/&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;fa fa-stack-overflow fa-2x&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;a title=&quot;LinkedIn&quot; href=&quot;https://www.linkedin.com/in/&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;fa fa-linkedin fa-2x&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;a title=&quot;Instagram&quot; href=&quot;https://instagram.com/&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;fa fa-instagram fa-2x&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;a title=&quot;Last.fm&quot; href=&quot;http://lastfm.com/user/&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;fa fa-lastfm fa-2x&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;a title=&quot;RSS&quot; href=&quot;http://streetturtle.github.io/feed.xml&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;fa fa-rss fa-2x&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;They could be setup in &lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To add more icons do following steps:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;choose an icon you want to use: &lt;a href=&quot;https://fortawesome.github.io/Font-Awesome/icons/&quot;&gt;Font Awesome Icons&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;add variable in &lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;add icon in &lt;code class=&quot;highlighter-rouge&quot;&gt;social.html&lt;/code&gt; with check if variable exists:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt; {% if site.social.rss %}
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;li&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;title=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{{ site.social.&amp;lt;your_social_variable&amp;gt; }}&quot;&lt;/span&gt; 
+       &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{{site.url}}/{{ site.social.&amp;lt;your_social_variable&amp;gt; }}&quot;&lt;/span&gt; 
+       &lt;span class=&quot;na&quot;&gt;target=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;_blank&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;font&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;_awesome_icon&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/i&amp;gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/li&amp;gt;&lt;/span&gt;
+{% endif %}&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+</description>
+				<pubDate>Thu, 02 Jul 2015 00:25:06 +0800</pubDate>
+				<link>http://streetturtle.github.io/jekyll-clean-dark/2015/07/social-icons</link>
+				<guid isPermaLink="true">http://streetturtle.github.io/jekyll-clean-dark/2015/07/social-icons</guid>
+			</item>
+		
+	</channel>
+</rss>
