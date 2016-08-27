@@ -3,10 +3,10 @@
   <channel>
     <title></title>
     <description>theme for jekyll</description>
-    <link>/herring-cove/</link>
-    <atom:link href="/herring-cove/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 27 Aug 2016 11:43:22 +0800</pubDate>
-    <lastBuildDate>Sat, 27 Aug 2016 11:43:22 +0800</lastBuildDate>
+    <link>/</link>
+    <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 27 Aug 2016 11:52:31 +0800</pubDate>
+    <lastBuildDate>Sat, 27 Aug 2016 11:52:31 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -26,8 +26,8 @@
 &lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
 </description>
         <pubDate>Sat, 27 Aug 2016 10:17:20 +0800</pubDate>
-        <link>/herring-cove/jekyll/update/2016/08/27/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">/herring-cove/jekyll/update/2016/08/27/welcome-to-jekyll.html</guid>
+        <link>/jekyll/update/2016/08/27/welcome-to-jekyll.html</link>
+        <guid isPermaLink="true">/jekyll/update/2016/08/27/welcome-to-jekyll.html</guid>
         
         
         <category>jekyll</category>
@@ -53,8 +53,8 @@
 
 &lt;h3&gt;Screenshots&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;/herring-cove/images/screenshot1.png&quot; alt=&quot;screenshot&quot;&gt;
-&lt;img src=&quot;/herring-cove/images/screenshot2.png&quot; alt=&quot;screenshot&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/screenshot1.png&quot; alt=&quot;screenshot&quot;&gt;
+&lt;img src=&quot;/images/screenshot2.png&quot; alt=&quot;screenshot&quot;&gt;&lt;/p&gt;
 
 &lt;h3&gt;Setup&lt;/h3&gt;
 
@@ -85,8 +85,8 @@
 &lt;p&gt;&lt;a href=&quot;http://www.capecodbeachchair.com/beachguide/index.cfm?page=3&amp;amp;BeachID=5&quot;&gt;Herring Cove&lt;/a&gt; is a beach on Cape Cod in Provincetown, Massachusetts. If you&amp;#39;re in the area, be sure to check it out!&lt;/p&gt;
 </description>
         <pubDate>Mon, 09 Dec 2013 03:55:16 +0800</pubDate>
-        <link>/herring-cove/jekyll/testing/2013/12/09/What-is-this-anyway.html</link>
-        <guid isPermaLink="true">/herring-cove/jekyll/testing/2013/12/09/What-is-this-anyway.html</guid>
+        <link>/jekyll/testing/2013/12/09/What-is-this-anyway.html</link>
+        <guid isPermaLink="true">/jekyll/testing/2013/12/09/What-is-this-anyway.html</guid>
         
         
         <category>jekyll</category>
@@ -115,7 +115,7 @@
 
 &lt;p&gt;&lt;strong&gt;Lorem ipsum dolor sit amet&lt;/strong&gt;, consectetur adipiscing elit. Quisque tempus nunc diam, non dignissim risus tincidunt a. Curabitur consequat justo vitae ipsum accumsan tempor. Quisque rhoncus eleifend ante vitae ultricies. Pellentesque suscipit nisl ut metus tincidunt, vulputate sodales dui commodo. Sed eget sapien varius, lacinia lectus nec, tempor dolor. Pellentesque sed mattis magna. Curabitur ut tristique turpis. Morbi sagittis dolor suscipit urna placerat, consectetur venenatis sapien viverra. Mauris vitae felis et sem venenatis cursus.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/herring-cove/images/cc.jpg&quot; alt=&quot;Image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/cc.jpg&quot; alt=&quot;Image&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;Donec ornare turpis non ullamcorper pulvinar. &lt;em&gt;Integer ut mauris vehicula mauris posuere adipiscing.&lt;/em&gt; Phasellus dictum cursus convallis. Sed dapibus laoreet porttitor.&lt;/p&gt;
 
@@ -180,8 +180,8 @@
         &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 </description>
         <pubDate>Wed, 04 Dec 2013 00:00:00 +0800</pubDate>
-        <link>/herring-cove/2013/12/04/Samples.html</link>
-        <guid isPermaLink="true">/herring-cove/2013/12/04/Samples.html</guid>
+        <link>/2013/12/04/Samples.html</link>
+        <guid isPermaLink="true">/2013/12/04/Samples.html</guid>
         
         
       </item>
@@ -202,8 +202,8 @@ To add new posts, simply add a file in the &lt;code&gt;_posts&lt;/code&gt; direc
 &lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/mojombo/jekyll&quot;&gt;Jekyll&amp;#39;s GitHub repo&lt;/a&gt;.&lt;/p&gt;
 </description>
         <pubDate>Sat, 09 Nov 2013 03:55:16 +0800</pubDate>
-        <link>/herring-cove/jekyll/update/2013/11/09/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">/herring-cove/jekyll/update/2013/11/09/welcome-to-jekyll.html</guid>
+        <link>/jekyll/update/2013/11/09/welcome-to-jekyll.html</link>
+        <guid isPermaLink="true">/jekyll/update/2013/11/09/welcome-to-jekyll.html</guid>
         
         
         <category>jekyll</category>
