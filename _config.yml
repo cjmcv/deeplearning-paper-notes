@@ -1,11 +1,11 @@
-name: Herring Cove
-author: Herring Cove
+name: ChenJM 
+author: ChenJM  
 baseurl: 
-description: theme for jekyll
-github: http://www.github.com/arnp
-twitter: http://www.twitter.com/
-facebook: http://www.facebook.com
-linkedin: http://www.linkedin.com
+description: "计算机视觉算法学习笔记" 
+#github: http://www.github.com/arnp
+#twitter: http://www.twitter.com/
+#facebook: http://www.facebook.com
+#linkedin: http://www.linkedin.com
 email: rnpatel[at]me.com
 location: 42°2'16"N   70°12'47"W
 disqus: diqus-username
@@ -14,7 +14,7 @@ disqus: diqus-username
 
 
 highlighter: pygments
-markdown: redcarpet
+kmarkdown: redcarpet
 redcarpet:
   extensions: ["tables"]
 
