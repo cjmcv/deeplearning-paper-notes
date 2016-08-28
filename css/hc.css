@@ -45,11 +45,11 @@ p
 
 .posts
 {
-  font-size:20px;
+  font-size:15px;
   list-style:none;
   font-weight:lighter;
-  line-height:250%;
-  padding-bottom:30px
+  line-height:150%;
+  padding-bottom:20px
 }
 
 .homepage-posts
@@ -499,14 +499,14 @@ time
 {
   background-color:#f9f9f9;
   box-shadow:1px 1px 0 1px #e8e8e8;
-  min-height:200px
+  min-height:60px
 }
 
 .project-box:hover
 {
   background-color:#fff;
   box-shadow:1px 1px 0 1px #e8e8e8;
-  min-height:200px
+  min-height:60px
 }
 
 .project-title
@@ -534,7 +534,7 @@ time
 
 .project-post h4
 {
-  font-weight:200;
+  font-weight:100;
   font-size:1em
 }
 

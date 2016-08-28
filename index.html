@@ -2,6 +2,8 @@
 title: ChenJM 
 ---
 {% include showcase.html %}
+
+<!--
 {% include greeting.html %}
 
 {% if site.posts != empty %}
@@ -33,7 +35,19 @@ title: ChenJM
     {% assign fresh_tag = '' %}
   {% endfor %}
   <ul>
-    <a href="{{ site.baseurl }}/projects.html">iiView More...</a>
+    <a href="{{ site.baseurl }}/projects.html">View More...</a>
   </ul>
+
+  {% for category in site.categories %}
+  <h2>{{ category | first }}</h2></span>{{ category | last | size }}</span>
+  <ul class="arc-list">
+      {% for post in category.last %}
+          <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+      {% endfor %}
+  </ul>
+  {% endfor %}
+
 </div>
+-->
+
 {% endif %}

@@ -12,26 +12,185 @@ title: Projects
     <a href="#"><span class="label label-danger light">Coding</span></a></center>
   </div>
 
-  <div class="container">
+
+  <div class="container">  <!--- 1 -->
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
-          <img src="http://lorempixel.com/g/400/400/">
+            <!---<img src="http://lorempixel.com/g/85/85/">-->
+            <img src="{{ site.baseurl }}/images/pBase.jpg">
         </div>
         <div class="col-md-9 project-post">
-          <h1>基础算法</h1><h4>subheading</h4>
-          <p class="meta"><small>&nbsp;<i class="fa fa-calendar-o"></i> 2013</small></p><hr/>
-          <div class="post">
-          包含图像处理，模式识别，机器学习基础算法
-          <ul class="posts">
-            {% for post in site.posts %}
-            <li><span><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a><time class="pull-right post-list">{{ post.date | date_to_string | date: "%b %-d, %Y"  }}</h4></time></span></span></li>
-            {% endfor %}
-          </ul>
+          {% for category in site.categories %}
+            {% if category[0] == 'fBase'  %}
+            <h1>基础算法 [{{category | last | size}}]</h1>
+            <h5>包含图像处理，模式识别，机器学习，深度学习算法理论笔记</h5>
+            <div class="post">
+              <!---<h2>{{ category | first }}</h2>-->
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	      {% endfor %}
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="container">  <!--- 2 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+          <img src="{{ site.baseurl }}/images/pDetect.jpg">
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fDetect'  %}
+            <h1>人脸检测&目标检测算法 [{{category | last | size}}]</h1>
+            <div class="post">
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	      {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">  <!--- 3 -->  
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+          <img src="{{ site.baseurl }}/images/pTrack.jpg">
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fTrack'  %}
+            <h1>目标跟踪 [{{category | last | size}}]</h1>
+            <!---<h4>包含检测类算法理论笔记</h4>-->
+            <div class="post">
+              <!---<h2>{{ category | first }}</h2>-->
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	      {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">   <!--- 4 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+          <img src="{{ site.baseurl }}/images/pAlign.jpg">
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fAlign'  %}
+            <h1>人脸对齐 [{{category | last | size}}]</h1>
+            <div class="post">
+              <!---<h2>{{ category | first }}</h2>-->
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	      {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">    <!--- 5 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+          <img src="{{ site.baseurl }}/images/pAtt.jpg">
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fAtt'  %}
+            <h1>人脸属性 [{{category | last | size}}]</h1>
+            <div class="post">
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	      {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">    <!--- 6 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+          <img src="{{ site.baseurl }}/images/pReg.jpg">
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fReg'  %}
+            <h1>人脸识别&物体识别 [{{category | last | size}}]</h1>
+            <!---<h4>包含检测类算法理论笔记</h4>-->
+            <div class="post">
+              <!---<h2>{{ category | first }}</h2>-->
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	      {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">   <!--- 6 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+          <img src="{{ site.baseurl }}/images/pProgram.jpg">
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fProgram'  %}
+            <h1>开源码学习笔记 [{{category | last | size}}]</h1>
+            <!---<h4>包含检测类算法理论笔记</h4>-->
+            <div class="post">
+              <!---<h2>{{ category | first }}</h2>-->
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	      {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
