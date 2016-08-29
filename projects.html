@@ -18,14 +18,36 @@ title: Algorithms
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
-            <!---<img src="http://lorempixel.com/g/85/85/">-->
-            <img src="{{ site.baseurl }}/images/pdBase/pBase.jpg">
+          <img src="{{ site.baseurl }}/images/pdDetect/pDetect.jpg">
         </div>
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
-            {% if category[0] == 'fBase'  %}
-            <h1>基础算法 [{{category | last | size}}]</h1>
-            <h5>包含图像处理，模式识别，机器学习，深度学习算法理论笔记</h5>
+            {% if category[0] == 'fDetect'  %}
+            <h1>目标|人脸检测与识别 ({{category | last | size}})</h1>
+            <div class="post">
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	      {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <div class="container">   <!--- 2 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+          <img src="{{ site.baseurl }}/images/pdAlign/pAlign.jpg">
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fAlign'  %}
+            <h1>人脸对齐 ({{category | last | size}})</h1>
             <div class="post">
               <!---<h2>{{ category | first }}</h2>-->
 	          <ul class="arc-list">
@@ -35,30 +57,6 @@ title: Algorithms
 	          </ul>
             {% endif %}
 	  {% endfor %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">  <!--- 2 -->
-    <div class="project-box">
-      <div class="row">
-        <div class="col-md-3 project-image">
-          <img src="{{ site.baseurl }}/images/pdDetect/pDetect.jpg">
-        </div>
-        <div class="col-md-9 project-post">
-          {% for category in site.categories %}
-            {% if category[0] == 'fDetect'  %}
-            <h1>人脸检测&目标检测算法 [{{category | last | size}}]</h1>
-            <div class="post">
-	          <ul class="arc-list">
-	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
-	            {% endfor %}
-	          </ul>
-            {% endif %}
-	      {% endfor %}
           </div>
         </div>
       </div>
@@ -74,10 +72,8 @@ title: Algorithms
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
             {% if category[0] == 'fTrack'  %}
-            <h1>目标跟踪 [{{category | last | size}}]</h1>
-            <!---<h4>包含检测类算法理论笔记</h4>-->
+            <h1>目标跟踪 ({{category | last | size}})</h1>
             <div class="post">
-              <!---<h2>{{ category | first }}</h2>-->
 	          <ul class="arc-list">
 	            {% for post in category.last %}
 	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
@@ -92,33 +88,7 @@ title: Algorithms
   </div>
 
 
-  <div class="container">   <!--- 4 -->
-    <div class="project-box">
-      <div class="row">
-        <div class="col-md-3 project-image">
-          <img src="{{ site.baseurl }}/images/pdAlign/pAlign.jpg">
-        </div>
-        <div class="col-md-9 project-post">
-          {% for category in site.categories %}
-            {% if category[0] == 'fAlign'  %}
-            <h1>人脸对齐 [{{category | last | size}}]</h1>
-            <div class="post">
-              <!---<h2>{{ category | first }}</h2>-->
-	          <ul class="arc-list">
-	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
-	            {% endfor %}
-	          </ul>
-            {% endif %}
-	  {% endfor %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="container">    <!--- 5 -->
+  <div class="container">    <!--- 4 -->
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
@@ -127,7 +97,7 @@ title: Algorithms
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
             {% if category[0] == 'fAtt'  %}
-            <h1>人脸属性 [{{category | last | size}}]</h1>
+            <h1>人脸属性 ({{category | last | size}})</h1>
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
@@ -142,33 +112,7 @@ title: Algorithms
     </div>
   </div>
 
-  <div class="container">    <!--- 6 -->
-    <div class="project-box">
-      <div class="row">
-        <div class="col-md-3 project-image">
-          <img src="{{ site.baseurl }}/images/pdReg/pReg.jpg">
-        </div>
-        <div class="col-md-9 project-post">
-          {% for category in site.categories %}
-            {% if category[0] == 'fReg'  %}
-            <h1>人脸识别&物体识别 [{{category | last | size}}]</h1>
-            <!---<h4>包含检测类算法理论笔记</h4>-->
-            <div class="post">
-              <!---<h2>{{ category | first }}</h2>-->
-	          <ul class="arc-list">
-	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
-	            {% endfor %}
-	          </ul>
-            {% endif %}
-	  {% endfor %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">   <!--- 6 -->
+  <div class="container">   <!--- 5 -->
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
@@ -176,9 +120,34 @@ title: Algorithms
         </div>
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
-            {% if category[0] == 'fProgram'  %}
-            <h1>开源码学习笔记 [{{category | last | size}}]</h1>
-            <!---<h4>包含检测类算法理论笔记</h4>-->
+            {% if category[0] == 'fOsource'  %}
+            <h1>开源码学习笔记 ({{category | last | size}})</h1>
+            <div class="post">
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	  {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="container">  <!--- 6 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+            <!---<img src="http://lorempixel.com/g/85/85/">-->
+            <img src="{{ site.baseurl }}/images/pdBasen/pBasen.jpg">
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fBasen'  %}
+            <h1>神经网络与深度学习基础 ({{category | last | size}})</h1>
+            <!--<h5>包含图像处理，模式识别，机器学习，深度学习算法理论笔记</h5>-->
             <div class="post">
               <!---<h2>{{ category | first }}</h2>-->
 	          <ul class="arc-list">
@@ -193,5 +162,60 @@ title: Algorithms
       </div>
     </div>
   </div>
+
+    <div class="container">  <!--- 7 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+            <!---<img src="http://lorempixel.com/g/85/85/">-->
+            <img src="{{ site.baseurl }}/images/pdBasem/pBasem.jpg">
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fBasem'  %}
+            <h1>机器学习与模式识别基础 ({{category | last | size}})</h1>
+            <!--<h5>包含图像处理，模式识别，机器学习，深度学习算法理论笔记</h5>-->
+            <div class="post">
+              <!---<h2>{{ category | first }}</h2>-->
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	  {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="container">  <!--- 8 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+            <!---<img src="http://lorempixel.com/g/85/85/">-->
+            <img src="{{ site.baseurl }}/images/pdBasei/pBasei.jpg">
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fBasei'  %}
+            <h1>图像处理与数学基础 ({{category | last | size}})</h1>
+            <!--<h5>包含图像处理，模式识别，机器学习，深度学习算法理论笔记</h5>-->
+            <div class="post">
+              <!---<h2>{{ category | first }}</h2>-->
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	  {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 </div>

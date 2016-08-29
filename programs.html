@@ -23,8 +23,8 @@ title: Programs
         </div>
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
-            {% if category[0] == 'fBase'  %}   <!--fCPU-->
-            <h1>CPU算法代码加速 [{{category | last | size}}]</h1>
+            {% if category[0] == 'fCPU'  %}   <!--fCPU-->
+            <h1>CPU算法代码加速 ({{category | last | size}})</h1>
             <h5>主要包含TBB，SSE等</h5>
             <div class="post">
               <!---<h2>{{ category | first }}</h2>-->
@@ -49,8 +49,8 @@ title: Programs
         </div>
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
-            {% if category[0] == 'fBase'  %}   <!--fCPU-->
-            <h1>GPU编程 [{{category | last | size}}]</h1>
+            {% if category[0] == 'fGPU'  %}   <!--fCPU-->
+            <h1>GPU编程 ({{category | last | size}})</h1>
             <h5>主要包含CUDA编程</h5>
             <div class="post">
 	          <ul class="arc-list">
