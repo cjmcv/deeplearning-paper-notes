@@ -1,0 +1,49 @@
+---
+title: DPM（Deformable Parts Model，2010）
+date: 2013-12-08 19:55:16
+categories: fDetect
+---
+
+作者主页：[http://www.cs.berkeley.edu/~rbg/latent/index.html](http://www.cs.berkeley.edu/~rbg/latent/index.html)
+
+论文（若干）：Felzenszwalb P F, Girshick R B, Mcallester D, et al. Object Detection with Discriminatively Trained Part-Based Models. IEEE Transactions on Software Engineering, 2010, 32(9):1627-45.
+
+译文博客推荐：[http://blog.csdn.net/masibuaa/article/details/17924671?utm_source=tuicool](http://blog.csdn.net/masibuaa/article/details/17924671?utm_source=tuicool)
+
+###论文算法简述
+    DPM（Deformable Parts Model），大体思路与HOG特征用于物体检测相似，可以看成是HOG特征物体检测算法的拓展，先通过计算得到物体的方向梯度直方图特征，然后使用支持向量机SVM对物体特征进行训练得到对应模型。而相比于HOG组合SVM的做法，DPM在训练模型方面上做了许多改进。如在提出使用HOG用于行人检测的论文中，训练出来的行人模型是单模型的。单模型对于正面和背面的行人有较好的检测效果。但如果行人行走时是侧面对着镜头，效果就不那么理想，而且行人在行走过程中有可能会做很多动作，HOG当时被广泛应用于行人检测就是因为计算出来的方向梯度直方图对行人轻微的动作不敏感，但单漠型会显得太死板，灵活不高，当行人动作幅度较大时，检测效果会急剧下降。因此采用多模型是很有必要的，既能解决角度问题，也可以使检测灵活性更高以提高检测准确率。而DPM就针对这些情况采用了多个模型，而多模型正是这个算法的重点。DPM采用的多模型检测，其本质可以看成是弹性形变模型。
+
+###创新点
+   第一个创新点涉及到使用由根滤波器（类似于Dalal-Triggs滤波器）加上一组和形变模型有关的部件滤波器定义的星型结构的部件模型去改进Dalal-Triggs模型。在图像的一个特定位置和尺度上，星型模型中的其中一个得分等于根滤波器在给定位置上的评分加上部件中的最大得分并减去可变形模型对于该部件偏移与理想情况的损耗。根滤波器和部件滤波器的得分都是由滤波器的一系列权重和图像的特征金字塔的子窗口进行点乘而得到的。
+为了使用部分标签数据对模型进行训练，我们使用被我们称为隐藏SVM的带有隐藏变量的MI-SVM。在隐藏SVM中，每个例子x都是由以下公式计算出得分。
+
+$$f_\beta  (x) = \mathop {\max }\limits_{z \in Z(x)} \beta  \bullet \Phi (x,z)$$
+
+   文中第二种类型模型使用混合的星型模型来识别物体类别。混合星型模型在特定位置和特定尺度上的得分是由各部件模型在给定位置的最大得分决定的。在这种情况下，潜在信息，指定了部件的标签和部件的设置。为了会的更好的效果，使用有区别的训练对于大的训练集通常来说是很重要。在这种情况下，物体检测中训练问题是很难平衡的，因为训练集中包含背景部分图像甚至会比目标物体部分还多。这是为了可以通过背景图像数据去寻找相应的小部分的潜在的错误样本或是困难负样本集。困难负样本集的数据挖掘方法被Dalal和 Triggs所采用，这里对SVM和LSVM的数据挖掘方法进行分析，证实数据挖掘方法可以用来使由整个训练集定义的模型收敛并达到最优。
+
+![a1]({{ site.baseurl }}/images/pdDetect/dpm1.jpg "HOG行人检测模型示意")     ![a2]({{ site.baseurl }}/images/pdDetect/dpm2.jpg "DPM行人检测模型示意")
+
+###论文算法简述
+       大体思路与HOG特征用于物体检测相似，可以看成是HOG特征物体检测算法的拓展，先通过计算得到物体的方向梯度直方图特征，然后使用支持向量机SVM对物体特征进行训练得到对应模型。而相比于HOG组合SVM的做法，DPM在训练模型方面上做了许多改进。如在提出使用HOG用于行人检测的论文中，训练出来的行人模型是单模型的。单模型对于正面和背面的行人有较好的检测效果。但如果行人行走时是侧面对着镜头，效果就不那么理想，而且行人在行走过程中有可能会做很多动作，HOG当时被广泛应用于行人检测就是因为计算出来的方向梯度直方图对行人轻微的动作不敏感，但单漠型会显得太死板，灵活不高，当行人动作幅度较大时，检测效果会急剧下降。因此采用多模型是很有必要的，既能解决角度问题，也可以使检测灵活性更高以提高检测准确率。而DPM就针对这些情况采用了多个模型，而多模型正是这个算法的重点。DPM采用的多模型检测，其本质可以看成是弹性形变模型。
+
+### Setup
+
+1. Install Jekyll
+2. Fork or [download](https://github.com/arnp/herring-cove/archive/master.zip) this theme repo
+3. Edit the `_config.yml` file
+
+You can change the showcase image by replacing `showcase.jpg` file in the `images` folder. I'll try to find a better way to do this soon.
+
+### Download
+
+[download](https://github.com/arnp/herring-cove/archive/master.zip)
+
+### License
+* [MIT](http://opensource.org/licenses/MIT)
+
+-------------
+Herring Cove is always a work in progress and as such, I hope to clean up the code and add features as time permits. Feel free to add your own additions.
+
+*What's with the name?*
+
+[Herring Cove](http://www.capecodbeachchair.com/beachguide/index.cfm?page=3&BeachID=5) is a beach on Cape Cod in Provincetown, Massachusetts. If you're in the area, be sure to check it out!
