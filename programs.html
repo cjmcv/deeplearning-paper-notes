@@ -1,15 +1,10 @@
 ---
 title: Programs 
 ---
-  <div class="container">
-  </div>
 
-  <div class="project-container">
-    <!--<img src="{{ site.baseurl }}/images/pbg.jpg">-->
-    <div style="background-image:url("{{ site.baseurl }}/images/pbg.jpg");"></div>
-    <p><h1>Programs</h1></p>
-    <p>Some of the programming skills I've dabbled on.</p>
-  </div>
+  <center><h1>Programs</h1></center>
+  <center>Some of the programming skills I've dabbled on.</center>
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   <div class="container">  <!--- 1 -->
     <div class="project-box">
@@ -22,7 +17,7 @@ title: Programs
           {% for category in site.categories %}
             {% if category[0] == 'fCPU'  %}   <!--fCPU-->
             <h1>CPU算法代码加速 ({{category | last | size}})</h1>
-            <h5>主要包含TBB，SSE等</h5>
+            主要包含TBB，SSE等
             <div class="post">
               <!---<h2>{{ category | first }}</h2>-->
 	          <ul class="arc-list">
@@ -48,7 +43,7 @@ title: Programs
           {% for category in site.categories %}
             {% if category[0] == 'fGPU'  %}   <!--fCPU-->
             <h1>GPU编程 ({{category | last | size}})</h1>
-            <h5>主要包含CUDA编程</h5>
+            主要包含CUDA编程
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
