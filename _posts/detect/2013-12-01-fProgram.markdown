@@ -4,6 +4,8 @@ date: 2013-12-08 19:55:16
 categories: fDetect
 ---
 
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
 作者主页：[http://www.cs.berkeley.edu/~rbg/latent/index.html](http://www.cs.berkeley.edu/~rbg/latent/index.html)
 
 论文（若干）：Felzenszwalb P F, Girshick R B, Mcallester D, et al. Object Detection with Discriminatively Trained Part-Based Models. IEEE Transactions on Software Engineering, 2010, 32(9):1627-45.
