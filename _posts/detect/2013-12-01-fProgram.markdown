@@ -12,7 +12,7 @@ categories: fDetect
 
 ### 论文算法概述
 
-    DPM（Deformable Parts Model），大体思路与HOG特征用于物体检测相似，可以看成是HOG特征物体检测算法的拓展，先通过计算得到物体的方向梯度直方图特征，然后使用支持向量机SVM对物体特征进行训练得到对应模型。而相比于HOG组合SVM的做法，DPM在训练模型方面上做了许多改进。如在提出使用HOG用于行人检测的论文中，训练出来的行人模型是单模型的。单模型对于正面和背面的行人有较好的检测效果。但如果行人行走时是侧面对着镜头，效果就不那么理想，而且行人在行走过程中有可能会做很多动作，HOG当时被广泛应用于行人检测就是因为计算出来的方向梯度直方图对行人轻微的动作不敏感，但单漠型会显得太死板，灵活不高，当行人动作幅度较大时，检测效果会急剧下降。因此采用多模型是很有必要的，既能解决角度问题，也可以使检测灵活性更高以提高检测准确率。而DPM就针对这些情况采用了多个模型，而多模型正是这个算法的重点。DPM采用的多模型检测，其本质可以看成是弹性形变模型。
+       DPM（Deformable Parts Model），大体思路与HOG特征用于物体检测相似，可以看成是HOG特征物体检测算法的拓展，先通过计算得到物体的方向梯度直方图特征，然后使用支持向量机SVM对物体特征进行训练得到对应模型。而相比于HOG组合SVM的做法，DPM在训练模型方面上做了许多改进。如在提出使用HOG用于行人检测的论文中，训练出来的行人模型是单模型的。单模型对于正面和背面的行人有较好的检测效果。但如果行人行走时是侧面对着镜头，效果就不那么理想，而且行人在行走过程中有可能会做很多动作，HOG当时被广泛应用于行人检测就是因为计算出来的方向梯度直方图对行人轻微的动作不敏感，但单漠型会显得太死板，灵活不高，当行人动作幅度较大时，检测效果会急剧下降。因此采用多模型是很有必要的，既能解决角度问题，也可以使检测灵活性更高以提高检测准确率。而DPM就针对这些情况采用了多个模型，而多模型正是这个算法的重点。DPM采用的多模型检测，其本质可以看成是弹性形变模型。
 
 ### 创新点
 
@@ -23,30 +23,50 @@ $$f_\beta  (x) = \mathop {\max }\limits_{z \in Z(x)} \beta  \bullet \Phi (x,z)$$
 
    文中第二种类型模型使用混合的星型模型来识别物体类别。混合星型模型在特定位置和特定尺度上的得分是由各部件模型在给定位置的最大得分决定的。在这种情况下，潜在信息，指定了部件的标签和部件的设置。为了会的更好的效果，使用有区别的训练对于大的训练集通常来说是很重要。在这种情况下，物体检测中训练问题是很难平衡的，因为训练集中包含背景部分图像甚至会比目标物体部分还多。这是为了可以通过背景图像数据去寻找相应的小部分的潜在的错误样本或是困难负样本集。困难负样本集的数据挖掘方法被Dalal和 Triggs所采用，这里对SVM和LSVM的数据挖掘方法进行分析，证实数据挖掘方法可以用来使由整个训练集定义的模型收敛并达到最优。
 
-![a1]({{ site.baseurl }}/images/pdDetect/dpm1.jpg "HOG行人检测模型示意")     ![a2]({{ site.baseurl }}/images/pdDetect/dpm2.jpg "DPM行人检测模型示意")
+<center>
+<img src="{{ site.baseurl }}/images/pdDetect/dpm1.jpg" width="200" height="200"><p>HOG行人检测模型</p>
+<img src="{{ site.baseurl }}/images/pdDetect/dpm2.jpg" width="300" height="200"><p>DPM行人检测模型</p> 
+</center>
 
-### 论文算法简述
+### DPM训练部分(Latent-SVM)
 
-       大体思路与HOG特征用于物体检测相似，可以看成是HOG特征物体检测算法的拓展，先通过计算得到物体的方向梯度直方图特征，然后使用支持向量机SVM对物体特征进行训练得到对应模型。而相比于HOG组合SVM的做法，DPM在训练模型方面上做了许多改进。如在提出使用HOG用于行人检测的论文中，训练出来的行人模型是单模型的。单模型对于正面和背面的行人有较好的检测效果。但如果行人行走时是侧面对着镜头，效果就不那么理想，而且行人在行走过程中有可能会做很多动作，HOG当时被广泛应用于行人检测就是因为计算出来的方向梯度直方图对行人轻微的动作不敏感，但单漠型会显得太死板，灵活不高，当行人动作幅度较大时，检测效果会急剧下降。因此采用多模型是很有必要的，既能解决角度问题，也可以使检测灵活性更高以提高检测准确率。而DPM就针对这些情况采用了多个模型，而多模型正是这个算法的重点。DPM采用的多模型检测，其本质可以看成是弹性形变模型。
+   DPM模型训练采用的是Latent-SVM，与MI-SVM相比，区别主要在于拓展了Latent变量。而MI-SVM的主要思想是将SVM中使最大化样本间距改为最大化样本集的间距，在正样本集中只选择多个最像是正样本的样本进行训练，在负样本集中也同样只选择最像负样本的样本用于训练。
+在MI-SVM中决定样本集内哪些样本作为用于训练的正样本的变量就是Latent变量，与MI-SVM中单一的Latent变量不同，Latent-SVM的Latent变量有很多，设正样本集为P，每个成员由图像I和目标在图像I中的具体框选区域B组成，又设负样本集为N，训练得到的模型参数向量为$$\beta$$，特征向量为F，则其训练过程图所示。其中函数$$detect - best(\beta ,I,B)$$是由主模型找到置信度最高的候选目标，该循环内集中优化正样本，函数$$detect - all(\beta ,I,t)$$是用于在各个位置中计算最佳假设目标的置信度，并选择高于t的一个。而函数$$gradient - descent(F)$$使用梯度下降法由特征向量去训练模型。
 
-### Setup
+<center>
+<img src="{{ site.baseurl }}/images/pdDetect/dpm3.jpg"><p>DPM中Latent-SVM的训练过程</p>
+</center>
 
+### DPM检测部分
+令用于检测一个物体的模型包含有n个组件，$$F_0$$为根滤波器，$$p_i$$为一个模型的第i个组件以$$(x_i ,y_i ,l_i )$$表示，指l特征金字塔第l层，b为偏置向量；每一个组件用元组$$(F_i ,v_i ,d_i )$$表示，其中$$F_i$$为第i个组件的滤波器，$$v_i$$为一个指定了第i个组件相对于根区域的位置的二维向量，$$d_i$$为一个四维向量，定义了二次方程式的系数，该方程用于计算每个组件相对于根位置可能存在地方的形变损耗。 一个候选结果的匹配程度的计算公式如下:
+
+$$
+score(p_1 ,...,p_n ) = \sum\limits_{i = 0}^n {F_i^' \phi (H,p_i )} - \sum\limits_{i = 0}^n {d_i \bullet \phi _d (d_{xi} ,d_{yi} ) + b}
+$$
+
+其中有：$$(d_{xi} ,d_{yi} ) = (x_i ,y_i ) - (2(x_0 ,y_0 ) + v_i )$$ ,  $$\phi _d (dx,dy) = (dx,dy,dx^2 ,dy^2 )$$;
+
+在对目标物体进行检测时，基于各组件最可能存在的位置计算每个根区域的匹配程度，较高评分则代表物体对应部分可能存在这个区域的可能性较大：
+
+$$score(p_0 ) = \mathop {\max }\limits_{p_1 ,...,p_n } score(p_1 ,...,p_n )$$
+
+令$$ R_{i,l} (x,y) = F_i^' \phi (H,(x,y,l)) $$ 
+
+$$D_{i,l} (x,y)$$为根区域在特征金字塔第l层，坐标$$(x,y)$$为的第组件中评分中影响最大的部分：$$D_{i.l} (x,y) = \mathop {\max }\limits_{dx,dy} \left( {R_{i,l} (x + dx,y + dy) - d_i  \bullet \phi _d (dx,dy)} \right)$$ ;
+在金字塔每一层中整体的匹配程度评分可由下式计算：$$score(x_0 ,y_0 ,l_0 ) = R_{0,l_0 } (x_0 ,y_0 ) + \sum\limits_{i = 1}^n {D_{0,l_0  - \lambda } } (2(x_0 ,y_0 ) + v_i ) + b$$
+
+<center>
+<img src="{{ site.baseurl }}/images/pdDetect/dpm4.jpg"><p>DPM行人检测</p>
+</center>
+
+-------------
 1. Install Jekyll
 2. Fork or [download](https://github.com/arnp/herring-cove/archive/master.zip) this theme repo
 3. Edit the `_config.yml` file
 
-You can change the showcase image by replacing `showcase.jpg` file in the `images` folder. I'll try to find a better way to do this soon.
-
-### Download
-
-[download](https://github.com/arnp/herring-cove/archive/master.zip)
-
 ### License
+1. Install Jekyll
 * [MIT](http://opensource.org/licenses/MIT)
-
--------------
-Herring Cove is always a work in progress and as such, I hope to clean up the code and add features as time permits. Feel free to add your own additions.
-
 *What's with the name?*
 
-[Herring Cove](http://www.capecodbeachchair.com/beachguide/index.cfm?page=3&BeachID=5) is a beach on Cape Cod in Provincetown, Massachusetts. If you're in the area, be sure to check it out!
+
