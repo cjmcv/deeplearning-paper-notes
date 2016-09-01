@@ -12,6 +12,9 @@ categories: fDetect
 
 译文博客推荐：[http://blog.csdn.net/masibuaa/article/details/17924671?utm_source=tuicool](http://blog.csdn.net/masibuaa/article/details/17924671?utm_source=tuicool)
 
+<img src="http://latex.codecogs.com/gif.latex?\frac{\partial J}{\partial \theta_k^{(j)}}=\sum_{i:r(i,j)=1}{\big((\theta^{(j)})^Tx^{(i)}-y^{(i,j)}\big)x_k^{(i)}}+\lambda \theta_k^{(j)}" />  
+
+
 $$ f_\beta  (x) = \mathop {\max }\limits_{z \in Z(x)} \beta  \bullet \Phi (x,z) $$
 
 ### 论文算法概述
