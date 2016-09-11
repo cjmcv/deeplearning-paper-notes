@@ -27,7 +27,7 @@ categories: fDetect
 
 ### 部分实现细节：
 
-1. 如何将原图的候选框位置映射到卷积特征图中
+1. <strong>如何将原图的候选框位置映射到卷积特征图中: 池化bins的实现:</strong>
 
    * “In our implementation, we project the corner point of a window onto a pixel in the feature maps, such that this corner point (in the image domain) is closest to the center of the receptive field of that pixel. This projection depends on the network architecture.For the ZF-5 network, a pixel in conv5 corresponds to a 139*139-pixel receptive field in the image domain, and the effective stride of conv5 in the image domain is 16. Denote x and xconv5 as the coordinates in the image domain and conv5 (we use the MATLAB convention, i.e., x starts from 1). We project the top-left corner by: 
 <img src="http://latex.codecogs.com/gif.latex? x_{conv5}  = \left\lfloor {(x - 139/2 + 63)/16} \right\rfloor  + 1" /> . 
@@ -35,11 +35,13 @@ Here 139/2 is the radius of the receptive field, 16 is the effective stride, and
 <img src="http://latex.codecogs.com/gif.latex? x_{conv5}  = \left\lfloor {(x + 139/2 - 75)/16} \right\rfloor - 1" > .
 Here 75 is the offset computed by the bottom-right corner of the receptive field. The mapping of other network architectures can be derived in a similar way.” --- (论文原话)
 
-2. 池化bins的实现:
-  * 设第5层卷积特征图conv5的宽和高分别为w、h，对于每个金字塔有n*n个bins，则第（i，j）个bin需要在的<img src="http://latex.codecogs.com/gif.latex? \left[ {\left\lfloor {\frac{{i - 1}}{n}w} \right\rfloor ,\left\lceil {\frac{i}{n}w} \right\rceil *\left\lfloor {\frac{{i - 1}}{n}h} \right\rfloor ,\left\lceil {\frac{i}{n}h} \right\rceil } \right]" >范围内。
+2. <strong>池化bins的实现:</strong>
+  
+   * 设第5层卷积特征图conv5的宽和高分别为w、h，对于每个金字塔有n*n个bins，则第（i，j）个bin需要在的<img src="http://latex.codecogs.com/gif.latex? \left[ {\left\lfloor {\frac{{i - 1}}{n}w} \right\rfloor ,\left\lceil {\frac{i}{n}w} \right\rceil *\left\lfloor {\frac{{i - 1}}{n}h} \right\rfloor ,\left\lceil {\frac{i}{n}h} \right\rceil } \right]" >范围内。
 
-3. 候选框大小不一，如何处理均值文件
-  * （1）将均值文件变换到对应大小后使用； （2）使用常数128作为均值，图像各像素值都减去128。
+3. <strong>候选框大小不一，如何处理均值文件</strong>
+
+   * （1）将均值文件变换到对应大小后使用； （2）使用常数128作为均值，图像各像素值都减去128。
 
 ### 存在问题
 
