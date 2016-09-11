@@ -1,0 +1,51 @@
+---
+title: SPP-Net（ECCV，2014）
+date: 2013-12-08 19:55:16
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文：He K, Zhang X, Ren S, et al. Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition[J]. IEEE Transactions on Pattern Analysis & Machine Intelligence, 2015, 37(9):1904-16.
+
+### 论文算法概述
+
+       SPP（spatial pyramid pooling，空间金字塔池化）：1）SPP层可以不论输入大小都能产生固定长度的输出，而传统基于滑动窗口的池化层则不行；2）SPP层使用多空间尺度的bins，而基于滑动窗口的池化层则使用单一尺寸窗口。多尺度的池化对于物体变型更具有鲁棒性；   3）由于可以输入任意尺度，SPP可以提取多尺度的池化特征；
+
+1. R-CNN中输入的候选窗口需要归一化到一定大小，如图所示裁剪和变换都可能会造成信息丢失导致识别率下降。而SPP-net可以解决这个问题。
+   
+   * 分析：一个卷积神经网络一般包含有卷积层和全连接层，其中卷积层不需要固定输入大小并且可以产生各种尺寸的特征图，而SVM、softmax或全连接层则需要固定输入大小。SPP层中可以通过局部空间bins进行池化来保持图像的空间信息，而这些空间bins的大小与图像大小成正比，bins的个数则与图像大小无关。以使用alexnet为例子，将第5层的卷积层后面的池化层pool5使用SPP（空间金字塔池化）代替，在每个空间bin中池化每个滤波器的输出，则SPP的输出为256M维的向量，其中M为空间bin的数量，256为alexnet中conv5的滤波器数量。如结构图所示，划分为4*4、2*2、1*1块，然后每块进行池化，所以SPP层中得到的向量为固定长度(4*4+2*2+1*1)*256，输入到fc6中。
+
+
+2. R-CNN在检测图像时使用selective search提取出很多个候选框（2000个），然后每个候选框都各自进行一次前向CNN特征提取与线性SVM分类，因此很耗时。而SPP-net则避免了重复计算卷积特征。
+   
+   * 分析：R-CNN中对每个候选框都要单独进行一次CNN特征提取，而不能将对整张图像进行卷积后将最后的卷积层特征图分割成一块块输入后全连接层中，这是因为全连接层的输入大小必须固定，而selective search的候选框大小不一致。而SPP-net中将conv5后的池化层改成SPP后，则可以对全图卷积一次以节省时间，后对各种尺寸的候选框的conv5特征输入到SPP层中，输出固定尺寸的特征向量到全连接层中。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/spp1.jpg" ></center>
+<center><img src="{{ site.baseurl }}/images/pdDetect/spp2.jpg" ></center>
+<center><img src="{{ site.baseurl }}/images/pdDetect/spp3.jpg" ></center>
+
+### 部分实现细节：
+
+1. 如何将原图的候选框位置映射到卷积特征图中
+
+   * “In our implementation, we project the corner point of a window onto a pixel in the feature maps, such that this corner point (in the image domain) is closest to the center of the receptive field of that pixel. This projection depends on the network architecture.For the ZF-5 network, a pixel in conv5 corresponds to a 139*139-pixel receptive field in the image domain, and the effective stride of conv5 in the image domain is 16. Denote x and xconv5 as the coordinates in the image domain and conv5 (we use the MATLAB convention, i.e., x starts from 1). We project the top-left corner by: 
+<img src="http://latex.codecogs.com/gif.latex? x_{conv5}  = \left\lfloor {(x - 139/2 + 63)/16} \right\rfloor  + 1" /> . 
+Here 139/2 is the radius of the receptive field, 16 is the effective stride, and 63 is an offset. The offset is computed by the top-left corner of the receptive field in the image domain. Similarly, we project the bottomright corner by:
+<img src="http://latex.codecogs.com/gif.latex? x_{conv5}  = \left\lfloor {(x + 139/2 - 75)/16} \right\rfloor - 1" > .
+Here 75 is the offset computed by the bottom-right corner of the receptive field. The mapping of other network architectures can be derived in a similar way.” --- (论文原话)
+
+2. 池化bins的实现:
+  * 设第5层卷积特征图conv5的宽和高分别为w、h，对于每个金字塔有n*n个bins，则第（i，j）个bin需要在的<img src="http://latex.codecogs.com/gif.latex? \left[ {\left\lfloor {\frac{{i - 1}}{n}w} \right\rfloor ,\left\lceil {\frac{i}{n}w} \right\rceil *\left\lfloor {\frac{{i - 1}}{n}h} \right\rfloor ,\left\lceil {\frac{i}{n}h} \right\rceil } \right]" >范围内。
+
+3. 候选框大小不一，如何处理均值文件
+  * （1）将均值文件变换到对应大小后使用； （2）使用常数128作为均值，图像各像素值都减去128。
+
+### 存在问题
+
+1. 和RCNN一样，训练过程繁琐，包含基于物体候选框使用log损失微调卷积网络；基于调优后的卷积特征训练SVM；训练bounding box回归器（参考DPM）；
+
+2. 和RCNN一样，训练结果占用空间很大，需要保存在磁盘中；
+
+3. 与RCNN不同，SPP-Net无法更新SPP层前面的卷积层，即意味着只能微调全连接层，而对于很多情况下卷积层也是需要微调的，特别是层次更深的网络。
+
