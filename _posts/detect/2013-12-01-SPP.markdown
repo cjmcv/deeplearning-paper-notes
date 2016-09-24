@@ -49,5 +49,5 @@ Here 75 is the offset computed by the bottom-right corner of the receptive field
 
 2. 和RCNN一样，训练结果占用空间很大，需要保存在磁盘中；
 
-3. 与RCNN不同，SPP-Net无法更新SPP层前面的卷积层，即意味着只能微调全连接层，而对于很多情况下卷积层也是需要微调的，特别是层次更深的网络。
+3. 与RCNN不同，SPP-Net无法更新SPP层前面的卷积层，因为CNN调优和SVM训练分离，SVM的loss无法传播到卷积层（RCNN也一样）,即意味着只能微调全连接层，而对于很多情况下卷积层也是需要微调的，特别是层次更深的网络。
 
