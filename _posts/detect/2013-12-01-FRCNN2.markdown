@@ -1,0 +1,41 @@
+---
+title: Faster-RCNN（NIPS，2015）
+date: 2013-12-08 19:55:16
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+代码：[https://github.com/ShaoqingRen/faster_rcnn](https://github.com/ShaoqingRen/faster_rcnn)
+
+论文：Ren S, He K, Girshick R, et al. Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks.[J]. IEEE Transactions on Pattern Analysis & Machine Intelligence, 2016:1-1.
+
+译文推荐：[http://www.2cto.com/kf/201604/503750.html](http://www.2cto.com/kf/201604/503750.html)
+
+### 论文算法概述
+
+       提出了一种Region Proposal Network (RPN)，共享目的是为了共享fast-rcnn物体检测网络中卷积特征的计算，以实现低运算量提取目标区域，解决Fast-RCNN和SPP-net中候选框提取速度慢的问题。RPN是一个端到端的全卷积网络，以任意大小的图像作为输入，只需在最后的卷积层上滑动一遍，可以同时预测物体的区域和在各区域的objectness scores（“Objectness” measures membership to a set of object classes vs. background），替换selective search应用到fast-rcnn中。RPN同时也提高了候选框的质量，使检测更准确。
+       为产生目标区域，在网络的最后一层共享卷积层（如ZF的第5层或VGG的第13层卷积层）中产生的卷积特征映射图上滑动一个小网络，这个小网络与输入的卷积特征图的n*n的空间滑动窗口进行全连接，滑动窗口每个都映射出一个低维向量，这向量输入到方框回归器reg和分类器cls两个关联的全连接层中。文中滑动窗口设为n=3，这小网络滑到一个位置时如图所示。因为这小网络是以滑动窗口的形式使用的，即这全连接的网络层可以被所有空间位置共享。它的网络结构是由n*n的卷积层加上两个滑动的1*1的卷积层（for reg和cls）。ReLU应用于n*n卷积层。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/f2rcnn.png"></center>
+
+### 旋转不变的Anchors
+
+   在每个滑动窗口位置，同时预测k个目标区域，因此reg层输出k个boxes，cls输出2k个分数（是目标的概率和非目标的概率）；每个anchor在滑动窗口的中心，与一个尺度和长宽比相关联。文中采用3个尺度（128,256,512）和3种长宽比例（1:1,1:2,2:1），则在每个滑动位置点上可产生k=9个anchors。一个卷积特征图大小为W*H，则有W*H*k个anchors，具有旋转不变性。
+
+### 损失函数
+
+   在训练RPN时，给每个anchor设置一个二值化类别标签（是/否物体），其中与一个真实物体区域具有最高的Intersection over-Union (IoU)重叠或与任意的真是物体区域的IoU超过0.7的anchor标记为“是”；而与任何物体真实区域的IoU都不超过0.3，则为“否”；介于“是”与“否”之间的舍去不做训练。训练时遵循Fast-RCNN中的多任务loss，损失函数如FastRCNN相似，并以与以往不同的方式实现了其中的bounding-box回归，详看论文。
+
+### 训练优化
+
+   RPN是全卷积网络，由方向传播和随机梯度SGD进行端到端训练。每个mini-batch由一张图像上随机抽选的256个正和负样本候选框组成，并使正负样本比例约1：1，否则负样本很多可能会使bias倾向于负样本。使用0均值0.01标准差的高斯分布对所有新网络层进行初始化，而其他层由预训练模型提供，进行finetune。
+
+### 共享卷积特征
+
+   这里检测网络采用的是Fast-RCNN，而RPN和Fast-RCNN的训练相互独立，现在是想让它们之间共享卷积特征以减少预测时的计算量。但Fase-RCNN的训练是基于固定候选框，在训练Fase-RCNN的同时调整候选框则无法确定网络训练是否会收敛，因此设计一个包含有Fast-RCNN和RPN的网络并简单联合使用反向传播训练是不容易实现的。文中采用的方法含4个步骤：
+1. 照常训练RPN，使用预训练模型进行初始化并对候选框做端到端finetune。
+2. 使用RPN产生的候选框对Fast-RCNN进行训练，Fast-RCNN也采用ImageNet的预训练模型进行初始化。
+3. 使用Fast-RCNN网络去初始化RPN的训练，固定卷积层微调RPN独有的网络层。这样两个网络就共享卷积层了。
+4. 保持共享卷积层固定，去对Fast-RCNN的全连接层进行finetune。
+

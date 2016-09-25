@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>RCNN（CVPR，2014）</title>
+<title>Faster-RCNN（NIPS，2015）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="计算机视觉算法学习笔记">
 <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -72,7 +72,7 @@
 
       <div class="container">
         <div id="article">
-  <div class="article-title">RCNN（CVPR，2014）</div>
+  <div class="article-title">Faster-RCNN（NIPS，2015）</div>
   <p class="meta">
     <small>
       &nbsp;<i class="fa fa-calendar-o"></i> 09 Dec 2013
@@ -81,52 +81,40 @@
   <div class="post">
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-<p>代码：<a href="http://www.cs.berkeley.edu/˜rbg/rcnn">http://www.cs.berkeley.edu/˜rbg/rcnn</a></p>
+<p>代码：<a href="https://github.com/ShaoqingRen/faster_rcnn">https://github.com/ShaoqingRen/faster_rcnn</a></p>
 
-<p>论文：Girshick, R, Donahue, J, Darrell, T, et al. Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation[C]// Computer Vision and Pattern Recognition. IEEE, 2014:580-587.</p>
+<p>论文：Ren S, He K, Girshick R, et al. Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks.[J]. IEEE Transactions on Pattern Analysis &amp; Machine Intelligence, 2016:1-1.</p>
+
+<p>译文推荐：<a href="http://www.2cto.com/kf/201604/503750.html">http://www.2cto.com/kf/201604/503750.html</a></p>
 
 <h3 id="section">论文算法概述</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>   整个算法过程包含三个步骤：a、输入图像，搜索生成类别独立的物体候选框； b、使用大的CNN网络对各候选框提取固定长度的特征向量；c、利用线性SVM对特征向量进行分类识别。
+<div class="highlighter-rouge"><pre class="highlight"><code>   提出了一种Region Proposal Network (RPN)，共享目的是为了共享fast-rcnn物体检测网络中卷积特征的计算，以实现低运算量提取目标区域，解决Fast-RCNN和SPP-net中候选框提取速度慢的问题。RPN是一个端到端的全卷积网络，以任意大小的图像作为输入，只需在最后的卷积层上滑动一遍，可以同时预测物体的区域和在各区域的objectness scores（“Objectness” measures membership to a set of object classes vs. background），替换selective search应用到fast-rcnn中。RPN同时也提高了候选框的质量，使检测更准确。
+   为产生目标区域，在网络的最后一层共享卷积层（如ZF的第5层或VGG的第13层卷积层）中产生的卷积特征映射图上滑动一个小网络，这个小网络与输入的卷积特征图的n*n的空间滑动窗口进行全连接，滑动窗口每个都映射出一个低维向量，这向量输入到方框回归器reg和分类器cls两个关联的全连接层中。文中滑动窗口设为n=3，这小网络滑到一个位置时如图所示。因为这小网络是以滑动窗口的形式使用的，即这全连接的网络层可以被所有空间位置共享。它的网络结构是由n*n的卷积层加上两个滑动的1*1的卷积层（for reg和cls）。ReLU应用于n*n卷积层。
 </code></pre>
 </div>
 
-<center><img src="/images/pdDetect/rcnn1.jpg" /></center>
+<center><img src="/images/pdDetect/f2rcnn.png" /></center>
 
-<h3 id="section-1">候选框搜索</h3>
+<h3 id="anchors">旋转不变的Anchors</h3>
 
-<p>使用selective search生成候选框，因为后面采用的网络结构是alexnet，则输入图像大小被限定为227*227，所以需要将候选框进行缩放填充处理。方式有很多种，如不管长宽比例直接缩放到对应大小，或将按比例将最长边缩放到对应大小后使用背景（框内均值、固定颜色等）将短边处填充到对应大小。文中采用的方式是先对候选框加padding=16，即框往外延伸16个像素后直接缩放到对应大小。在CNN阶段，如果用selective search挑选出来的候选框与物体的人工标注矩形框的重叠区域IoU大于0.5，那么我们就把这个候选框标注成物体类别，否则当做背景。</p>
+<p>在每个滑动窗口位置，同时预测k个目标区域，因此reg层输出k个boxes，cls输出2k个分数（是目标的概率和非目标的概率）；每个anchor在滑动窗口的中心，与一个尺度和长宽比相关联。文中采用3个尺度（128,256,512）和3种长宽比例（1:1,1:2,2:1），则在每个滑动位置点上可产生k=9个anchors。一个卷积特征图大小为W<em>H，则有W</em>H*k个anchors，具有旋转不变性。</p>
 
-<h3 id="section-2">训练</h3>
+<h3 id="section-1">损失函数</h3>
 
-<ol>
-  <li>
-    <p>网络有监督预训练：在设计网络结构的时候，是直接用Alexnet的网络，然后连参数也是直接采用它的参数作为初始的参数值，然后再fine-tuning训练。输入227*227的RGB图像，通过5个卷积层和2个全连接层，输出4096维特征向量。</p>
-  </li>
-  <li>
-    <p>fine-tuning：使用随机梯度下降法SGD在缩放和padding处理后的（VOC）样本上继续进行训练，将原CNN模型（AlexNet）中的分类层由原来的1000类改成N+1（1为背景）类，其他网络结构不变；SGD学习率为0.001（预训练模型学习率的1/10），即微调优而不破坏预训练模型的结果。在每个SGD迭代中，batch size大小128，包含32个正样本和96个负样本。</p>
-  </li>
-  <li>
-    <p>SVM训练与测试：当bounding box完整包含整量车的，才叫正样本；如果bounding box 没有包含到车辆则当做负样本。但当检测窗口只有部分包好物体，如何定义正负样本？文中从数值0,0.1,0.2,0.3,0.4,0.5中选择0.3，即当重叠度小于0.3的时候，我们就把它标注为负样本。当特征被提取出来后，为每个物体类别训练一个线性SVM分类器。而当训练样本数量过大导致内存不足的问题，文中使用困难负样本挖掘的方式(可参考DPM的论文:Object detection with discriminatively trained part based models)。</p>
-  </li>
-</ol>
+<p>在训练RPN时，给每个anchor设置一个二值化类别标签（是/否物体），其中与一个真实物体区域具有最高的Intersection over-Union (IoU)重叠或与任意的真是物体区域的IoU超过0.7的anchor标记为“是”；而与任何物体真实区域的IoU都不超过0.3，则为“否”；介于“是”与“否”之间的舍去不做训练。训练时遵循Fast-RCNN中的多任务loss，损失函数如FastRCNN相似，并以与以往不同的方式实现了其中的bounding-box回归，详看论文。</p>
 
-<h3 id="section-3">部分细节</h3>
+<h3 id="section-2">训练优化</h3>
 
-<ul>
-  <li>使用CNN物体进行识别分类训练，在训练的时候最后一层softmax为分类层，而文中使用CNN进行特征提取，然后再把提取到的特征用于线性SVM分类器的训练。这是因为SVM训练和CNN训练过程的样本选取方式不一致，alexnet在训练时所采用的训练数据的标注比较宽松，如外接框包含物体一部分（IOU大于0.5）则可以作为正样本，需要大量的数据进行训练以防止过拟合。而SVM适用于小样本，对样本数据要求比较苛刻，要使外接框完全包含整个物体时才标注为目标。而文中采用selective search获取候选框，按照原alexnet中的训练模型无法取得较好的结果。</li>
-</ul>
+<p>RPN是全卷积网络，由方向传播和随机梯度SGD进行端到端训练。每个mini-batch由一张图像上随机抽选的256个正和负样本候选框组成，并使正负样本比例约1：1，否则负样本很多可能会使bias倾向于负样本。使用0均值0.01标准差的高斯分布对所有新网络层进行初始化，而其他层由预训练模型提供，进行finetune。</p>
 
-<h3 id="section-4">存在问题</h3>
+<h3 id="section-3">共享卷积特征</h3>
 
-<ol>
-  <li>
-    <p>训练过程繁琐：包含基于物体候选框使用log损失微调卷积网络；基于调优后的卷积特征训练SVM；训练bounding box回归器（参考DPM）；</p>
-  </li>
-  <li>
-    <p>训练耗时，占用磁盘空间大。（3）每个候选框需要进行整个前向CNN计算导致测试速度慢：</p>
-  </li>
-</ol>
+<p>这里检测网络采用的是Fast-RCNN，而RPN和Fast-RCNN的训练相互独立，现在是想让它们之间共享卷积特征以减少预测时的计算量。但Fase-RCNN的训练是基于固定候选框，在训练Fase-RCNN的同时调整候选框则无法确定网络训练是否会收敛，因此设计一个包含有Fast-RCNN和RPN的网络并简单联合使用反向传播训练是不容易实现的。文中采用的方法含4个步骤：
+1. 照常训练RPN，使用预训练模型进行初始化并对候选框做端到端finetune。
+2. 使用RPN产生的候选框对Fast-RCNN进行训练，Fast-RCNN也采用ImageNet的预训练模型进行初始化。
+3. 使用Fast-RCNN网络去初始化RPN的训练，固定卷积层微调RPN独有的网络层。这样两个网络就共享卷积层了。
+4. 保持共享卷积层固定，去对Fast-RCNN的全连接层进行finetune。</p>
 
 
   </div>
@@ -137,10 +125,10 @@
 -->
 <ul class="pager">
 
-  <li class="previous"><a href="/fdetect/2013/12/09/FRCNN2.html">&larr; Older</a></li>
+  <li class="previous"><a href="/fdetect/2013/12/09/FRCNN.html">&larr; Older</a></li>
 
 
-  <li class="next"><a href="/fdetect/2013/12/09/SPP.html">Newer &rarr;</a></li>
+  <li class="next"><a href="/fdetect/2013/12/09/RCNN.html">Newer &rarr;</a></li>
 
 </ul>
 

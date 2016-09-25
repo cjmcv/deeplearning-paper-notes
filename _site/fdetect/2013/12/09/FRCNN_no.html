@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>FRCNN（CVPR，2014）</title>
+<title>Fast-RCNN（ICCV，2015）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="计算机视觉算法学习笔记">
 <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -72,7 +72,7 @@
 
       <div class="container">
         <div id="article">
-  <div class="article-title">FRCNN（CVPR，2014）</div>
+  <div class="article-title">Fast-RCNN（ICCV，2015）</div>
   <p class="meta">
     <small>
       &nbsp;<i class="fa fa-calendar-o"></i> 09 Dec 2013
@@ -81,50 +81,54 @@
   <div class="post">
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-<p>代码：<a href="http://www.cs.berkeley.edu/˜rbg/rcnn">http://www.cs.berkeley.edu/˜rbg/rcnn</a></p>
+<p>代码：<a href="https://github.com/rbgirshick/fast-rcnn">https://github.com/rbgirshick/fast-rcnn</a></p>
 
-<p>论文：Girshick, R, Donahue, J, Darrell, T, et al. Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation[C]// Computer Vision and Pattern Recognition. IEEE, 2014:580-587.</p>
+<p>论文：Girshick R. Fast R-CNN[C]// IEEE International Conference on Computer Vision. IEEE, 2015:1440-1448.</p>
 
 <h3 id="section">论文算法概述</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>   整个算法过程包含三个步骤：a、输入图像，搜索生成类别独立的物体候选框； b、使用大的CNN网络对各候选框提取固定长度的特征向量；c、利用线性SVM对特征向量进行分类识别。
+<div class="highlighter-rouge"><pre class="highlight"><code>   该算法针对RCNN和SPP-Net中的缺点而提出，具有以下优点：1）比RCNN和SPP-Net更高的检测率； 2）训练过程简洁，使用多任务loss；  3）能更新所有网络层（SPP无法更新卷积层）； 4）改进了SPP-Net后面的需要将第二层FC的特征放到硬盘上训练SVM，之后再额外训练bbox regressor。
+ 训练过程为将完整图像输入到各卷积层和池化层中得到特征图，把最后一层特征图中每个候选框的相应区域输入到单层（only one pyramid level）的SPP layer（文中称为ROI池化层）中，以使每个候选框得到固定长度的特征向量。特征向量输入到全连接层中而全连接层后面接两个输出层，一个输出各类的softmax概率，另一个输出各类对应的四个实数表示目标方框位置；
 </code></pre>
 </div>
 
-<center><img src="/images/pdDetect/rcnn1.jpg" /></center>
+<center><img src="/images/pdDetect/frcnn1.png" /></center>
 
-<h3 id="section-1">候选框搜索</h3>
+<h3 id="roispp">Roi池化层（单层金字塔的SPP空间金字塔池化层）</h3>
 
-<p>使用selective search生成候选框，因为后面采用的网络结构是alexnet，则输入图像大小被限定为227*227，所以需要将候选框进行缩放填充处理。方式有很多种，如不管长宽比例直接缩放到对应大小，或将按比例将最长边缩放到对应大小后使用背景（框内均值、固定颜色等）将短边处填充到对应大小。文中采用的方式是先对候选框加padding=16，即框往外延伸16个像素后直接缩放到对应大小。在CNN阶段，如果用selective search挑选出来的候选框与物体的人工标注矩形框的重叠区域IoU大于0.5，那么我们就把这个候选框标注成物体类别，否则当做背景。</p>
+<p>使用极大值池化，将感兴趣区域的特征转化到一个小的固定尺寸（H<em>W）的特征图中，H和W作为超参数独立于各个特定的感兴趣区域ROI。这里的ROI指的是卷积特征图的一个矩形窗口（h</em>w），而极大值池化核大小约为（h/H * w/W），在每个子窗口中进行池化到H*W中对应的网格中。这ROI池化层是SPP-Net中的特殊例子，与SPP层为多尺度，ROI池化层为单尺度。</p>
 
-<h3 id="section-2">训练</h3>
+<h3 id="section-1">使用预训练网络进行初始化</h3>
+
+<p>使用预训练网络需要经过三个阶段:1、网络最后的极大值池化层改为ROI池化层去连接第一层全连接层； 2、最后的全连接层和1000类softmax层更换成全连接层和K+1类softmax 再加上 窗口位置信息。 3、网络输入增加输入ROI信息；</p>
+
+<h3 id="section-2">调优</h3>
+
+<p>FastRCNN只有一个调优阶段，联合优化softmax分类器和bbox回归器；而RCNN和SPPnet包含softmax分类器、SVMs和回归器三个调优阶段。文中基于特征共享提出一种更高效的训练方法，在FRCNN中选取N张图片，从每张图像中提取R/N个ROI，这样ROI来自同一张图片可以在前向和后向中共享计算量和内存。如文中试验采用N=2，R=128，即两张图片各取64个ROI，可以比从128张图片中各提取一个ROI快64倍。因为这里计算是对一张图片进行卷积，后提取ROI做ROI池化等后面操作，主要运算量与图片大小和数量相关联。</p>
+
+<h3 id="loss">多任务loss</h3>
+
+<p>FastRCNN有两个输出层，两个loss联合训练：<img src="http://latex.codecogs.com/gif.latex? L\left( {p,u,t^u ,v} \right) = L_{cls} (p,u) + \lambda [u \ge 1]L_{loc} (t^u ,v)" />，类别为u，框为v。一个输入K+1类的概率分布，使用softmaxLoss：<img src="http://latex.codecogs.com/gif.latex? L_{loc}  =  - \log p_u" />；另一个是输出目标的回归窗口位置，使用的是smoothL1Loss：<img src="http://latex.codecogs.com/gif.latex? L_{loc} (t^u ,u) = \sum\limits_{i \in \{ x,y,w,h\} } {smooth_{L1} (t_i^u ,v_i )} " />，<img src="/images/pdDetect/frcnn2.png" />，目的是让loss对离散点更具鲁棒性。若使用L2 loss需要认真调整学习率防止梯度暴增；</p>
+
+<h3 id="section-3">尺度不变性</h3>
+
+<p>文中探索了两种方式来实现尺度不变的物体检测：1）暴力方法：每张图片都设置为固定大小，使网络直接从训练数据中学习尺度不变性； 2）通过多尺度方法，在测试时利用图像金字塔近似对每个样本进行尺度归一化，在训练时每张图像随机选取金字塔中的一个尺度，这也是数据扩增的方式。文中采用的是方式1，多尺度比单尺度准确率仅高一点点约1%，但速度慢很多。</p>
+
+<h3 id="section-4">用奇异值分解加速检测过程</h3>
+
+<p>使用Truncated SVD（SVD的变形,只计算用户指定的最大的k个奇异值）对全连接层进行分解，速度可提高30%，而mAp仅下降0.3%，并且在压缩后不需要进行微调。</p>
+
+<h3 id="section-5">算法设计细节</h3>
 
 <ol>
   <li>
-    <p>网络有监督预训练：在设计网络结构的时候，是直接用Alexnet的网络，然后连参数也是直接采用它的参数作为初始的参数值，然后再fine-tuning训练。输入227*227的RGB图像，通过5个卷积层和2个全连接层，输出4096维特征向量。</p>
+    <p>哪些层需要finetune？答：对于层次较深的网络，只finetune全连接层而不管卷积层会造成较大的性能损耗，如文中试验VGG16只调fc为61.4%，fc和conv一起调为66.9%；但并非所有卷积层都要调，对于浅层的卷积层影响不大，不finetune这些层可以节省训练时间。</p>
   </li>
   <li>
-    <p>fine-tuning：使用随机梯度下降法SGD在缩放和padding处理后的（VOC）样本上继续进行训练，将原CNN模型（AlexNet）中的分类层由原来的1000类改成N+1（1为背景）类，其他网络结构不变；SGD学习率为0.001（预训练模型学习率的1/10），即微调优而不破坏预训练模型的结果。在每个SGD迭代中，batch size大小128，包含32个正样本和96个负样本。</p>
+    <p>多任务的好处？答：相对于RCNN的多个单独训练任务来说方便；而且任务间通过卷积层共享进行相互影响可以提高性能。</p>
   </li>
   <li>
-    <p>SVM训练与测试：当bounding box完整包含整量车的，才叫正样本；如果bounding box 没有包含到车辆则当做负样本。但当检测窗口只有部分包好物体，如何定义正负样本？文中从数值0,0.1,0.2,0.3,0.4,0.5中选择0.3，即当重叠度小于0.3的时候，我们就把它标注为负样本。当特征被提取出来后，为每个物体类别训练一个线性SVM分类器。而当训练样本数量过大导致内存不足的问题，文中使用困难负样本挖掘的方式(可参考DPM的论文:Object detection with discriminatively trained part based models)。</p>
-  </li>
-</ol>
-
-<h3 id="section-3">部分细节</h3>
-
-<ul>
-  <li>使用CNN物体进行识别分类训练，在训练的时候最后一层softmax为分类层，而文中使用CNN进行特征提取，然后再把提取到的特征用于线性SVM分类器的训练。这是因为SVM训练和CNN训练过程的样本选取方式不一致，alexnet在训练时所采用的训练数据的标注比较宽松，如外接框包含物体一部分（IOU大于0.5）则可以作为正样本，需要大量的数据进行训练以防止过拟合。而SVM适用于小样本，对样本数据要求比较苛刻，要使外接框完全包含整个物体时才标注为目标。而文中采用selective search获取候选框，按照原alexnet中的训练模型无法取得较好的结果。</li>
-</ul>
-
-<h3 id="section-4">存在问题</h3>
-
-<ol>
-  <li>
-    <p>每个候选框需要进行整个前向CNN特征提取，运算量大;</p>
-  </li>
-  <li>
-    <p>训练耗时，占用磁盘空间大。</p>
+    <p>为什么用softmax替换SVM？答：实验结果表明softmax的mAP更高，“We note that softmax, unlike one-vs-rest SVMs, introduces competition between classes when scoring a RoI”。</p>
   </li>
 </ol>
 
@@ -175,7 +179,7 @@
       <center>
       &copy; 2016 陈健明 &middot;
       <a href="https://github.com/cjmcv"> Github Site </a>
-      2016-09-24 13:15:35 +0800
+      2016-09-25 22:41:19 +0800
       </center>
     </p>
   </footer>
