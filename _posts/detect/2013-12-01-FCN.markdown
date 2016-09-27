@@ -1,5 +1,5 @@
 ---
-title: FCN(Fully Convolutional Networks for Semantic Segmentation, CVPR，2015）
+title: FCN（CVPR，2015）
 date: 2013-12-08 19:55:16
 categories: fDetect
 ---

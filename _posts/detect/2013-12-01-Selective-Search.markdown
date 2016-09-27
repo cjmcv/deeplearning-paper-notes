@@ -1,5 +1,5 @@
 ---
-title: Selective Search for Object Recognition（IJCV，2012）
+title: Selective Search（IJCV，2012）
 date: 2013-12-08 19:55:16
 categories: fDetect
 ---

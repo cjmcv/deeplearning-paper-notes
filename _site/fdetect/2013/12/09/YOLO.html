@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>fAtt</title>
+<title>YOLO（CVPR，2016）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="计算机视觉算法学习笔记">
 <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -72,56 +72,62 @@
 
       <div class="container">
         <div id="article">
-  <div class="article-title">fAtt</div>
+  <div class="article-title">YOLO（CVPR，2016）</div>
   <p class="meta">
     <small>
       &nbsp;<i class="fa fa-calendar-o"></i> 09 Dec 2013
     </small>
   </p> <hr/>
   <div class="post">
-    <p>Herring Cove is a clean and responsive theme for Jekyll.</p>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-<h3 id="overview">Overview</h3>
+<p>代码：<a href="http://pjreddie.com/darknet/yolo/">http://pjreddie.com/darknet/yolo/</a></p>
 
-<ul>
-  <li>Fixed Sidebar with social links</li>
-  <li>Minimal design</li>
-  <li>Comments by Disqus</li>
-  <li>Social Sharing abilities</li>
-  <li>Easy to configure</li>
-  <li>Based on Bootstrap</li>
-</ul>
+<p>论文：Redmon J, Divvala S, Girshick R, et al. You Only Look Once: Unified, Real-Time Object Detection[J]. Computer Science, 2015.</p>
 
-<h3 id="screenshots">Screenshots</h3>
+<h3 id="section">论文算法概述</h3>
 
-<p><img src="/images/screenshot1.png" alt="screenshot" />
-<img src="/images/screenshot2.png" alt="screenshot" /></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>   YOLO，将物体检测的多个组建融合到单一的卷积网络中，输入全图可以同时预测多个包围框及其属各类别的概率。可以进行端到端训练并保持较高的平均准确率实时检测。系统中将输入图像分割成S*S个单元格，当物体落入到某单元格中，则该单元格则负责检测该物体。每个单元格要预测B个候选框及其是否含有目标的置信度。每个候选框有（x,y,w,h,confidence）五个参数，(x,y)为相对于该单元格的偏移，而confidence表示预测框和任意ground truth box的IOU。流程大致为：将图像缩放到固定大小（448*448），用网格进行分割，每个网格预测B个候选框，各得到5个参数，用阈值和NMS（Non-maximum suppression）去掉部分候选框即可。
 
-<h3 id="setup">Setup</h3>
+   网络输出为S*S*(B*5+C)，以下网络结构输出为例，PASCAL VOC 的20类，则C = 20，网格分为7*7，B为2（每格可以有两个框），5为五个参数，得到每个单元格对应2*5+20=30维的张量，含有两个候选框及其位置，加上每一类的概率，因为限定了每单元格只能识别一类，所以20不用*2。
+</code></pre>
+</div>
+
+<center><img src="/images/pdDetect/yolo1.png" /></center>
+
+<center><img src="/images/pdDetect/yolo2.png" /></center>
+
+<h3 id="section-1">优点</h3>
 
 <ol>
-  <li>Install Jekyll</li>
-  <li>Fork or <a href="https://github.com/arnp/herring-cove/archive/master.zip">download</a> this theme repo</li>
-  <li>Edit the <code class="highlighter-rouge">_config.yml</code> file</li>
+  <li>
+    <p>检测速度快，把检测看成是回归问题，不需要复杂的过程。速度快，比其他实时检测算法的平均准确率高；</p>
+  </li>
+  <li>
+    <p>YOLO在训练和预测时都对全图进行分析，可以对全图的上下文信息等进行提取。Fast-RCNN把部分背景图像块识别成物体（作为候选框）的原因主要是它无法分析到更大一些的上下文信息，所以YOLO错误候选框会比Fast-RCNN少很多。</p>
+  </li>
 </ol>
 
-<p>You can change the showcase image by replacing <code class="highlighter-rouge">showcase.jpg</code> file in the <code class="highlighter-rouge">images</code> folder. I’ll try to find a better way to do this soon.</p>
+<h3 id="section-2">缺点</h3>
 
-<h3 id="download">Download</h3>
+<ol>
+  <li>
+    <p>检测精度不是很高，只是说比其他能实时检测的算法高；</p>
+  </li>
+  <li>
+    <p>具有空间约束，每个单元格只能预测两个框和一个类别，即成群出现的小物体（多物体在同一单元格）无法识别。</p>
+  </li>
+  <li>
+    <p>无法适应于有不寻常长宽比的物体或其他情况，泛化能力较弱。</p>
+  </li>
+  <li>
+    <p>由于算法的损失函数问题，对大小物体的检测误差一样对待，而因为在大物体上的小误差影响不大，小物体上的小误差会造成很大影响，因此该算法对大小物体上的检测还需要提高。</p>
+  </li>
+  <li>
+    <p>因为有全连接层，且没有使用SPP等相应措施，所以输入图像需要缩放到固定大小。</p>
+  </li>
+</ol>
 
-<p><a href="https://github.com/arnp/herring-cove/archive/master.zip">download</a></p>
-
-<h3 id="license">License</h3>
-<ul>
-  <li><a href="http://opensource.org/licenses/MIT">MIT</a></li>
-</ul>
-
-<hr />
-<p>Herring Cove is always a work in progress and as such, I hope to clean up the code and add features as time permits. Feel free to add your own additions.</p>
-
-<p><em>What’s with the name?</em></p>
-
-<p><a href="http://www.capecodbeachchair.com/beachguide/index.cfm?page=3&amp;BeachID=5">Herring Cove</a> is a beach on Cape Cod in Provincetown, Massachusetts. If you’re in the area, be sure to check it out!</p>
 
   </div>
 </div>
@@ -131,10 +137,10 @@
 -->
 <ul class="pager">
 
-  <li class="previous"><a href="/fdetect/2013/12/09/YOLO.html">&larr; Older</a></li>
+  <li class="previous"><a href="/fdetect/2013/12/09/Selective-Search.html">&larr; Older</a></li>
 
 
-  <li class="next"><a href="/fcpu/fgpu/2013/12/09/fProgram.html">Newer &rarr;</a></li>
+  <li class="next"><a href="/fatt/2013/12/09/fAtt.html">Newer &rarr;</a></li>
 
 </ul>
 
