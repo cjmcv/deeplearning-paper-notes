@@ -1,5 +1,5 @@
 ---
-title: SSD（CVPR，2016）
+title: GoogLeNet（2014）
 date: 2013-12-08 19:55:16
 categories: fDetect
 ---
@@ -8,7 +8,7 @@ categories: fDetect
 
 代码：[https://github.com/weiliu89/caffe/tree/ssd](https://github.com/weiliu89/caffe/tree/ssd)
 
-论文：Liu W, Anguelov D, Erhan D, et al. SSD: Single Shot MultiBox Detector[J]. Computer Science, 2015.
+论文：Szegedy C, Liu W, Jia Y, et al. Going deeper with convolutions[J]. 2015:1-9.
 
 ### 论文算法概述
 
