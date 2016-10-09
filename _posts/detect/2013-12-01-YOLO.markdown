@@ -1,5 +1,5 @@
 ---
-title: YOLO（CVPR，2016）
+title: YOLO（CVPR，2015）
 date: 2013-12-08 19:55:16
 categories: fDetect
 ---

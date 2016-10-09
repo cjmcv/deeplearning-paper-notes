@@ -81,63 +81,46 @@
   <div class="post">
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-<p>代码：<a href="https://github.com/weiliu89/caffe/tree/ssd">https://github.com/weiliu89/caffe/tree/ssd</a></p>
-
 <p>论文：Szegedy C, Liu W, Jia Y, et al. Going deeper with convolutions[J]. 2015:1-9.</p>
 
 <h3 id="section">论文算法概述</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>   SSD（Single Shot MultiBox Detector），单一的深度神经网络用于检测多个类别的物体，可进行端到端的训练，速度比之前的single shot detectors（YOLO）快，准确率与Faster-RCNN相当，甚至对与低分辨率的图像也能取得不差的效果。而其核心在于使用应用于特征图上的小卷积滤波器进行物体类别与区域预测，如图1某层8*8大小的特征图，使用3*3的滑窗提取每个位置的特征，然后这个特征回归得到目标的坐标信息和类别信息。为了实现高检测率，在不同尺度的特征图上进行多尺度的预测，并根据长宽比来分离预测结果。
+<div class="highlighter-rouge"><pre class="highlight"><code>   提出一种深度卷积神经网络框架，叫做Inception。一个典型的应用例子是22层的GoogLeNet，取得ILSVRC14中物体分类与检测冠军。这种框架基于Hebbian规则和多尺度处理的思想进行设计，其主要特点是可以在固定的运算量下提升网络的深度和宽度，使能更好利用网络中的计算资源。且GoogLeNet的参数比2012年的Alexnet少12倍，准确率却高不少。主要采用了1×1卷积的方式，主要用于实现两个功能：1）作为降维模块去除限制网络大小的计算瓶颈;  2）使可以加深加宽网络结构而不降低网络性能。
 </code></pre>
 </div>
 
-<h3 id="section-1">模型</h3>
+<h3 id="section-1">目的和更高层次的考虑</h3>
 
-<p>以较好的物体分类网络（如VGG16）中分类层前面的网络作为基础网络（truncated base network），再添加上一些网络结构来实现物体检测，该模型有以下几个特点：</p>
+<p>提高深度网络性能的最直接方式是增加网络复杂度，这增加包括深度（网络层数）和宽度（每层的神经元个数）。但是模型越大意味着参数越多，则越容易产生过拟合，特别是数据量不够的时候;另一个缺点是这样会增加计算资源的使用，例如，在深度网络中，两个卷积层连接在一起，任何的一致的大小增加都会造成参数呈二次方增加。如果增加的是无效的，例如，大部分权重最后会接近于0，这样许多计算就浪费了。尽管主要的目的是提高性能，在实际中计算资源是有限的。</p>
 
-<ol>
-  <li>
-    <p>采用多尺度特征图，添加多卷积层到基础网络后面，逐层将尺寸减小使可以用于多尺度检测;</p>
-  </li>
-  <li>
-    <p>添加的每个卷积层都可以使用一系列卷积滤波器产生一个套检测结果，如下结构图（classifier对应）所示。对于m<em>n的p通道特征图，一个可能的检测结果的参数的基本元素是3</em>3<em>p的小卷积核，生成每类的评分或位置偏移量。即核应用在m</em>n的每个位置上都会有一个输出;</p>
-  </li>
-  <li>
-    <p>将一系列default boxes与网络顶层多个特征图中每个特征图单元相关联。default boxes,如图1中为3<em>3大小
-以卷积的方式放到特征图上，所以每个default boxes的位置相对于与它相关联的单元格是固定的。在每个特征图单元格中，我们预测方框相对于特征图单元格的偏移位置及其类别评分。例如，在一位置上每个方框有K个目标，分别计算其类别评分c和4个位置偏移量，则有（c+4）k个滤波器被应用在m</em>n特征图的每个位置上，产生（c+4）kmn输出。这里的default boxes与Faster-RCNN中的anchor boxes相似，但会被应用于多个分辨率的特征图上。</p>
-  </li>
-</ol>
+<p>解决上面问题最基本的方法是将最后的全连接层甚至是中间的卷积层改为稀疏连接结构。以往文章表明，如果一个数据集的概率分布能被一个大的稀疏的深度网络所表征，则最优的网络结构能通过激活单元的相关统计构建出来（稀疏网络结构可以重新构建出最优结构），并与Hebbian原则相对应——neurons that fire together, wire together。</p>
 
-<h3 id="section-2">训练</h3>
+<p>从底层考虑，现在的硬件在非一致稀疏数据结构上的计算是很低效的，特别是在这些数据上使用为密集矩阵计算优化过的库函数时。卷积网络为了打破对称性并提高学习率，传统上会在特征维度上使用随机稀疏的方式来实现。而后来又为了更好地实现并行计算，转为使用全连接的方式。</p>
 
-<p>与使用region proposals和pooling的检测器不一样的是ground truth信息需要被分配到有检测器产生的特定的输出上，当分配好后即可进行端到端的训练。训练还涉及到选择default boxes和尺度以及困难样本挖掘和数据扩增等策略。</p>
+<p>所以，问题是有没有一种方法，既能保证网络结构的稀疏性，又能利用密集矩阵的高计算性能。而文中提出的Inception Module可解决这问题。</p>
 
-<p>匹配策略：</p>
+<h3 id="section-2">结构上的细节</h3>
 
-<ul>
-  <li>在训练时，需要先建立ground truth和default boxes的联系，开始使用jaccard overlap将ground truth box与default boxes匹配，然后将default boxes对任意ground truth的 jaccard overlap大于阈值（0.5）的进行匹配。这样可以使网络在多个重叠default boxes中进行预测，而不需要只选择最大重叠的一个。</li>
-</ul>
+<p>Inception结构的主要目的是在卷积网络中找出一个最优的局部稀疏结构，可以用来近似并代替现有的密集型的组件。我们假定前面层的每个单元都与输入图像的某些区域相关联，并且这些单元组成滤波器组。在低层（靠近输入图像的层）中相关的单元将对应于某局部区域，使用1×1的卷积后仍然对应着该区域，使用3×3则可以得到更大的区域对应。为了避免patch alignment的问题，Inception框架使用的滤波器大小是1×1,3×3,5×5，而这样的设计并不是必须的，更多只是为了方便。而在更高层中进行特征提取，特征的稀疏聚集程度需要增加，即3×3和5×5卷积在更高的层中应有所增加。Inception模块如图所示。</p>
 
-<p>default boxes尺度和长宽比的选择：</p>
+<p>在这些模块中的一个大问题是，在上层卷积层中有很多滤波器导致尽管5×5的卷积数量不多也会产生较多的计算量。除了卷积外，其中的池化单元也存在这个问题。尽管这种结构比较接近最优稀疏结构，但其计算也并不高效，会导致在几层过后计算量暴增。因此提出在计算量会增加较多的地方联合使用降维和预测，在3×3和5×5卷积前面使用1×1卷积进行降维。</p>
 
-<ul>
-  <li>
-    <p>大多数卷积网络会随着层次加深而减少特征图的尺寸，这样不仅减少了计算量和内存消耗，也产生一些角度和尺度变换的不变性。为处理不同的物体尺度，一些方法建议将图像缩放到不同的大小，然后每个尺度独立处理后合并结果。但使用来自单网络多个不同层的特征图进行预测，同时共享所有的物体尺度的参数，也可以实现这个功能。之前有论文证明过使用低层次的特征图可以提高语义分割的质量，因为低层获取了更好的细节。则文中同时采用高层和低层的特征图用来做物体检测，图1中展示了使用的两个特征图（8<em>8和4</em>4）示意，还可以采用更多层。</p>
-  </li>
-  <li>
-    <p>每层的特征图都会有不同的感受野，而SSD中default boxes没必要与每层实际感受野相联系。要使特定特征图的对应位置针对于特定图像区域和物体尺度的检测，使用多个特征图去预测，则每个特征图的default boxes的尺度计算如下：<img src="/images/pdDetect/ssd_g1.png" height="50" width="260" />，其中Smin=0.2，Smax=0.95，即最底层对应0.2，最高层对应0.95。而对于default boxes的长宽比，设a为{1,2,3,1/2,1/3}，则宽高分别为<img src="http://latex.codecogs.com/gif.latex? w_k^a  = s_k \sqrt a ,\;\;h_k^a  = s_k /\sqrt a " />。对于长宽比为1时，添加一个尺度为<img src="http://latex.codecogs.com/gif.latex? s'_k  = \sqrt {s_k s_k  + 1}" />的default boxe，则每个特征图位置上有6个default boxes。设置每个default boxe的中心为<img src="/images/pdDetect/ssd_g2.png" />，<img src="http://latex.codecogs.com/gif.latex? |f_k |" />是第k个特征图的大小，<img src="http://latex.codecogs.com/gif.latex? i,j \in [0,|f_k |)" />。在实际应用中可以设计一个default boxe的分布去适应针对的测试集。</p>
-  </li>
-</ul>
+<p>对于降维如模块图所示，虽然图a的卷积核都比较小，但是当输入和输出的通道数很大时，乘起来也会使得卷积核参数变的很大，而图b加入1×1卷积后可以降低输入的通道数，卷积核参数、运算复杂度也就跟着下降。以GoogLeNet的3a模块为例，输入的feature map是28×28×192，3a模块中1×1卷积通道为64，3×3卷积通道为128，5×5卷积通道为32，如果是左图结构，那么卷积核参数为1×1×192×64+3×3×192×128+5×5×192×32，而右图对3×3和5×5卷积层前分别加入了通道数为96和16的1×1卷积层，这样卷积核参数就变成了1×1×192×64+（1×1×192×96+3×3×96×128）+（1×1×192×16+5×5×16×32），参数大约减少到原来的三分之一。同时在并行pooling层后面加入1×1卷积层后也可以降低输出的feature map数量，左图pooling后feature map是不变的，再加卷积层得到的feature map，会使输出的feature map扩大到416，如果每个模块都这样，网络的输出会越来越大。而右图在pooling后面加了通道为32的1×1卷积，使得输出的feature map数降到了256。</p>
 
-<p>困难样本挖掘：</p>
+<p>这种框架有两个优点，1）可以增加每层网络参数而不会造成计算量暴增；2)可以使同时提取不同尺度的特征。</p>
 
-<ul>
-  <li>在匹配阶段，多数的default boxs都是负样本，但并非所有负样本都使用。这里以每个default box的最高置信度进行排序，并选择最高的一些。使正负样本比例保持约为1：3，使训练更快更稳定。</li>
-</ul>
+<center><img src="/images/pdDetect/googlenet1.png" /></center>
 
-<center><img src="/images/pdDetect/ssd1.png" /></center>
+<center><img src="/images/pdDetect/googlenet2.png" /></center>
 
-<center><img src="/images/pdDetect/ssd2.png" /></center>
+<h3 id="googlenet">GoogLeNet</h3>
+
+<center><img src="/images/pdDetect/googlenet3.png" /></center>
+
+<center><img src="/images/pdDetect/googlenet4.png" /></center>
+<center><img src="/images/pdDetect/googlenet5.png" /></center>
+<center><img src="/images/pdDetect/googlenet6.png" /></center>
+<center><img src="/images/pdDetect/googlenet7.png" /></center>
 
   </div>
 </div>
@@ -185,7 +168,7 @@
       <center>
       &copy; 2016 陈健明 &middot;
       <a href="https://github.com/cjmcv"> Github Site </a>
-      2016-10-03 00:40:50 +0800
+      2016-10-09 14:19:53 +0800
       </center>
     </p>
   </footer>

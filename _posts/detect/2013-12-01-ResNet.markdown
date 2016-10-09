@@ -1,0 +1,28 @@
+---
+title: ResNet（2015）
+date: 2013-12-08 19:55:16
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文：He K, Zhang X, Ren S, et al. Deep Residual Learning for Image Recognition[J]. Computer Science, 2015.
+
+### 论文算法概述
+
+       提出
+
+### 目的和更高层次的考虑
+
+   提高
+
+
+### 结构上的细节
+
+   Inception
+
+   这
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/googlenet1.png"></center>
+
+
