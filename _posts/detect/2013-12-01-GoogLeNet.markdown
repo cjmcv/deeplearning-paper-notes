@@ -42,6 +42,4 @@ categories: fDetect
 <center><img src="{{ site.baseurl }}/images/pdDetect/googlenet3.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/googlenet4.png"></center>
-<center><img src="{{ site.baseurl }}/images/pdDetect/googlenet5.png"></center>
-<center><img src="{{ site.baseurl }}/images/pdDetect/googlenet6.png"></center>
-<center><img src="{{ site.baseurl }}/images/pdDetect/googlenet7.png"></center>
+
