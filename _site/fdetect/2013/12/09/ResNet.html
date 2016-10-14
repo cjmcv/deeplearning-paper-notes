@@ -85,6 +85,8 @@
 
 <p>Github: <a href="https://github.com/KaimingHe/deep-residual-networks">https://github.com/KaimingHe/deep-residual-networks</a></p>
 
+<p>译文推荐：<a href="http://www.cnfeelings.com/future/53100">http://www.cnfeelings.com/future/53100</a></p>
+
 <h3 id="section">论文算法概述</h3>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>   深度网络可以提取到低/中/高层的特征，通过增加网络层数可以丰富提取到的特征。但训练一个好的模型并不是直接叠加更多的网络层就可以实现的。在增加层数时会有梯度弥散和梯度暴增的问题，使网络难以收敛，而normalized initialization [23, 9, 37, 13] and intermediate normalization layers[16]可以很大程度上解决这些问题。但网络逐渐收敛后，还有可能会遇到degradation（退化）问题，即网络加深了，在没有产生过拟合情况下，准确率却下降了。如图1所示，在合适的网络的基础上增加网络层数，而产生了更大的误差。这表明并不是所有网络那么容易优化的。文中提出的深度残差学习框架可以解决degradation问题。
@@ -188,7 +190,7 @@
       <center>
       &copy; 2016 陈健明 &middot;
       <a href="https://github.com/cjmcv"> Github Site </a>
-      2016-10-10 16:29:40 +0800
+      2016-10-14 15:12:12 +0800
       </center>
     </p>
   </footer>

@@ -8,7 +8,9 @@ categories: fDetect
 
 论文： He K, Zhang X, Ren S, et al. Deep Residual Learning for Image Recognition[J]. Computer Science, 2015.
 
-Github: [https://github.com/KaimingHe/deep-residual-networks](https://github.com/KaimingHe/deep-residual-networks )
+Github: [https://github.com/KaimingHe/deep-residual-networks](https://github.com/KaimingHe/deep-residual-networks)
+
+译文推荐：[http://www.cnfeelings.com/future/53100](http://www.cnfeelings.com/future/53100)
 
 ### 论文算法概述
 
