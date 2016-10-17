@@ -8,7 +8,7 @@ categories: fDetect
 
 主页：[http://cilvr.nyu.edu/doku.php?id=software:overfeat:start](http://cilvr.nyu.edu/doku.php?id=software:overfeat:start)
 
-Github：[https://github.com/sermanet/OverFeat](Github：https://github.com/sermanet/OverFeat)
+Github：[https://github.com/sermanet/OverFeat](https://github.com/sermanet/OverFeat)
 
 论文：Sermanet P, Eigen D, Zhang X, et al. Overfeat: Integrated recognition, localization and detection using convolutional networks[J]. arXiv preprint arXiv:1312.6229, 2013.
 
