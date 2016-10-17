@@ -1,0 +1,78 @@
+---
+title: OverFeat（ICCV，2013）
+date: 2013-12-08 19:55:16
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+主页：[http://cilvr.nyu.edu/doku.php?id=software:overfeat:start](http://cilvr.nyu.edu/doku.php?id=software:overfeat:start)
+
+Github：[https://github.com/sermanet/OverFeat](Github：https://github.com/sermanet/OverFeat)
+
+论文：Sermanet P, Eigen D, Zhang X, et al. Overfeat: Integrated recognition, localization and detection using convolutional networks[J]. arXiv preprint arXiv:1312.6229, 2013.
+
+### 论文算法概述
+
+       提出一种联合分类、定位和检测的卷积神经网络框架。一种常用的数据扩增方法是将训练样本随机移动一个小的偏移量或者随机crop，而测试时可以使用滑动窗口对每个图像块进行分类并组合分类结果。文中展示了如何将多尺度滑动窗口的方法高效率地应用在卷积网络中，通过单一的共享网络同时多项任务，并相互辅助提高精度。在ILSVRC2013上获得很好的成绩。文中分类框架与Alexnet相似，主要设计了fast和accurate两个模型。其中的卷积层为各个任务特征提取的公共部分，应对不同任务对后面层进行单独调整训练。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/overfeat1.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/overfeat2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/overfeat3.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/overfeat4.png"></center>
+
+### 多尺度分类
+
+   对于训练好的卷积网络，每层的特征图大小会随输入图像大小的改变而改变，当输入图像与训练样本尺寸相同时，如图上边所示，最后只有一个节点的输出，代表属于某一类的概率（如用于1000分类，则得到1000*1的输出）。但当输入图像比训练样本大时，如图下边所示，输出为一个矩阵（1类1矩阵，如第n个矩阵的左上角的元素值k代表左上角的图像块属于第n类的概率为k），矩阵中每个节点对应着每个图像块属于某一类的概率，相当于通过滑动窗口进行采样（密集采样，dense pooling）至训练样本大小然后分别进行计算。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/overfeat5.png"></center>
+
+   传统的检测任务应对多尺度问题通常有两种方式，一是固定图像大小使用不同尺度的滑动窗口遍历全图，二是构建图像金字塔以固定滑动窗口遍历每个尺度的图像。而卷积网络的输入大小为固定为全图，要使其支持多尺度需要以不同尺度的图像作为输入，分别通过上面的计算，最后将所有输出结果组合起来得到最终结果。
+
+   <font color='blue'>步骤说明：</font>
+1. 对于一张图片，给定一个尺度（每个尺度都计算一次），从最后一层卷积层（layer-5）未池化的特征图开始计算； 
+
+2. 每个特征图使用3*3的极大值池化操作，偏移量分别为{0,1,2}，重复3*3次;
+
+3. 这过程产生一系列的特征图，为每个不同的偏移量重复3*3次；
+
+4. 分类器（6,7,8层）需要一个固定的5*5大小的输入，并且在池化特征图中的每个位置产生C维的输出向量。这分类器使用滑动窗口的方式应用在池化特征图上，产生C维的输出特征图；
+
+5. 每个偏移组合输出的特征图重整成一个3D的特征图输出。
+
+
+<font color='blue'>以下图为例子：</font>
+
+* 卷积层5的特征图大小为（一维）20，使用尺寸为3的不重叠的极大值池化，以偏移量{0,1,2}分别生成3个大小为6（20/3=6）的池化结果，如偏移为1时得到（2,3,4）（5,6,7）（8,9,10）（11,12,13）（14,15,16）（17,18,19）= 4,7,10,13,16,19；而后面的全连接层分类器需要大小为5的固定输入，可以使用滑动窗口的方式提取不同的输入向量（如截取4,7,10,13,16作为输入）；分类器对每个偏移量对应输出一个2维的结果，并将其整合成一个3*2维的输出。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/overfeat6.png"></center>
+
+   文中测试时如下表格所示，对于一张图像，设定6个尺度，得到6个输入图像，并分别翻转得到12个输入图像。分别输入网络中得到12个输出结果，对每个结果进行NMS非极大值抑制，将抑制结果按类别求平均得到最终结果。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/overfeat7.png"></center>
+
+
+### 定位
+
+   将网络中的分类层（6,7,8）由回归网络替代，以最后一层卷积层的池化特征图作为输入，使用预测边界和真实边界之间的L2范数作为代价函数来训练回归网络，用于预测物体的每个位置和尺度，最后输出的结果包含4个节点用于表示物体方框。测试时将分类器和回归器同时应用于图像所有位置和尺度。对于每一个尺度，分类器给出了图像块的类别的概率分布，回归器进一步为每一类给出了一个方框，则每一个方框都会有一个置信度与之相对应。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/overfeat8.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/overfeat9.png"></center>
+
+<font color='blue'>组合预测结果：</font>
+1. 在6个缩放比例上分别使用分类网络，得到每个比例上的top-k个类别作为该图片的类别标定Cs。
+
+2. 在各个缩放比例和位置上针对类别集Cs使用回归网络，产生Cs内每个类别对应的物体方框集合Bs。
+
+3. 将各个缩放比例的方框集合Bs都放到一个大集合B中。
+
+4. 在B中进行方框融合。选取两个方框b1，b2，计算两方框中心距离和重叠面积得到两方框的匹配程度，若匹配程度大于设定阈值，就结束，如果小于阈值就在B中删除b1，b2，然后把b1和b2的融合方框放入B中，继续进行循环计算。
+
+### 检测
+
+   略...
+
