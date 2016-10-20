@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Samples</title>
+<title>Center Loss（ECCV，2016）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="计算机视觉算法学习笔记">
 <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -73,97 +73,44 @@
 
       <div class="container">
         <div id="article">
-  <div class="article-title">Samples</div>
+  <div class="article-title">Center Loss（ECCV，2016）</div>
   <p class="meta">
     <small>
-      &nbsp;<i class="fa fa-calendar-o"></i> 04 Dec 2013
+      &nbsp;<i class="fa fa-calendar-o"></i> 09 Dec 2013
     </small>
   </p> <hr/>
   <div class="post">
-    <h1 id="samples">Samples</h1>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-<h1 id="heading-1">Heading 1</h1>
+<p>论文： Wen Y, Zhang K, Li Z, et al. A Discriminative Feature Learning Approach for Deep Face Recognition[M]// Computer Vision – ECCV 2016. Springer International Publishing, 2016.</p>
 
-<h2 id="heading-2">Heading 2</h2>
+<p>Github: <a href="https://github.com/ydwen/caffe-face">https://github.com/ydwen/caffe-face</a></p>
 
-<h3 id="heading-3">Heading 3</h3>
+<h3 id="section">论文算法概述</h3>
 
-<h4 id="heading-4">Heading 4</h4>
+<div class="highlighter-rouge"><pre class="highlight"><code>   在训练深度网络时选择一个好的损失函数很重要，因为SGD用于CNN训练是基于mini-batch的，并不能很好的反映出深度特征的全局分布。而将所有图片一起输入训练不切实际，因此contrastive loss和triplet loss作为可选的方法，分别为两张图像和三张图片构造损失函数，并且相对与单张图片的效果得到显著提升，但不可避免地使收敛速度慢且不稳定。
 
-<h5 id="heading-5">Heading 5</h5>
+   在大多数可用的CNN中，softmax损失函数被用作训练深度模型的监视信号。为了增强深度学习特征的识别能力，文中提出中心损失函数（center loss）。中心损失函数学习每类数据的深层特征的中心，惩罚深层特征和它们对应的类中心的距离，即训练时在更新特征中心的同时最小化深度特征与其对应中心的距离（减小类内距离）。这种中心损失函数是可训练的，在CNN中非常容易优化。在用于训练CNN时，使用softmax loss和center loss进行联合监督，使用超参数对两个监督信号进行平衡。从直观上看，softmax loss使各类的深度特征分离，而center loss将深度特征推向各自的中心。这样联合监督可以使类间差异加大，类内差异减小。实验中通过Softmax损失函数和中心损失函数的联合监视的CNN在几个重要人脸识别基准上取得了最高的准确率。
+</code></pre>
+</div>
 
-<h6 id="heading-6">Heading 6</h6>
+<h3 id="center-loss">Center Loss</h3>
 
-<h3 id="body-text">Body text</h3>
+<p>设c为类深度特征中心，x为各特征向量，L为梯度。则center loss的公式为:</p>
 
-<p><strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Quisque tempus nunc diam, non dignissim risus tincidunt a. Curabitur consequat justo vitae ipsum accumsan tempor. Quisque rhoncus eleifend ante vitae ultricies. Pellentesque suscipit nisl ut metus tincidunt, vulputate sodales dui commodo. Sed eget sapien varius, lacinia lectus nec, tempor dolor. Pellentesque sed mattis magna. Curabitur ut tristique turpis. Morbi sagittis dolor suscipit urna placerat, consectetur venenatis sapien viverra. Mauris vitae felis et sem venenatis cursus.</p>
+<center><img src="/images/pdDetect/centerloss1.png" /></center>
 
-<p><img src="/images/cc.jpg" alt="Image" /></p>
+<p>在训练时，中心损失由SGD进行优化，类特征中心c应随着特征的改变而更新，即需要输入整个训练集并将每次迭代得到的特征取平均，这样的做法不切实际。文中采用的方式是基于mini-batch来更新类特征中心，在每次迭代中，类中心通过类特征取平均得到（即有些类中心可能会不更新）；为了避免错误标签带来大扰动，文中使用一个标量来控制类中心的学习率。梯度L和类中心c的计算如下：</p>
 
-<p>Donec ornare turpis non ullamcorper pulvinar. <em>Integer ut mauris vehicula mauris posuere adipiscing.</em> Phasellus dictum cursus convallis. Sed dapibus laoreet porttitor.</p>
+<center><img src="/images/pdDetect/centerloss2.png" /></center>
 
-<h3 id="blockquotes">Blockquotes</h3>
+<center><img src="/images/pdDetect/centerloss3.png" /></center>
 
-<blockquote>
-  <p>Fusce non eleifend nisi. Donec pharetra sed ipsum sit amet sollicitudin. Duis dolor ante, gravida varius neque eget, semper commodo libero. In euismod tempor lobortis. Nulla eget lectus nec enim mattis aliquet a sit amet est.</p>
-</blockquote>
+<h3 id="section-1">实验结果</h3>
 
-<h2 id="list-types">List Types</h2>
+<p>model A仅以softmax loss作为监督信号； model B以softmax loss和contrastive loss作为监督信号； model C以softmax loss和center loss作为监督信号。结果对比如下：</p>
 
-<h3 id="lists">Lists</h3>
-
-<ol>
-  <li>Item One
-    <ol>
-      <li>sub one</li>
-      <li>sub two</li>
-      <li>sub three</li>
-    </ol>
-  </li>
-  <li>Item Two</li>
-</ol>
-
-<ul>
-  <li>Uno</li>
-  <li>Dos</li>
-  <li>Tres</li>
-</ul>
-
-<h2 id="table">Table</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>Tables</th>
-      <th style="text-align: center">Are</th>
-      <th style="text-align: right">Cool</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>col 3 is</td>
-      <td style="text-align: center">right-aligned</td>
-      <td style="text-align: right">$1600</td>
-    </tr>
-    <tr>
-      <td>col 2 is</td>
-      <td style="text-align: center">centered</td>
-      <td style="text-align: right">$12</td>
-    </tr>
-    <tr>
-      <td>zebra stripes</td>
-      <td style="text-align: center">are neat</td>
-      <td style="text-align: right">$1</td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="code">Code</h2>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">node</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="nb">next</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="nb">next</span></code></pre></figure>
+<center><img src="/images/pdDetect/centerloss4.png" /></center>
 
 
   </div>
@@ -174,10 +121,10 @@
 -->
 <ul class="pager">
 
-  <li class="previous"><a href="/fbasei/fbasen/fbasem/ftrack/fosource/2013/11/09/fBase-fDetect-fTrack.html">&larr; Older</a></li>
+  <li class="previous"><a href="/fdetect/2013/12/09/AlexNet.html">&larr; Older</a></li>
 
 
-  <li class="next"><a href="/jekyll/testing/2013/12/09/What-is-this-anyway.html">Newer &rarr;</a></li>
+  <li class="next"><a href="/fdetect/2013/12/09/DPM.html">Newer &rarr;</a></li>
 
 </ul>
 
