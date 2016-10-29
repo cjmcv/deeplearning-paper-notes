@@ -1,0 +1,38 @@
+---
+title: ZFNet（ECCV, 2014）
+date: 2013-12-08 19:55:16
+categories: fTrick
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Zeiler M D, Fergus R. Visualizing and Understanding Convolutional Networks[M]// Computer Vision – ECCV 2014. Springer International Publishing, 2013:818-833.
+
+Github: [https://github.com/kvfrans/feature-visualization](https://github.com/kvfrans/feature-visualization) ; [https://github.com/jcjohnson/cnn-vis](https://github.com/jcjohnson/cnn-vis)
+
+### 论文算法概述
+
+       深度网络效果很好，但却难以理解为什么会有这么好的效果，如何能提高性能。要知道卷积网络中的卷积操作需要将特征在中间层的活动展现出来，则文中提出了一种新型的方法将这些活动通过反卷积网络映射回输入图像的空间上进行可视化，展示出什么样的输入模式会使特征图中出现这样的活动，用于模型的分析和调优。反卷积网络可以看成是一个卷积网络使用相同的而翻转的组件（滤波器和池化），将特征映射回输入图像。不参与训练，仅用于检测已训练好的模型。
+
+* Unpooling：在卷积网络中，最大池化操作是不可逆的，然而我们可以通过记录每个池化区域的最大值的位置作为一组转换变量以获得近似的逆转池化效果。在反卷积中，unpooling从上一层网络根据记录定位到下一层的位置，将该位置填回极大值，其余置0，进行重构，保留刺激的结构。
+
+* Rectication: 卷积网络使用Relu的非线性性质，用于修正特征图确保特征图处于活跃状态，确保激励值为正。而逆向过程同样要确保为正，也可以直接使用Relu。
+
+* Filtering: 卷积网络使用卷积滤波器去对上一层网络进行卷积学习，为了逆转，反卷积网络使用以相同的滤波器转置后得到的卷积滤波器，应用于rectified maps。在实践中将滤波器进行水平和垂直翻转。
+
+<center><img src="{{ site.baseurl }}/images/pdTrick/zfnet1.png"></center>
+
+### 卷积网络的可视化实验
+
+* 特征可视化：如图所示，网络中每层网络的映射反映出了特征集在网络中的分层次的性质。网络层数越高，提取到的特征越抽象，如第2层提取到了角点、轮廓、颜色等特征；第3层提取到了纹理信息，更具不变性；第4、5层提取到的特征开始具有类别的差异。
+
+<center><img src="{{ site.baseurl }}/images/pdTrick/zfnet2.png"></center>
+
+* 训练过程中的特征演变：如图，底层的特征经过多次迭代后较快地趋于稳定，而高层特征需要迭代更多次才能收敛。
+
+<center><img src="{{ site.baseurl }}/images/pdTrick/zfnet3.png"></center>
+
+* 特征不变性：将图像进行平移、旋转、缩放等操作。如图所示，第2列和第3列分别为第1层和第7层网络对原图输出的特征和操作后图像输出的特征的欧式距离；第4列为图像变换后的分类器正确输出的概率。可得层数低时输入图像的小的变化都会导致输出特征很大的变化，而随着层数增加影响会变小（注：卷积网络对旋转不具有很好鲁棒性）。
+
+<center><img src="{{ site.baseurl }}/images/pdTrick/zfnet4.png"></center>
+
