@@ -1,0 +1,24 @@
+---
+title: MTCNN（2016）
+date: 2013-12-08 19:55:16
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+代码：[https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html?from=timeline&isappinstalled=1](https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html?from=timeline&isappinstalled=1)
+
+论文：Zhang K, Zhang Z, Li Z, et al. Joint Face Detection and Alignment using Multi-task Cascaded Convolutional Networks[J]. 2016.
+
+### 论文算法概述
+
+       使用级联卷积网络的方式同时实现人脸检测和人脸对齐，则该框架整体上有三个任务（是否人脸，人脸方框回归，关键点回归），共使用了三个卷积网络：第一级，使用全卷积神经网络获取候选框及其回归向量，利用回归向量对候选框进行校正并使用非极大值抑制NMS来融合框；第二级，将前面得到的候选框输入到例一个CNN中，也同样进行方框回归和NMS；第三级，与第二级类似，但更注重细节并添加了人脸关键点的回归。
+       在训练时，对于是否人脸的二分类问题，使用cross-entropy loss，而对于方框回归和特征点回归都采用Euclidean loss。同时训练过程中采用了Online Hard sample mining，在前向过程得到每个样本的loss，对minibatch中每个样本的loss进行排序，选取前70%作为困难样本，在反向传播中只传递由困难样本得到的梯度。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/mtcnn1.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/mtcnn2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/mtcnn3.png"></center>
+
+
