@@ -52,7 +52,6 @@ Github: [http://www.github.com/goodfeli/adversarial ](http://www.github.com/good
 
 1. 一个条件生成模型p(x |c)可以由将c作为输入添加到模型G和D中得到。
 
-
 2. 学习近似推理可以通过训练辅助网络来基于x预测z，这是类似于用wake-sleep算法训练的推理网络，但该推理网络具有的优势是在训练完毕后能一个固定的生成器。
 
 3. 半监督学习：来自判别模型D或推论网络的特征在带标签数据有限的情况下有助于提升分类器的性能。
