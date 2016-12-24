@@ -1,0 +1,37 @@
+---
+title: DRCN（CVPR，2016）
+date: 2016-12-11 19:50:00
+categories: fSr
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文：Kim J, Lee J K, Lee K M. Deeply-Recursive Convolutional Network for Image Super-Resolution[J]. Computer Science, 2015.
+
+### 论文算法概述
+
+       提出使用深度递归网络用于单图像分辨率重构，实验中采用的网络递归16层。增加递归深度可以提高性能，而这里递归是重复利用相同的卷积层，因此不需要引入新的参数。但它的缺点是较难使用标准的梯度下降法来训练DRCN，因为容易出现梯度暴增或梯度弥散问题。为了解决这个问题，提出了两个方法：1）recursive-supervision，所有的递归都被监督，每次递归得到的特征图都用于重构高清目标图，重构的方法对于每个递归都一样，每个递归得到的结果都不一样，然后结合全部预测结果得到最后的结果；2）skip-connection，从输入到重构层采用skip-connection，低分辨率图像与高分辨率图像在很大程度上有同样的信息，将输入连接到重构输出层，有利于提高效率。
+
+<center><img src="{{ site.baseurl }}/images/pdSr/drcn1.png"></center>
+
+### 基本模型
+
+   基本模型包含embedding, inference and reconstruction networks三个子网络，embedding net由输入图像转化成一系列特征图；Inference net是主要的部分，解决超分辨率问题也是递归循环的部分；reconstruction net将多通道的特征图转为3通道或单通道的图像。每个子网络都有一个隐藏层，只有inference net是递归的。在子网络中每个使用3*3*F*F的卷积核，embedding net中使用3*3是因为图像的梯度比整体的整体图像强度有用，inference net中采用3*3的核表示隐藏状态只从相邻的像素之间传递。Reconstruction net也考虑到相邻像素的关系。训练时与SRCNN一样，将原图模糊化上采样到目标大小，做成图像对进行训练。该递归模型简单而且效果好，但且很难训练，因为容易出现梯度暴增或梯度弥散的现象，因为输入输出的端到端的关系，之间有不少网络层，需要长期记忆，因此在学习像素之间的关系时梯度叠加容易出现暴增或者弥散。另外，在SR任务中，需要输入输出很相似，需要把输入信息准确地拷贝传递到输出层，在递归层中实现较困难，所以这里单纯加深递归层数时无法训练成功。
+
+<center><img src="{{ site.baseurl }}/images/pdSr/drcn2.png">  <img src="{{ site.baseurl }}/images/pdSr/drcn3.png"></center>
+
+### 改进的模型（概述中图a）
+
+1. Recursive-Supervision：监督所有的循环迭代用来防止梯度暴增和梯度弥散的影响。相同的网络表征在inference net中被重复利用，相同的reconstruction net用于所有迭代循环的高分辨率预测。D个迭代循环就有D个输出结果，所有输出预测结果在训练时同时进行监督，如图3（a）所示，使用D个中间预测结果取平均计算最终的输出。一个相似却又不一样的用于监督中间层的方法在Lee al [16]中被应用到，他们的方法最小化了分类误差，同时也使隐藏层学习过程变得更直观透明。但与该论文的方法有两点不一样，他们将独立的分类器与每一个隐藏层相联系，对于一个额外的层，就会引入一个新的分类器，及其新的参数。如果采用这种方式，该论文中网络就会变成图3（b）那样，需要引入D个不同的重构网络，这样随着递归加深，就会引入更多的参数，与采用递归网络的初衷相违背。而且采用不同的重构网络就不能有效地调整网络。另外一个不同的是他们在测试的时候将去掉所有中间分类器，然而整合所有的中间分类结果能够有效提高效果。论文中递归监督很容易地去除训练递归网络的难题，将多个预测losses中得到的反向传播整合起来能得到一个相对稳定的结果，这样梯度暴增或弥散的影响就会小很多。
+
+<center><img src="{{ site.baseurl }}/images/pdSr/drcn4.png"></center>
+
+2. Skip-Connection：对于SR，输入和输出高度相关，而因为梯度传播的问题，在递归较深的时候比较难学习到它们之间的简单的线性映射关系，因为文中添加了从输入到重构层的连接，这样可以使网络在递归的情况下仍可保留输入信号，同时输入信号的准确拷贝在目标预测时能起到作用。
+
+3. Training：在该递归网络中，有D+1（D个递归循环输出+1个最终输出）个目标需要最小化目标函数，对于中间递归结果，loss设为<img src="{{ site.baseurl }}/images/pdSr/drcn5.png">；尾端输出loss为<img src="{{ site.baseurl }}/images/pdSr/drcn6.png">；整体loss则为<img src="{{ site.baseurl }}/images/pdSr/drcn7.png">，其中alpha为权重因子，beta为权重衰减系数。
+
+
+### 实验结果
+
+<center><img src="{{ site.baseurl }}/images/pdSr/drcn8.png"></center>
+

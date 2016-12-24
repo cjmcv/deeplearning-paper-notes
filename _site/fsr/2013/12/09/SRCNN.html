@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>SRCNN（ECCV，2014）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">SRCNN（ECCV，2014）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 09 Dec 2013
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>主页：<a href="http://mmlab.ie.cuhk.edu.hk/projects/SRCNN.html">http://mmlab.ie.cuhk.edu.hk/projects/SRCNN.html </a></p>
+
+<p>论文：Dong C, Chen C L, He K, et al. Learning a Deep Convolutional Network for Image Super-Resolution[M]// Computer Vision – ECCV 2014. Springer International Publishing, 2014:184-199.</p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   提出的基于深度卷积网络用于单图像的超分辨率重构，直接学习低分辨率和高分辨率图像之间的映射关系，联合优化所有网络层进行端到端训练。并建立了传统的基于稀疏编码的SR方法与基于深度学习的SR方法的联系，由此提供SR网络设计的方向。
+
+   整个流程包括三个步骤：1、图像块提取与表示；2、非线性映射；3、重构；测试时先使用双立方插值将低分辨率图像放大到目标大小，将放大后的图像进行映射和重构得到高分辨率图像。训练时使用清晰图像，按一定步长将输入图像先缩小后放大得到相对模糊的图像，以一定大小和步长有重叠地截取模糊的图像块和原图图像块作为样本对（输入图像和标签），进行训练，因为图像块的截取有重叠，则映射得到的高分辨率图像块也有重叠，而传统方法中是以取平均的方式得到结果，这种取平均的方式可以认为是一种在一组特征图上的预定义滤波器，所以这里提出使用一个卷积层。最后使用重构图和标签图的均方误差MSE作为损失函数进行训练。
+</code></pre>
+</div>
+
+<h3 id="section-1">实现细节</h3>
+
+<p>文中用于实验的网络设置参数为f1=9，f2=5，n1=64，n2=32。并会根据每个上采样因子{x2,x3,x3}来针对性训练网络。在训练阶段输入图像为32<em>32的图像块，把每个图像块当作是一张单独的图像。先将原图按对应的缩放因子进行下采样，然后使用双立方插值上采样的原来大小。使用一定的步长有重叠地裁切图像，则这91图像使用步长为14时将会大约得到24800张子图像，作者尝试过采用更小的步长，但没有明显的性能提升。且据作者观察，这些训练样本对于该网络已经足够了。
+训练中为避免边界影响，所有卷积层都没有padding，并且网络输出更小的尺寸（20</em>20），而损失函数仅针对原图中心20*20的图像块与网络输出进行计算。在测试的时候，该网络可应用于任意大小的图像，并会给出足够的zero-padding来使输入输出大小一致。为解决边界影响，在每个卷积层中，在relu之前的输出都根据输入有效数据的数量来进行归一化，这些可以预先计算好。卷积核的权重由0均值0偏置0.001标准差的高斯分布生成，前两层的学习率为0.0001，最后一层为0.00001。</p>
+
+<center><img src="/images/pdSr/srcnn1.png" /></center>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fsr/2013/12/09/FSRCNN.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fsr/2013/12/09/VDSR.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2016 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2016-12-24 22:00:40 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

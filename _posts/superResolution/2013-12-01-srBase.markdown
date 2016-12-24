@@ -1,0 +1,33 @@
+---
+title: Train/Test DataSet
+date: 2016-12-23 20:00:00
+categories: fSr
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+### 训练集
+
+1. 91 images：来自 J. Yang, J. Wright, T. S. Huang, and Y. Ma. Image superresolution via sparse representation. TIP, 2010.
+   
+2. 291 images：来自D. Martin, C. Fowlkes, D. Tal, and J. Malik. A database of human segmented natural images and its application to evaluating segmentation algorithms and measuring ecological statistics. In ICCV, 2001.
+
+3. ImageNet：SRCNN中采用该训练集进行训练。
+
+### 测试集
+
+1. Set5：来自C. G. Marco Bevilacqua, Aline Roumy and M.-L. A. Morel. Low-complexity single-image super-resolution based on nonnegative neighbor embedding. In BMVC, 2012.
+
+2. Set14：来自R. Zeyde, M. Elad, and M. Protter. On single image scale-upusing sparse-representations. In Curves and Surfaces, pages 711–730. Springer, 2012.
+
+3. Urban100：来自J.-B. Huang, A. Singh, and N. Ahuja. Single image superresolution using transformed self-exemplars. In CVPR, 2015.
+
+4. B100：来自R. Timofte, V. De Smet, and L. Van Gool. A+: Adjusted anchored neighborhood regression for fast super-resolution. In ACCV, 2014.
+
+### 测试指标
+
+1. PSNR:
+
+2. SSIM:
+
+<center><img src="{{ site.baseurl }}/images/pdSr/sr1.png"></center>

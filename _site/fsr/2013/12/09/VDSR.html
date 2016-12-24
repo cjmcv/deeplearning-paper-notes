@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>VDSR（CVPR，2016）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">VDSR（CVPR，2016）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 09 Dec 2013
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文：Kim J, Lee J K, Lee K M. Accurate Image Super-Resolution Using Very Deep Convolutional Networks[J]. Computer Science, 2015.</p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   提出一种高精度单图超分辨率重构方法，通过多次级联小滤波器在20层的网络结构中，来高效挖掘图像区域中的上下文信息。训练时通过只学习残差的方式以高学习率加快收敛。文中先指出SRCNN的三个缺点：依赖小图像块的上下文信息；训练收敛慢；网络仅能应对一个尺度；则文中算法有一下改进：1、利用较大图像块的上下文信息。对于单尺度缩放因子，通常涵盖在小图像块内的上下文信息不足以恢复细节，即会有病态矩阵问题（求解方程组时如果对数据进行较小的扰动，则得出的结果具有很大波动，这样的矩阵称为病态矩阵）； 2、采用残差学习从而使用较大的学习率加快收敛速度。因为训练图像对具有高度相关，残差则对应于低分辨率和高分辨率图像的差别，所以残差学习会比较有效，这里初始学习率设为SRCNN的10000倍；3、提出单模型的超分辨率重构方法，以往的方法通常是手动设置缩放因子，而这里发现单模型足以应用与多个缩放因子的重构。
+</code></pre>
+</div>
+
+<center><img src="/images/pdSr/vdsr1.png" /></center>
+
+<h3 id="section-1">网络结构</h3>
+
+<p>整体结构如图所示，先将图像上采样到对应尺寸，使用卷积网络来学习图像细节部分（残差），后将学到的细节部分跟原图叠加得到高分辨率输出，采用残差学习的方式是因为输入和输出高度相关。</p>
+
+<center><img src="/images/pdSr/vdsr2.png" /></center>
+
+<h3 id="section-2">训练</h3>
+
+<p>采用MSE监督训练。在SRCNN中，在某图像丢弃后网络仍需要保留所有输入细节，同时输出图像完全来自于学习到的特征图。输入输出在经过多个网络层，为端到端的关系则需要长期记忆，所以容易出现梯度暴增或梯度弥散。而这个问题可以通过残差学习来解决，这里损失层输入有三个：残差估计、低分辨率图、高分辨率目标，残差估计与低分辨率图相叠加结果使接近高分辨率目标图。</p>
+
+<p>训练过程中可加大学习率，通过可调节的gradient clipping来防止梯度暴增。gradient clipping的意思是在前向传播与反向传播之后得到的每个权重的梯度diff，这时不像通常那样直接使用这些梯度进行权重更新，而是先求所有权重梯度的平方和sumsq_diff，如果sumsq_diff &gt; clip_gradient，则求缩放因子scale_factor = clip_gradient / sumsq_diff。这个scale_factor在(0,1)之间。如果权重梯度的平方和sumsq_diff越大，那缩放因子将越小，最后将所有权重乘上这个缩放因子后得到的梯度值才用于权重更新，这样可以防止梯度暴增时造成的loss发散（caffe中需要在solver里设置一个超参数clip_gradient）。文中利用gradient clipping把梯度限制在一定范围内[-a/r, a/r]，使可以较大的学习率去学习，其中r为当前学习率，a为自己调节的参数。</p>
+
+<p>加深模型能提高性能（论文中实验证明从5到20层，随着层数增加，效果也迅速提升），则更深模型中会有更多的参数。以往的一个模型针对一个缩放因子，这里模型应对于多个尺度，将多个缩放因子产生的图像对集放在一起一同训练，样本生成与SRCNN类似，将图像进行切块，但这里的图像块之间无重叠。对于多缩放因子和单一缩放因子的训练效果如图，发现多缩放因子一起训练效果反而更好。</p>
+
+<center><img src="/images/pdSr/vdsr3.png" /></center>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fsr/2013/12/09/SRCNN.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fatt/2013/12/09/fAtt.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2016 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2016-12-24 22:00:40 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

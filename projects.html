@@ -61,12 +61,12 @@ title: Algorithms
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
-          <img src="{{ site.baseurl }}/images/pdTrack/pTrack.jpg">
+          <img src="{{ site.baseurl }}/images/pdSr/pSr.jpg">
         </div>
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
-            {% if category[0] == 'fTrack'  %}
-            <h1>目标跟踪 ({{category | last | size}})</h1>
+            {% if category[0] == 'fSr'  %}
+            <h1>超分辨率重构 ({{category | last | size}})</h1>
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
@@ -74,7 +74,7 @@ title: Algorithms
 	            {% endfor %}
 	          </ul>
             {% endif %}
-	  {% endfor %}
+	      {% endfor %}
           </div>
         </div>
       </div>
