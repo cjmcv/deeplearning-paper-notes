@@ -121,13 +121,13 @@
 </code></pre>
 </div>
 
-<center><img src="/images/pdTrick/gan1.png" /></center>
+<center><img src="/images/pdGan/gan1.png" /></center>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>   模型G和D使用多层感知器来构建，所以只需使用BP算法即可训练而不需要用到马尔科夫链和其他近似推理网络。可实现给定一批样本，通过无监督训练一个网络，能够生成类似的新样本。
 </code></pre>
 </div>
 
-<center><img src="/images/pdTrick/gan2.png" /></center>
+<center><img src="/images/pdGan/gan2.png" /></center>
 
 <h3 id="section-1">优缺点</h3>
 
@@ -145,6 +145,8 @@
 
 <p>缺：
 由模型G得到的数据分布没有一个明确的表示，没有损失函数，在过于自由不可控,训练过程中很难区分是否在向好的方向训练。而且在训练时模型D需要和模型G同步得很好，否则可能发生崩溃问题，生成器开始退化，总是生成同样的样本点，无法继续学习。当生成模型崩溃时，判别模型也会对相似的样本点指向相似的方向，训练无法继续。训练较困难。</p>
+
+<center><img src="/images/pdGan/gan3.png" /></center>
 
 <h3 id="section-2">结论与展望</h3>
 
@@ -215,7 +217,7 @@
       <center>
       &copy; 2016 陈健明 &middot;
       <a href="https://github.com/cjmcv"> Github Site </a>
-      2016-12-31 17:06:40 +0800
+      2016-12-31 17:15:34 +0800
       </center>
     </p>
   </footer>

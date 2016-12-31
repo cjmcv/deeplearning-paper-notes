@@ -2,7 +2,7 @@
 title: Algorithms
 ---
 
-  <!--<center><font color="blue" size="50px">Algorithms</font></center>-->
+  <!--<center><font color="blue" size="50px">Algorithms</font></center>          -->
   <center><h1>论文阅读</h1></center>
   <center>包括关注过的模块算法的相关论文阅读笔记</center>
 
@@ -12,12 +12,12 @@ title: Algorithms
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
-          <img src="{{ site.baseurl }}/images/pdDetect/pDetect.jpg">
+	  <!--<img src="{{ site.baseurl }}/images/pdDetect/pDetect.jpg">-->
         </div>
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
             {% if category[0] == 'fDetect'  %}
-            <h1>目标|人脸检测与识别 ({{category | last | size}})</h1>
+            <h1>目标|人脸检测与对比/识别 ({{category | last | size}})</h1>
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
@@ -36,7 +36,7 @@ title: Algorithms
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
-          <img src="{{ site.baseurl }}/images/pdAlign/pAlign.jpg">
+          <!--<img src="{{ site.baseurl }}/images/pdAlign/pAlign.jpg">-->
         </div>
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
@@ -61,12 +61,12 @@ title: Algorithms
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
-          <img src="{{ site.baseurl }}/images/pdSr/pSr.jpg">
+          <!--<img src="{{ site.baseurl }}/images/pdSr/pSr.jpg">-->
         </div>
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
             {% if category[0] == 'fSr'  %}
-            <h1>超分辨率重构 ({{category | last | size}})</h1>
+            <h1>人脸幻构/超分辨率重构 ({{category | last | size}})</h1>
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
@@ -81,17 +81,16 @@ title: Algorithms
     </div>
   </div>
 
-
-  <div class="container">    <!--- 4 -->
+  <div class="container">  
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
-          <img src="{{ site.baseurl }}/images/pdAtt/pAtt.jpg">
+          <!--<img src="{{ site.baseurl }}/images/pdAtt/pAtt.jpg">-->
         </div>
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
-            {% if category[0] == 'fAtt'  %}
-            <h1>人脸属性 ({{category | last | size}})</h1>
+            {% if category[0] == 'fGan'  %}
+            <h1>生成对抗网络 ({{category | last | size}})</h1>
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
@@ -104,13 +103,13 @@ title: Algorithms
         </div>
       </div>
     </div>
-  </div>
+  </div> 
 
   <div class="container">    <!--- 4 -->
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
-          <img src="{{ site.baseurl }}/images/pdAtt/pAtt.jpg">
+          <!--<img src="{{ site.baseurl }}/images/pdAtt/pAtt.jpg">-->
         </div>
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
