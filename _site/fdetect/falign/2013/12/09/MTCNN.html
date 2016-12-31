@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Train/Test DataSet</title>
+<title>MTCNN（2016）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="计算机视觉算法学习笔记">
 <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -73,58 +73,32 @@
 
       <div class="container">
         <div id="article">
-  <div class="article-title">Train/Test DataSet</div>
+  <div class="article-title">MTCNN（2016）</div>
   <p class="meta">
     <small>
-      &nbsp;<i class="fa fa-calendar-o"></i> 24 Dec 2016
+      &nbsp;<i class="fa fa-calendar-o"></i> 09 Dec 2013
     </small>
   </p> <hr/>
   <div class="post">
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-<h3 id="section">训练集</h3>
+<p>代码：<a href="https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html?from=timeline&amp;isappinstalled=1">https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html?from=timeline&amp;isappinstalled=1</a></p>
 
-<ol>
-  <li>
-    <p>91 images：来自 J. Yang, J. Wright, T. S. Huang, and Y. Ma. Image superresolution via sparse representation. TIP, 2010.</p>
-  </li>
-  <li>
-    <p>291 images：来自D. Martin, C. Fowlkes, D. Tal, and J. Malik. A database of human segmented natural images and its application to evaluating segmentation algorithms and measuring ecological statistics. In ICCV, 2001.</p>
-  </li>
-  <li>
-    <p>ImageNet：SRCNN中采用该训练集进行训练。</p>
-  </li>
-</ol>
+<p>论文：Zhang K, Zhang Z, Li Z, et al. Joint Face Detection and Alignment using Multi-task Cascaded Convolutional Networks[J]. 2016.</p>
 
-<h3 id="section-1">测试集</h3>
+<h3 id="section">论文算法概述</h3>
 
-<ol>
-  <li>
-    <p>Set5：来自C. G. Marco Bevilacqua, Aline Roumy and M.-L. A. Morel. Low-complexity single-image super-resolution based on nonnegative neighbor embedding. In BMVC, 2012.</p>
-  </li>
-  <li>
-    <p>Set14：来自R. Zeyde, M. Elad, and M. Protter. On single image scale-upusing sparse-representations. In Curves and Surfaces, pages 711–730. Springer, 2012.</p>
-  </li>
-  <li>
-    <p>Urban100：来自J.-B. Huang, A. Singh, and N. Ahuja. Single image superresolution using transformed self-exemplars. In CVPR, 2015.</p>
-  </li>
-  <li>
-    <p>B100：来自R. Timofte, V. De Smet, and L. Van Gool. A+: Adjusted anchored neighborhood regression for fast super-resolution. In ACCV, 2014.</p>
-  </li>
-</ol>
+<div class="highlighter-rouge"><pre class="highlight"><code>   使用级联卷积网络的方式同时实现人脸检测和人脸对齐，则该框架整体上有三个任务（是否人脸，人脸方框回归，关键点回归），共使用了三个卷积网络：第一级，使用全卷积神经网络获取候选框及其回归向量，利用回归向量对候选框进行校正并使用非极大值抑制NMS来融合框；第二级，将前面得到的候选框输入到例一个CNN中，也同样进行方框回归和NMS；第三级，与第二级类似，但更注重细节并添加了人脸关键点的回归。
+   在训练时，对于是否人脸的二分类问题，使用cross-entropy loss，而对于方框回归和特征点回归都采用Euclidean loss。同时训练过程中采用了Online Hard sample mining，在前向过程得到每个样本的loss，对minibatch中每个样本的loss进行排序，选取前70%作为困难样本，在反向传播中只传递由困难样本得到的梯度。
+</code></pre>
+</div>
 
-<h3 id="section-2">测试指标</h3>
+<center><img src="/images/pdDetect/mtcnn1.png" /></center>
 
-<ol>
-  <li>
-    <p>PSNR:</p>
-  </li>
-  <li>
-    <p>SSIM:</p>
-  </li>
-</ol>
+<center><img src="/images/pdDetect/mtcnn2.png" /></center>
 
-<center><img src="/images/pdSr/sr1.png" /></center>
+<center><img src="/images/pdDetect/mtcnn3.png" /></center>
+
 
   </div>
 </div>
@@ -134,8 +108,10 @@
 -->
 <ul class="pager">
 
-  <li class="previous"><a href="/fsr/2016/12/12/DRCN.html">&larr; Older</a></li>
+  <li class="previous"><a href="/fdetect/2013/12/09/HyperFace.html">&larr; Older</a></li>
 
+
+  <li class="next"><a href="/fdetect/2013/12/09/OverFeat.html">Newer &rarr;</a></li>
 
 </ul>
 

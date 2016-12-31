@@ -1,7 +1,7 @@
 ---
 title: MTCNN（2016）
 date: 2013-12-08 19:55:16
-categories: fDetect
+categories: fDetect fAlign
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
