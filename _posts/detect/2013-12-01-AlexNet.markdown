@@ -1,6 +1,6 @@
 ---
 title: AlexNet（NIPS，2012）
-date: 2013-12-08 19:55:16
+date: 2015-06-20 09:50:00
 categories: fDetect
 ---
 

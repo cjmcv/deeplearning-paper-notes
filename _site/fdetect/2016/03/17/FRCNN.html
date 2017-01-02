@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Fast-RCNN（ICCV，2015）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">Fast-RCNN（ICCV，2015）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 17 Mar 2016
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>代码：<a href="https://github.com/rbgirshick/fast-rcnn">https://github.com/rbgirshick/fast-rcnn</a></p>
+
+<p>论文：Girshick R. Fast R-CNN[C]// IEEE International Conference on Computer Vision. IEEE, 2015:1440-1448.</p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   该算法针对RCNN和SPP-Net中的缺点而提出，具有以下优点：1）比RCNN和SPP-Net更高的检测率； 2）训练过程简洁，使用多任务loss；  3）能更新所有网络层（SPP无法更新卷积层）； 4）改进了SPP-Net后面的需要将第二层FC的特征放到硬盘上训练SVM，之后再额外训练bbox regressor。
+ 训练过程为将完整图像输入到各卷积层和池化层中得到特征图，把最后一层特征图中每个候选框的相应区域输入到单层（only one pyramid level）的SPP layer（文中称为ROI池化层）中，以使每个候选框得到固定长度的特征向量。特征向量输入到全连接层中而全连接层后面接两个输出层，一个输出各类的softmax概率，另一个输出各类对应的四个实数表示目标方框位置；
+</code></pre>
+</div>
+
+<center><img src="/images/pdDetect/frcnn1.png" /></center>
+
+<h3 id="roispp">Roi池化层（单层金字塔的SPP空间金字塔池化层）</h3>
+
+<p>使用极大值池化，将感兴趣区域的特征转化到一个小的固定尺寸（H<em>W）的特征图中，H和W作为超参数独立于各个特定的感兴趣区域ROI。这里的ROI指的是卷积特征图的一个矩形窗口（h</em>w），而极大值池化核大小约为（h/H * w/W），在每个子窗口中进行池化到H*W中对应的网格中。这ROI池化层是SPP-Net中的特殊例子，与SPP层为多尺度，ROI池化层为单尺度。</p>
+
+<h3 id="section-1">使用预训练网络进行初始化</h3>
+
+<p>使用预训练网络需要经过三个阶段:1、网络最后的极大值池化层改为ROI池化层去连接第一层全连接层； 2、最后的全连接层和1000类softmax层更换成全连接层和K+1类softmax 再加上 窗口位置信息。 3、网络输入增加输入ROI信息；</p>
+
+<h3 id="section-2">调优</h3>
+
+<p>FastRCNN只有一个调优阶段，联合优化softmax分类器和bbox回归器；而RCNN和SPPnet包含softmax分类器、SVMs和回归器三个调优阶段。文中基于特征共享提出一种更高效的训练方法，在FRCNN中选取N张图片，从每张图像中提取R/N个ROI，这样ROI来自同一张图片可以在前向和后向中共享计算量和内存。如文中试验采用N=2，R=128，即两张图片各取64个ROI，可以比从128张图片中各提取一个ROI快64倍。因为这里计算是对一张图片进行卷积，后提取ROI做ROI池化等后面操作，主要运算量与图片大小和数量相关联。</p>
+
+<h3 id="loss">多任务loss</h3>
+
+<p>FastRCNN有两个输出层，两个loss联合训练：<img src="http://latex.codecogs.com/gif.latex? L\left( {p,u,t^u ,v} \right) = L_{cls} (p,u) + \lambda [u \ge 1]L_{loc} (t^u ,v)" />，类别为u，框为v。一个输入K+1类的概率分布，使用softmaxLoss：<img src="http://latex.codecogs.com/gif.latex? L_{loc}  =  - \log p_u" />；另一个是输出目标的回归窗口位置，使用的是smoothL1Loss：<img src="http://latex.codecogs.com/gif.latex? L_{loc} (t^u ,u) = \sum\limits_{i \in \{ x,y,w,h\} } {smooth_{L1} (t_i^u ,v_i )} " />，<img src="/images/pdDetect/frcnn2.png" />，目的是让loss对离散点更具鲁棒性。若使用L2 loss需要认真调整学习率防止梯度暴增；</p>
+
+<h3 id="section-3">尺度不变性</h3>
+
+<p>文中探索了两种方式来实现尺度不变的物体检测：1）暴力方法：每张图片都设置为固定大小，使网络直接从训练数据中学习尺度不变性； 2）通过多尺度方法，在测试时利用图像金字塔近似对每个样本进行尺度归一化，在训练时每张图像随机选取金字塔中的一个尺度，这也是数据扩增的方式。文中采用的是方式1，多尺度比单尺度准确率仅高一点点约1%，但速度慢很多。</p>
+
+<h3 id="section-4">用奇异值分解加速检测过程</h3>
+
+<p>使用Truncated SVD（SVD的变形,只计算用户指定的最大的k个奇异值）对全连接层进行分解，速度可提高30%，而mAp仅下降0.3%，并且在压缩后不需要进行微调。</p>
+
+<h3 id="section-5">算法设计细节</h3>
+
+<ol>
+  <li>
+    <p>哪些层需要finetune？答：对于层次较深的网络，只finetune全连接层而不管卷积层会造成较大的性能损耗，如文中试验VGG16只调fc为61.4%，fc和conv一起调为66.9%；但并非所有卷积层都要调，对于浅层的卷积层影响不大，不finetune这些层可以节省训练时间。</p>
+  </li>
+  <li>
+    <p>多任务的好处？答：相对于RCNN的多个单独训练任务来说方便；而且任务间通过卷积层共享进行相互影响可以提高性能。</p>
+  </li>
+  <li>
+    <p>为什么用softmax替换SVM？答：实验结果表明softmax的mAP更高，“We note that softmax, unlike one-vs-rest SVMs, introduces competition between classes when scoring a RoI”。</p>
+  </li>
+</ol>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fdetect/2016/01/03/RCNN.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fdetect/2016/03/19/FRCNN2.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-01-02 15:52:26 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

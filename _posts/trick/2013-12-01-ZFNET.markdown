@@ -1,6 +1,6 @@
 ---
 title: ZFNet（ECCV, 2014）
-date: 2013-12-08 19:55:16
+date: 2016-09-10 19:55:16
 categories: fTrick
 ---
 

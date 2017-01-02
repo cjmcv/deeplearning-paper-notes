@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>ResNet（2015）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">ResNet（2015）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 11 Sep 2016
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文： He K, Zhang X, Ren S, et al. Deep Residual Learning for Image Recognition[J]. Computer Science, 2015.</p>
+
+<p>Github: <a href="https://github.com/KaimingHe/deep-residual-networks">https://github.com/KaimingHe/deep-residual-networks</a></p>
+
+<p>译文推荐：<a href="http://www.cnfeelings.com/future/53100">http://www.cnfeelings.com/future/53100</a></p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   深度网络可以提取到低/中/高层的特征，通过增加网络层数可以丰富提取到的特征。但训练一个好的模型并不是直接叠加更多的网络层就可以实现的。在增加层数时会有梯度弥散和梯度暴增的问题，使网络难以收敛，而normalized initialization [23, 9, 37, 13] and intermediate normalization layers[16]可以很大程度上解决这些问题。但网络逐渐收敛后，还有可能会遇到degradation（退化）问题，即网络加深了，在没有产生过拟合情况下，准确率却下降了。如图1所示，在合适的网络的基础上增加网络层数，而产生了更大的误差。这表明并不是所有网络那么容易优化的。文中提出的深度残差学习框架可以解决degradation问题。
+</code></pre>
+</div>
+
+<center><img src="/images/pdDetect/resnet1.png" /></center>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>假设我们期望的网络层关系映射为H(x), 我们让 the stacked nonlinear layers 拟合另一个映射，F(x):= H(x)-x，那么原先的映射就是 F(x)+x。 这里我们假设优化残差映射F(x) 比优化原来的映射 H(x)容易。F(x)+x可以通过shortcut connections 来实现，如下图所示：
+</code></pre>
+</div>
+
+<center><img src="/images/pdDetect/resnet2.png" /></center>
+
+<h3 id="section-1">残差学习</h3>
+
+<p>（与训练减均值类似）设H(x)为多个堆叠在一起的网络的期望的关系映射，x为原始输入。假定多个非线性网络可以慢慢逼近复杂函数，那么也就同样可以逼近残差函数H(x)-x（假设输入输出维度相等）。因此我们可以让网络逼近残差函数F(x) := H(x)-x，则原始的函数为F(x)+x。</p>
+
+<p>增加的网络层如果可以被构建为相应的关系映射，则更深层次的网络的训练误差会更小。而degradation问题表明直接通过多个非线性网络层去逼近identity mappings存在一定难度，在进行残差学习时，如果identity mappings是最优的，则会直接将这多个非线性层的权重置0去接近identity mappings。</p>
+
+<p>在实际中，identity mappings不太可能达到最优，但残差学习可以帮助预处理这些问题。如果一个最优的函数相对与zero mappings来说更靠近identity mappings，那么它应该更容易基于identity mappings去学习，而不用重新学习。</p>
+
+<h3 id="identity-mapping-by-shortcuts">Identity Mapping by Shortcuts</h3>
+
+<p>在多个堆叠层中采用残差学习，其构件（building block）如图2所示，假定输入x和输出y的维度一致，定义为y = F( x, {Wi} ) + x；若维度不一致，可通过a linear projection Ws去转换维度：y = F( x, {Wi} ) +Ws x。而残差函数F是可变的，可以包含有两个或三个甚至更多网络层。但如果只有一层，那么该building block与一个线性层相类似，即y=W1 x + x。</p>
+
+<h3 id="section-2">网络结构</h3>
+
+<p>Plain Network提出受VGG启发，主要采用3*3卷积，并且有以下两个规则：1）对于相同输出特征图尺寸，网络层则有相同个数的滤波器；2）如果特征图尺寸缩小一半，滤波器个数加倍以保持每层的计算复杂度。通过步长为2的卷积来进行降采样。总共有34个权重层。 该网络与VGG相比，滤波器要少，复杂度要小。Residual Network则主要是在plain network上加入shortcut connections。</p>
+
+<center><img src="/images/pdDetect/resnet3.png" /></center>
+
+<h3 id="section-3">实验测试结果</h3>
+
+<center><img src="/images/pdDetect/resnet4.png" /></center>
+
+<hr />
+
+<center><img src="/images/pdDetect/resnet5.png" /></center>
+
+<hr />
+
+<center><img src="/images/pdDetect/resnet6.png" /></center>
+
+<hr />
+
+<center><img src="/images/pdDetect/resnet7.png" /></center>
+
+<hr />
+
+<center><img src="/images/pdDetect/resnet8.png" /></center>
+
+<hr />
+
+<center><img src="/images/pdDetect/resnet9.png" /></center>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fdetect/2016/09/09/HyperFace.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/ftrick/2016/09/11/ZFNET.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-01-02 16:03:37 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

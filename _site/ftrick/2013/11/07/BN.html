@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Batch Normalization（2015）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">Batch Normalization（2015）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 07 Nov 2013
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文： He K, Zhang X, Ren S, et al. Deep Residual Learning for Image Recognition[J]. Computer Science, 2015.</p>
+
+<p>Github: <a href="https://github.com/KaimingHe/deep-residual-networks">https://github.com/KaimingHe/deep-residual-networks</a></p>
+
+<p>译文推荐：<a href="http://www.cnfeelings.com/future/53100">http://www.cnfeelings.com/future/53100</a>
+论文：Ioffe S, Szegedy C. Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift[J]. Computer Science, 2015.</p>
+
+<p>部分内容摘自：</p>
+
+<p><a href="http://blog.csdn.net/happynear/article/details/44238541">http://blog.csdn.net/happynear/article/details/44238541</a>  作者：happynear</p>
+
+<p><a href="http://blog.csdn.net/hjimce/article/details/50866313">http://blog.csdn.net/hjimce/article/details/50866313</a>  作者：hjimce</p>
+
+<p><a href="http://blog.csdn.net/shuzfan/article/details/50723877">http://blog.csdn.net/shuzfan/article/details/50723877</a>  作者：shuzfan</p>
+
+<p>BN的matlab代码：<a href="https://github.com/happynear/DeepLearnToolbox">https://github.com/happynear/DeepLearnToolbox</a></p>
+
+<p>Caffe的BN实现：<a href="https://github.com/ducha-aiki/caffe/tree/bn">https://github.com/ducha-aiki/caffe/tree/bn</a></p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   训练深度神经网络时，每层网络的输入分布都会随着前面层的参数变化而改变。所以需要较低的学习率和谨慎的参数初始化，这会使训练变得缓慢，使saturating nonlinearities 激活函数（如sigmoid，正负两边都会饱和）进行模型训练也会变得困难。文中称这种现象为internal covariate shift，并采用归一化网络层的输入(Batch Normalization)来解决该问题。
+</code></pre>
+</div>
+
+<p>“We define Internal Covariate Shift as the change in the distribution of network activations due to the change in network parameters during training”</p>
+
+<ol>
+  <li>
+    <p>Batch Normalization可以保持各层输入的均值和方差稳定，来减弱internal covariate shift问题，并提高训练速度。</p>
+  </li>
+  <li>
+    <p>可以通过降低梯度对于参数的尺度或初始值的依赖性，对整个网络的梯度流起到有利的效果，这可以使我们可以使用更高的学习率而没有发散的风险。</p>
+  </li>
+  <li>
+    <p>有正则化效果，规范化了模型，减少了Dropout的需求。</p>
+  </li>
+  <li>
+    <p>降低网络在饱和区域卡死的可能性降低，使网络使用saturating nonlinearities 激活函数成为可能。</p>
+  </li>
+</ol>
+
+<h3 id="section-1">网络训练的预处理</h3>
+
+<p>从以往的论文可得如果输入数据是白化的（0均值、1方差、弱相关），则网络的收敛速度会快些。而每层网络的输入都由前面层产生，这有利于实现对每层的输入进行相同的白化，白化后有助于固定输入的分布，来去除internal covariate shift的缺点。</p>
+
+<p>如图中红点，由于图像数据的每一维一般都是0-255之间的数字，因此数据点只会落在第一象限，而且图像数据具有很强的相关性，比如第一个灰度值为30，比较黑，那它旁边的一个像素值一般不会超过100，否则给人的感觉就像噪声一样。由于强相关性，数据点仅会落在第一象限的很小的区域中，形成类似上图所示的狭长分布。而神经网络模型在初始化的时候，权重W是随机采样生成的，一个常见的神经元表示为：ReLU(Wx+b) = max(Wx+b,0)，即在Wx+b=0的两侧，对数据采用不同的操作方法。具体到ReLU就是一侧收缩，一侧保持不变。</p>
+
+<p>在使用梯度下降时，可能需要很多次迭代才会使这些虚线对数据点进行有效的分割，就像紫色虚线那样，这势必会带来求解速率变慢的问题。更何况，我们这只是个二维的演示，数据占据四个象限中的一个，如果是几百、几千、上万维呢？而且数据在第一象限中也只是占了很小的一部分区域而已，可想而知不对数据进行预处理带来了多少运算资源的浪费，而且大量的数据外分割面在迭代时很可能会在刚进入数据中时就遇到了一个局部最优，导致overfit的问题。这时，如果我们将数据减去其均值，数据点就不再只分布在第一象限，这时一个随机分界面落入数据分布的概率增加了多少呢？2^n倍！如果我们使用去除相关性的算法，例如PCA和ZCA白化，数据不再是一个狭长的分布，随机分界面有效的概率就又大大增加了。不过计算协方差矩阵的特征值太耗时也太耗空间，我们一般最多只用到z-score处理，即每一维度减去自身均值，再除以自身标准差，这样能使数据点在每维上具有相似的宽度，可以起到一定的增大数据分布范围，进而使更多随机分界面有意义的作用。</p>
+
+<center><img src="/images/pdTrick/bn1.png" /></center>
+
+<h3 id="mini-batch">通过Mini-Batch统计进行归一化</h3>
+
+<p>如果对每一层都进行PCA白化，计算量过大，因此作者只采用了减均值除标准差的方式对每个标量特征进行归一化，这样可以加快网络的收敛，尽管这些特征并非弱相关。</p>
+
+<center><img src="/images/pdTrick/bn2.png" /></center>
+
+<p>但如果对每层都进行这种简单的归一化会影响层的表达能力。比如下图，在使用sigmoid激活函数的时候，如果把数据限制到0均值单位方差，那么相当于只使用了激活函数中近似线性的部分，这显然会降低模型表达能力。为此，作者添加了两个参数对归一化量进行缩放和偏移。</p>
+
+<center><img src="/images/pdTrick/bn3.png" /> <img src="/images/pdTrick/bn4.png" /></center>
+
+<p>其中均值E和方差Var，在理想情况下应是针对整个数据集的，但显然这是不现实的。因此，作者做了简化，用一个Batch的均值和方差作为对整个数据集均值和方差的估计。BN算法整体如下：</p>
+
+<center><img src="/images/pdTrick/bn5.png" /></center>
+
+<hr />
+
+<p>在训练时，需要将loss L的梯度通过该变换进行反向传播，推导过程采用链式法则，公式如下：</p>
+
+<center><img src="/images/pdTrick/bn6.png" /></center>
+
+<hr />
+
+<p>在测试时， 均值和方差已经不是针对某一个Batch了，而是针对整个数据集。因此，在训练过程中除了正常的前向传播和反向求导之外，还要记录每一个Batch的均值和方差，以便训练完成之后按照下式计算整体的均值和方差：<img src="/images/pdTrick/bn7.png" /></p>
+
+<h3 id="section-2">实验结果</h3>
+
+<center><img src="/images/pdTrick/bn8.png" /></center>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+
+  <li class="next"><a href="/jekyll/update/2013/11/09/welcome-to-jekyll.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-01-02 16:01:57 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

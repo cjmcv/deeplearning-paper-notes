@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Faster-RCNN（NIPS，2015）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">Faster-RCNN（NIPS，2015）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 21 May 2016
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>代码：<a href="https://github.com/ShaoqingRen/faster_rcnn">https://github.com/ShaoqingRen/faster_rcnn</a></p>
+
+<p>论文：Ren S, He K, Girshick R, et al. Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks.[J]. IEEE Transactions on Pattern Analysis &amp; Machine Intelligence, 2016:1-1.</p>
+
+<p>译文推荐：<a href="http://www.2cto.com/kf/201604/503750.html">http://www.2cto.com/kf/201604/503750.html</a></p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   提出了一种Region Proposal Network (RPN)，共享目的是为了共享fast-rcnn物体检测网络中卷积特征的计算，以实现低运算量提取目标区域，解决Fast-RCNN和SPP-net中候选框提取速度慢的问题。RPN是一个端到端的全卷积网络，以任意大小的图像作为输入，只需在最后的卷积层上滑动一遍，可以同时预测物体的区域和在各区域的objectness scores（“Objectness” measures membership to a set of object classes vs. background），替换selective search应用到fast-rcnn中。RPN同时也提高了候选框的质量，使检测更准确。
+   为产生目标区域，在网络的最后一层共享卷积层（如ZF的第5层或VGG的第13层卷积层）中产生的卷积特征映射图上滑动一个小网络，这个小网络与输入的卷积特征图的n*n的空间滑动窗口进行全连接，滑动窗口每个都映射出一个低维向量，如在ZFnet中最后一层卷积层为256个特征图，则输出256维向量：一个3×3窗口在一个特征图的一个位置上输出一个节点，共256个特征图，则有256个节点，得到1×256的向量，这向量输入到方框回归器reg和分类器cls两个关联的全连接层中（无论有多少个特征图都只滑动一次，特征图个数等于输出向量维度）。文中滑动窗口设为n=3，这小网络滑到一个位置时如图所示。因为这小网络是以滑动窗口的形式使用的，即这全连接的网络层可以被所有空间位置共享。它的网络结构是由n*n的卷积层加上两个滑动的1*1的卷积层（for reg和cls）。ReLU应用于n*n卷积层。
+</code></pre>
+</div>
+
+<center><img src="/images/pdDetect/f2rcnn.png" /></center>
+
+<h3 id="anchors">旋转不变的Anchors</h3>
+
+<p>在每个滑动窗口位置，同时预测k个目标区域，因此reg层输出k个boxes，cls输出2k个分数（是目标的概率和非目标的概率）；每个anchor在滑动窗口的中心，与一个尺度和长宽比相关联。文中采用3个尺度（128,256,512）和3种长宽比例（1:1,1:2,2:1），则在每个滑动位置点上可产生k=9个anchors。一个卷积特征图大小为W<em>H，则有W</em>H*k个anchors，具有旋转不变性。</p>
+
+<h3 id="section-1">损失函数</h3>
+
+<p>在训练RPN时，给每个anchor设置一个二值化类别标签（是/否物体），其中与一个真实物体区域具有最高的Intersection over-Union (IoU)重叠或与任意的真是物体区域的IoU超过0.7的anchor标记为“是”；而与任何物体真实区域的IoU都不超过0.3，则为“否”；介于“是”与“否”之间的舍去不做训练。训练时遵循Fast-RCNN中的多任务loss，损失函数如FastRCNN相似，并以与以往不同的方式实现了其中的bounding-box回归，详看论文。</p>
+
+<h3 id="section-2">训练优化</h3>
+
+<p>RPN是全卷积网络，由方向传播和随机梯度SGD进行端到端训练。每个mini-batch由一张图像上随机抽选的256个正和负样本候选框组成，并使正负样本比例约1：1，否则负样本很多可能会使bias倾向于负样本。使用0均值0.01标准差的高斯分布对所有新网络层进行初始化，而其他层由预训练模型提供，进行finetune。</p>
+
+<h3 id="section-3">共享卷积特征</h3>
+
+<p>这里检测网络采用的是Fast-RCNN，而RPN和Fast-RCNN的训练相互独立，现在是想让它们之间共享卷积特征以减少预测时的计算量。但Fase-RCNN的训练是基于固定候选框，在训练Fase-RCNN的同时调整候选框则无法确定网络训练是否会收敛，因此设计一个包含有Fast-RCNN和RPN的网络并简单联合使用反向传播训练是不容易实现的。文中采用的方法含4个步骤：</p>
+
+<ol>
+  <li>照常训练RPN，使用预训练模型进行初始化并对候选框做端到端finetune。</li>
+  <li>使用RPN产生的候选框对Fast-RCNN进行训练，Fast-RCNN也采用ImageNet的预训练模型进行初始化。</li>
+  <li>使用Fast-RCNN网络去初始化RPN的训练，固定卷积层微调RPN独有的网络层。这样两个网络就共享卷积层了。</li>
+  <li>保持共享卷积层固定，去对Fast-RCNN的全连接层进行finetune。</li>
+</ol>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fdetect/2016/05/16/FCN.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fdetect/2016/06/16/VGG.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-01-02 15:48:00 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

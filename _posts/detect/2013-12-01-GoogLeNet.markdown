@@ -1,6 +1,6 @@
 ---
 title: GoogLeNet（2014）
-date: 2013-12-08 19:55:16
+date: 2016-02-16 19:55:00
 categories: fDetect
 ---
 

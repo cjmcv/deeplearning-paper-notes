@@ -1,6 +1,6 @@
 ---
 title: HyperFace（PAMI，2016）
-date: 2013-12-08 19:55:16
+date: 2016-09-08 19:20:00
 categories: fDetect
 ---
 

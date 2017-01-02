@@ -1,6 +1,6 @@
 ---
 title: Selective Search（IJCV，2012）
-date: 2013-12-08 19:55:16
+date: 2015-12-05 15:20:00
 categories: fDetect
 ---
 

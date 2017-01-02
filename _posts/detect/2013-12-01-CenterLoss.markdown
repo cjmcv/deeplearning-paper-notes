@@ -1,6 +1,6 @@
 ---
 title: Center Loss（ECCV，2016）
-date: 2013-12-08 19:55:16
+date: 2016-10-29 19:30:00
 categories: fDetect
 ---
 

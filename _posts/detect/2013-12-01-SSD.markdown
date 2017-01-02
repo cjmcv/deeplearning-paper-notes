@@ -1,6 +1,6 @@
 ---
 title: SSD（CVPR，2015）
-date: 2013-12-08 19:55:16
+date: 2016-02-12 20:50:00
 categories: fDetect
 ---
 

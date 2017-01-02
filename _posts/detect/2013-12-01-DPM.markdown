@@ -1,6 +1,6 @@
 ---
 title: DPM（Deformable Parts Model，2010）
-date: 2013-12-08 19:55:16
+date: 2015-03-12 10:30:00
 categories: fDetect
 ---
 

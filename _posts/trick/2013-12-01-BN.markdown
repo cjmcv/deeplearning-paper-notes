@@ -1,6 +1,6 @@
 ---
 title: Batch Normalization（2015）
-date: 2013-12-08 19:55:16
+date: 2016-11-06 19:55:16
 categories: fTrick
 ---
 

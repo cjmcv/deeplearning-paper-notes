@@ -1,6 +1,6 @@
 ---
 title: Generative Adversarial Nets（2014）
-date: 2013-12-08 19:55:16
+date: 2016-11-08 19:55:16
 categories: fGan
 ---
 
