@@ -1,7 +1,7 @@
 ---
 title: Center Loss（ECCV，2016）
 date: 2016-10-29 19:30:00
-categories: fDetect
+categories: fReg
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
@@ -20,18 +20,20 @@ Github: [https://github.com/ydwen/caffe-face](https://github.com/ydwen/caffe-fac
 
   设c为类深度特征中心，x为各特征向量，L为梯度。则center loss的公式为:
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/centerloss1.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/centerloss1.png"></center>
 
   在训练时，中心损失由SGD进行优化，类特征中心c应随着特征的改变而更新，即需要输入整个训练集并将每次迭代得到的特征取平均，这样的做法不切实际。文中采用的方式是基于mini-batch来更新类特征中心，在每次迭代中，类中心通过类特征取平均得到（即有些类中心可能会不更新）；为了避免错误标签带来大扰动，文中使用一个标量来控制类中心的学习率。梯度L和类中心c的计算如下：
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/centerloss2.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/centerloss2.png"></center>
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/centerloss3.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/centerloss3.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdReg/centerloss4.png"></center>
 
 ### 实验结果
 
   model A仅以softmax loss作为监督信号； model B以softmax loss和contrastive loss作为监督信号； model C以softmax loss和center loss作为监督信号。结果对比如下：
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/centerloss4.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/centerloss5.png"></center>
 
 

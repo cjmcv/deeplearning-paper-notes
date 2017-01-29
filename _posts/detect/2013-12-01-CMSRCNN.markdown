@@ -1,0 +1,42 @@
+---
+title: CMS-RCNN（2016）
+date: 2016-11-18 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文：Zhu C, Zheng Y, Luu K, et al. CMS-RCNN: Contextual Multi-Scale Region-based CNN for Unconstrained Face Detection[J]. 2016.
+
+### 论文算法概述
+
+       提出一个名为Contextual Multi-Scale Region-based Convolution Neural Network (CMS-RCNN)的人脸检测方法来解决多姿态、强光照、大遮挡和低分辨率等问题。类似于RCNN，这里提出的网络包含有region proposal和ROI detection两部分。该网络的主要贡献有两点，首先是对多尺度信息在region proposal和ROI检测中都做分组来检测微小的人脸区域；其次该网络允许显式的身体上下文信息用于网络推理，如人眼在无法确定人脸图像时，在看到脸部下面的身体后就能更加地确定该图像是否为人脸（tinyface也类似利用了上下文信息）。即具体地，该网络引入Multi-Scale Region Proposal Network (MS-RPN) 来生成区域候选框，引入Contextual Multi-Scale Convolution Neural Network (CMS-CNN)来判断候选框，最后可以通过检测质量评分来设定检测判断阈值。该网络当前在当前FDDB上取得最优效果。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/cmsrcnn1.png"></center>
+
+### 背景梳理
+
+   <strong>RCNN</strong>，因为缺少带标注样本，在预训练模型上进行微调。卷积网络用于特征提取，然后使用SVM做物体检测，最后做物体框回归。该方法准确率高但很耗时，花了大量时间在产生region proposals上（用SS，单独产生候选框，而没有共享计算），并且需要从每个候选图像区域进行特征提取（也没有共享计算），再把特征写到磁盘上（量大，内存不足以存放），测试时，论文数据为VGG16在GPU下47s每张图。
+
+   <strong>Fast RCNN</strong>，对每个proposals之间计算共享。该网络中每张图片只需要计算一次特征图，然后使用ROI-pooling高效地从特征图中为每个物体proposal提取特征，实现端到端训练。该网络同样采用分类loss和边框回归loss联合，相比与RCNN，ROI-pooling使Fast RCNN耗时减少到0.3s。但region proposal的产生仍在网络之外进行设计，没有与特征提取分类网络交互调优，存在局部最优问题。
+
+   <strong>Faster RCNN</strong>，引入了 Region Proposal Network (RPN)，RPN是由全卷积网络实现的用于预测物体框及其置信度。其中的anchors被设计用来实现平移尺度不变性。RPN共享了全图的卷积特征，因此整个系统在使用VGG16下可以在0.2s内实现proposals生成和检测计算。
+   
+   但Faster RCNN也还存在一定局限性，在测试微软的COCO数据库时会发现，其性能下降很多。COCO数据库中的包含有很多非常小、遮挡和不完整的目标，就如人脸检测任务的实际应用情况相似。直观来看，关键点在于ROI-pooling层，该层仅从最后一层卷积层中进行提取。如在VGG16中conv5的全局步长为16，即当给定人脸区域小于16*16时，在conv5中小于1个像素。
+
+### CONTEXTUAL MULTI-SCALE R-CNN
+
+   在MS-RPN中，将低层的特征图下采样到与高层特征图大小一致进行拼接并降维，然后用于生成region proposals。在CMS-CNN中，region proposals被映射到来自各层的特征图上。ROI-pooling应用在每一层中，使产生固定大小的特征张量，所有特征张量进行归一化后拼接和降维度为单一的特征blob，输入到两个全连接层中计算候选框的分类评分情况。
+
+   在MS-RPN 和CMS-CNN中，特征图的拼接是在L2正则化层中实现的。一般来说，较深层的数值会比较浅层的数值小很多，这样会导致浅层占优势。在实践中，不太可能为每层的数值进行调优，因此在拼接之前对来自三层的特征图采用L2正则化，L2正则化可以保持来自每层的数值都大概在一个尺度上。正则化对应每一个数值进行操作，且所有特征图单独处理，式中d为特征图张量的通道数，r为正则化特征的缩放校正因子，y为输出。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/cmsrcnn2.png"></center>
+
+   以人脸为基准划定身体区域，身体区域与人脸区域的处理方式一样，为两条并行的支路，这样在每个region proposals中会有多个人脸特征图和身体纹理特征图。在网络靠后的地方将人脸特征和身体特征拼接在一起得到一个长特征用于人脸检测评分和方框回归。
+
+### 实验结果
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/cmsrcnn3.png"></center>
+
+
+

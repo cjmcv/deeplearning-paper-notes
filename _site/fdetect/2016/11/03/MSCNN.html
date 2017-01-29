@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>MSCNN（2016）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">MSCNN（2016）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 03 Nov 2016
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文：Cai Z, Fan Q, Feris R S, et al. A Unified Multi-scale Deep Convolutional Neural Network for Fast Object Detection[J]. 2016.</p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   multi-scale CNN（MSCNN）用于目标检测，包含proposal子网络和检测子网络，都是端到端训练并且计算共享，使用多任务loss进行优化。在proposal子网络上，检测器应用于多个输出层，每个输出层应对物体某一尺度范围，所以接受域也对应着物体的多个尺度。直观地看，较低层的conv3具有更小的接受域，能更好地适应小物体。而更高的层如conv5则更适合大物体，则相当于用足够多个对应尺度范围的检测器来组合成一个强的多尺度检测器。在特征上采用反卷积操作做上采样，相比于在输入时做上采样，可以减少内存和计算消耗。
+</code></pre>
+</div>
+
+<center><img src="/images/pdDetect/mscnn1.png" /></center>
+
+<h3 id="multi-scale-object-proposal-network">Multi-scale Object Proposal Network</h3>
+
+<p>检测器本质上是匹配模板和图像区域进行点积，模板在空间上需要与物体相对应，常用的主要有两种策略去达到这个条件。第一个是训练单独的分类器模板然后对图像进行多次缩放，如图(a)所示，这种策略能够产生最精确的检测结果，但需要在不同尺度的图像上都做特征计算。另外一种策略是对单一尺度的图像采用多个检测器模板，如图(b)，这种策略避免了多次计算特征图，但需要一个独立的包含每个尺度模板的检测器，较难得到较好的检测器。也有其他一些两者之间权衡的方法，如图(c)，缩放少量的尺度和训练少量的模型模板；如图(d)，对输入图像进行少量缩放，在两次缩放之间进行插值以填充没有缩放到的尺度；如图(e)，将候选框图像块映射到CNN的一个尺度上，与图(a)有点相似，但特征的重复计算只对应着图像块，而不是全图；如图(f)，RPN的多尺度机制，与图(b)有点相似，然而同一大小的多个模板集被应用到所有特征图，会导致有一些尺度与模板不一致，如单一尺度的特征图在感受野为228<em>228的CNN上会无法检测到小的目标(如32</em>32)和大的目标(如640*640)；文中提出的方法如图(g)，可以看成是图(c)的深度网络实现的扩展，但只使用了单尺度输入，与(e)和(f)不同，它利用了特征图的多个分辨率去检测不同尺度的物体，包含有不同大小的感受野，可以涵盖更大范围的物体尺度。</p>
+
+<center><img src="/images/pdDetect/mscnn2.png" /></center>
+
+<p>该检测框架如图3，包含多个检测分支，每个分支可以看成是对最终proposal的检测，这些分支都包含有一个单独的检测层。注意到在“conv4-3”的分支上接有一个缓冲卷积层，因为这个分支接近主干网络的较低层，更容易影响梯度导致训练不稳定，这个缓冲卷积层能够防止由该分支产生的梯度直接被反向传播到主干。</p>
+
+<h3 id="section-1">实现细节</h3>
+
+<p>数据扩增：一些论文中讨论过没有必要进行多尺度训练，因为深度网络擅长于学习尺度不变性。然而对于尺度范围非常大的数据库，如Caltech和KITTI等，进行多尺度训练是有必要的。文中对原图进行随机缩放到多个尺度中进行扩增。</p>
+
+<p>微调：训练fast rcnn和RPN需要大量的显存和小的mini-batch，因为输入图像很大，这样会导致训练过程较艰难。事实上，许多背景区域对训练影响不大但却占用大部分的内存。因此论文中从原图中随机裁剪出包含物体图像块(448*448)，这样能很大程度上减少内存使用。因为booststrapping和multi-task loss在刚开始训练的迭代中不稳定，这里采用两个阶段的训练过程。第一阶段使用随机采样和小的平衡系数(分类与回归的平衡系数)入(如0.05)，用0.00005的学习率迭代10000次。得到的模型作为第二阶段训练的初始值，这时采样使用booststrapping，系数入=1，设置“det-8”的alphai=0.9，其他层的alpha为0.1。</p>
+
+<h3 id="object-detection-network">Object Detection Network</h3>
+
+<center><img src="/images/pdDetect/mscnn3.png" /></center>
+
+<h3 id="section-2">实现结果</h3>
+
+<center><img src="/images/pdDetect/mscnn4.png" /></center>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/freg/2016/10/30/CenterLoss.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/ftrick/2016/11/07/BN.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-01-30 00:30:58 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

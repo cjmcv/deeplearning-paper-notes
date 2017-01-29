@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Center Loss（ECCV，2016）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">Center Loss（ECCV，2016）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 30 Oct 2016
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文： Wen Y, Zhang K, Li Z, et al. A Discriminative Feature Learning Approach for Deep Face Recognition[M]// Computer Vision – ECCV 2016. Springer International Publishing, 2016.</p>
+
+<p>Github: <a href="https://github.com/ydwen/caffe-face">https://github.com/ydwen/caffe-face</a></p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   在训练深度网络时选择一个好的损失函数很重要，因为SGD用于CNN训练是基于mini-batch的，并不能很好的反映出深度特征的全局分布。而将所有图片一起输入训练不切实际，因此contrastive loss和triplet loss作为可选的方法，分别为两张图像和三张图片构造损失函数，并且相对与单张图片的效果得到显著提升，但不可避免地使收敛速度慢且不稳定。
+
+   在大多数可用的CNN中，softmax损失函数被用作训练深度模型的监视信号。为了增强深度学习特征的识别能力，文中提出中心损失函数（center loss）。中心损失函数学习每类数据的深层特征的中心，惩罚深层特征和它们对应的类中心的距离，即训练时在更新特征中心的同时最小化深度特征与其对应中心的距离（减小类内距离）。这种中心损失函数是可训练的，在CNN中非常容易优化。在用于训练CNN时，使用softmax loss和center loss进行联合监督，使用超参数对两个监督信号进行平衡。从直观上看，softmax loss使各类的深度特征分离，而center loss将深度特征推向各自的中心。这样联合监督可以使类间差异加大，类内差异减小。实验中通过Softmax损失函数和中心损失函数的联合监视的CNN在几个重要人脸识别基准上取得了最高的准确率。
+</code></pre>
+</div>
+
+<h3 id="center-loss">Center Loss</h3>
+
+<p>设c为类深度特征中心，x为各特征向量，L为梯度。则center loss的公式为:</p>
+
+<center><img src="/images/pdReg/centerloss1.png" /></center>
+
+<p>在训练时，中心损失由SGD进行优化，类特征中心c应随着特征的改变而更新，即需要输入整个训练集并将每次迭代得到的特征取平均，这样的做法不切实际。文中采用的方式是基于mini-batch来更新类特征中心，在每次迭代中，类中心通过类特征取平均得到（即有些类中心可能会不更新）；为了避免错误标签带来大扰动，文中使用一个标量来控制类中心的学习率。梯度L和类中心c的计算如下：</p>
+
+<center><img src="/images/pdReg/centerloss2.png" /></center>
+
+<center><img src="/images/pdReg/centerloss3.png" /></center>
+
+<center><img src="/images/pdReg/centerloss4.png" /></center>
+
+<h3 id="section-1">实验结果</h3>
+
+<p>model A仅以softmax loss作为监督信号； model B以softmax loss和contrastive loss作为监督信号； model C以softmax loss和center loss作为监督信号。结果对比如下：</p>
+
+<center><img src="/images/pdReg/centerloss5.png" /></center>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fdetect/2016/10/11/RFCN.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fdetect/2016/11/03/MSCNN.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-01-30 00:30:58 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

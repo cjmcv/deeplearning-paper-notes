@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>TinyFaces（2016）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">TinyFaces（2016）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 21 Dec 2016
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>主页(要翻墙)：<a href="https://www.cs.cmu.edu/˜peiyunh/tiny">https://www.cs.cmu.edu/˜peiyunh/tiny</a></p>
+
+<p>论文：Hu P, Ramanan D. Finding Tiny Faces[J]. 2016.</p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   对于检测小的人脸主要有三个问题：尺度不变性、图像分辨率和上下文关系。文中提出对不同的尺度训练不同的检测器，为了提高效率采用多任务的模式，在单个网络中从多个层上进行特征提取（称为hypercolumn特征）。整体检测框架如下，先将输入图像构建一个粗糙的图像金字塔，将金字塔中每个尺度输入到网络中提取hypercolumn特征，由hypercolumn特征图得到相应模板的预测响应图，包括检测和回归。在给定的预测响应图中，从每个尺度上提取出检测框，然后合并到原始的尺度上，使用NMS得到最终的结果。文中A-type模板用于在金字塔所有尺度中检测40-140像素高的人脸，B-type用于在2x采样层中检测小于20像素的人脸。
+</code></pre>
+</div>
+
+<center><img src="/images/pdDetect/tinyface1.png" /></center>
+
+<h3 id="multi-task-modeling-of-scales">Multi-task modeling of scales</h3>
+
+<p>传统的方法是训练一个单尺度的模板应用到密集离散的图像金字塔中(a)，为了利用在不同分辨率上的信息，需要应对不同尺度的物体建立不同的检测器(b)。但这种方法在一些在训练集或预训练集上很少出现的极端的尺度上会失效。文中利用粗糙的图像金字塔去应对极端的尺度(c)。最后，为了提高检测小脸的性能，文中对额外的上下文信息进行建模，上下文信息在特定接受域在特定模板上实现效率高(d)。文中从深度网络内多个网络层中进行特征提取，在提取结果上设定模板(e)。</p>
+
+<center><img src="/images/pdDetect/tinyface2.png" /></center>
+
+<h3 id="human-on-context">Human on context</h3>
+
+<p>在图左边有一个大脸和小脸，各有两张图，一张包含上下文，另一张没有。上下文信息对于人识别大的脸来说是不需要的，但如果脸非常小，则在没有上下文信息的时候是无法识别的。论文作者做过实验，对于很小的人脸图，在加上上下文信息后，误识率降低20%，而对于大的人脸，在加上上下文信息后，误识率降低2%。同时如直方图所示，当尺度很小时，按比例的大小的上下文起到的作用不大。文中把目标放在中心( foveal templates)，扩展到约300*300的大小，如黄框所示。</p>
+
+<center><img src="/images/pdDetect/tinyface3.png" /></center>
+
+<h3 id="how-best-to-encode-context">How best to encode context</h3>
+
+<p>有趣的是更小的接受域对于小的人脸更有效，因为整个人脸是可见的。图中绿色表示实际的人脸大小，而虚线框表示各网络层上特征对应的接受域。Foveal descriptor对于小物体的准确检测很重要，小的模板(右图上)在只有res4情况下效果下降7%，在只有res5的情况下效果下降33%。与之相反，去掉foveal结构后并没有影响到大模板的效果(右图下)，表明来自较低网络层的高分辨率对于小物体检测很有用。</p>
+
+<center><img src="/images/pdDetect/tinyface4.png" /></center>
+
+<h3 id="how-to-generalize-pre-trained-networks">How to generalize pre-trained networks</h3>
+
+<p>在检测25<em>20大小的人脸时，把为50</em>40大小人脸而微调的模型模板比微调置25<em>20的效果好。而在检测250</em>200大小的人脸时，把为125<em>100大小人脸为微调的模型模板比为250</em>200为微调的模型模板效果要好。这是为什么呢？假定预训练模型有适应过极端的适度，ImageNet里有超过80%的数据像素在40-140之间，考虑在归一化的情况下所有的图像都是224*224的，那么预训练模型很可能对在那些尺度范围内的物体检测做过优化。</p>
+
+<p>这里粗暴地列举出一些尺度，粗糙地覆盖尺度空间，然后尝试对每个尺度采用三个不同的策略（缩小到0.5x，保持原来的1x，插值放大到2x）。如图所示，对于大的人脸（高大于140像素），使用0.5x的分辨率训练模型模板；对于小人脸（高小于40像素），使用2x的分辨率。在这大小之间，使用原来的分辨率1x。</p>
+
+<center><img src="/images/pdDetect/tinyface5.png" /></center>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fsr/fgan/2016/12/16/GLN.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fsr/2016/12/24/srBase.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-01-30 00:30:58 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

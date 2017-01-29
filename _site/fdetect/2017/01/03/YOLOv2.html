@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>YOLOv2（2016）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">YOLOv2（2016）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 03 Jan 2017
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>主页与源码：<a href="http://pjreddie.com/yolo9000">http://pjreddie.com/yolo9000</a></p>
+
+<p>论文：Redmon J, Farhadi A. YOLO9000: Better, Faster, Stronger[J]. 2016.</p>
+
+<p>博客推荐：<a href="http://blog.csdn.net/hysteric314/article/details/53909408">http://blog.csdn.net/hysteric314/article/details/53909408</a></p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   YOLO v2，在YOLO的基础上进行优化，提出了一种新方法利用已有的大量分类数据库去扩展当前检测系统的检测类别数，允许将不同的数据库合并在一起使用；还提出了一种联合训练的方法，允许同时在检测数据和分类数据上训练检测器，利用带标签的检测数据去学习精确定位物体，同时使用分类图片数据去提高它可检测的类别数和鲁棒性。YOLO 9000能检测9000类物体，其中分类信息学习自ImageNet分类数据集，而物体位置检测信息则学习自COCO检测数据集。
+</code></pre>
+</div>
+
+<h3 id="better">Better</h3>
+
+<p>如下列举了一些方法用于提高YOLO的性能:</p>
+
+<center><img src="/images/pdDetect/yolo2v1.png" /></center>
+
+<p><strong>Batch Normalization</strong>：能消除其他形式正则化的需求，并提高模型收敛性。通过在YOLO的每个卷积层上添加batch normalization得到2%的mAP提升。Batch normalization还有助于正则化模型，在去掉dropout后不会产生过拟合。</p>
+
+<p><strong>High Resolution Classifier</strong>：目前最前沿的检测方法都使用ImageNet的预训练模型，从alexnet开始，所有的分类器都运行在小于256<em>256的输入图片上，而原始的YOLO是在224</em>224输入下进行训练并提高分辨率到448进行检测的，这就意味着新网络必须要由分类转换到物体检测上，同时也要适应新的输入分辨率。对于YOLOv2，作者首先在ImageNet上以448*448的分辨率微调分类网络10个epochs，这样会使网络更好适应较高的分辨率，然后再在微调后的网络上去应对检测任务进行第二次微调，得到了4%的mAp提升。</p>
+
+<p><strong>Convolutional With Anchor Boxes</strong>：YOLO通过最后一层卷积层后的全连接层来直接得到bounding boxes的坐标值。Faster RCNN使用仅含卷积层的RPN来预测anchor boxes的偏移量和置信度。预测坐标偏移量比直接获取坐标更容易让网络学习，所以将YOLO的全连接层更换成使用anchor boxes去预测bounding boxes。先去掉一个池化层使网络的卷积层输出分辨率更高，同时网络输入由448改为416。这样是为了在特征图上有奇数个点，则可以有一个单独的中心点，一般来说目标大多情况下都在靠近中间位置，由中间位置去预测目标会比直接获取目标周围的四个点要好。YOLO由416<em>416下采样32倍，最终得到13</em>13的输出特征图。使用anchor boxes前为YOLO仅可检测98个框，69.5mAP，81%recall，使用后则将预测机制由空间位置改为每个anchor boxes预测类别，可检测超过一千个候选框，69.2mAp，88%recall。</p>
+
+<p><strong>Dimension Clusters</strong>：Faster rcnn中RPN的anchor boxes是手动设计的，文中在训练集的bounding boxes上使用k均值聚类自动选取。如果使用标准的基于欧式距离的K均值，则尺度大方框会比小的方框产生更多的错误。然而我们目的是得到好的IOU评分，这与方框大小无关，因此把距离公式改为d( box, centroid ) = 1 - IOU( box, centroid )。</p>
+
+<center><img src="/images/pdDetect/yolo2v2.png" /></center>
+
+<p><strong>Direct location prediction</strong>：使用anchor boxes会使模型训练不稳定，特别是在迭代初期。这不稳定性主要来自预测方框的坐标，在RPN中需要预测tx，ty和中心点(x,y)，x = (tx * wa) - xa; y = (ty * ha) - ya，例如，tx=1，则表示方框往右移动anchor box宽度的距离，ty=1则往下移动anchor box高度的距离。这样每个anchor box都可以在图像中任意位置，随机初始化使模型需要花很长的时间去稳定预测这敏感的偏移量。这里遵循YOLO那一套，通过grid cell来定位。使用 logistic activation将方框坐标标签归一化到0到1之间。该网络在输出特征图的每个cell中预测5个bounding boxes，每个bounding box预测5个坐标值x, ty, tw, th和to，如果一个cell左上角相对图像的偏移量是(cx, cy)，先验bounding box的高和宽为pw和ph，则预测如下图右式：</p>
+
+<center><img src="/images/pdDetect/yolo2v3.png" /></center>
+
+<p><strong>Fine-Grained Features</strong>：修改后的YOLO输出特征图大小为13<em>13，这对于检测大物体来说是足够的，可能对检测小物体也有好处。Faster RCNN和SSD都在网络中的不同的特征图上运行proposal网络去获得一定分辨率范围。YOLOv2则添加了一个passthrough层从较前的26</em>26分辨率的特征图上获取特征，该层将高分辨率和低分辨率特征联系起来，联系的方式为将相邻的特征堆叠到不同通道channel上，该方法与resnet的identity mapping类似。将26<em>26</em>512的特征图嵌入到13<em>13</em>2048的特征图中。</p>
+
+<p><strong>Multi-Scale Training</strong>：为提高网络应对多尺度图像的鲁棒性，训练时每隔一定迭代次数就修改一下网络输入尺度。作者在训练时，每隔10个batches随机选一个新的图像尺度，因为模型的降采样因子为32，则选择的尺度为32的倍数：(320, 352,…, 608)。最小为320，最大为608。</p>
+
+<center><img src="/images/pdDetect/yolo2v4.png" /></center>
+
+<h3 id="faster">Faster</h3>
+
+<p>YOLO的网络框架基于GoogleNet，速度比其他检测算法常采用的VGG-16快，但精度比VGG16稍低。</p>
+
+<p><strong>Draknet19</strong>：提出一个新的分类模型作为YOLOv2的基础，该模型几乎都采用3<em>3卷积核，并在每次池化后channel数量翻一倍。全程使用均值池化，并采用1</em>1卷积去降维，使用batch normalization以稳定训练，加快收敛与规范化模型。最终模型如下图；</p>
+
+<p><strong>Training for classification</strong>：在标准的ImageNet 1000类上使用SGD以0.1学习率开始训练160个epochs。采用了标准的数据扩增方法，包括随机裁剪、旋转以及色度、饱和度和曝光偏移。因为初始预训练网络输入为224<em>224，因此要微调至448</em>448，以0.001学习率迭代10个epochs，top1准确率为76.5%，top5为93.3%。</p>
+
+<p><strong>Training for detection</strong>：在该网络上去掉最后一个卷积层，使用三个3<em>3的具有1024种卷积核的卷积层代替，每个卷积层后紧接一个1</em>1的卷积层，该1<em>1卷积层的输出与需要检测的数量一致。对于VOC，作者预测5个带有5个坐标值和20类物体信息的boxes，共有125个filters。也添加了一个passthrough层，从最后一个3</em>3*512的卷积层连接到最后一层卷积层，使模型可以利用前面的细粒度特征。网络迭代160个epochs，学习率以0.001开始，在60和90epoch时下降10倍。</p>
+
+<center><img src="/images/pdDetect/yolo2v5.png" /></center>
+
+<h3 id="stronger">Stronger</h3>
+
+<p>提出了一种在分类数据和检测数据上联合训练的机制，使用带检测标签的样本去学习检测信息，如方框坐标预测和分类；使用带分类标签的数据去扩展可检测的类别数量。在训练的时候将检测和分类训练集都混合在一起，当网络获取到的是检测标签信息，则基于整个YOLOv2的损失函数进行反向传播，而获取到的是分类信息则仅反向传播分类部分的网络。该方法有一些难点，检测数据集仅包含有一些较常见的物体类别，而分类数据集的类别范围更广更深，即在检测数据集中“狗”为一类，但在分类数据集中每个品种的狗都各作为一类，因此需要一种方法将两个训练集连贯起来。</p>
+
+<p><strong>Hierarchical classification</strong>：（WordNet, a language database that structures concepts and how they relate），为解决训练集合并问题，对训练集的合并构建一个分层的树。先检查ImageNet中出现的类别名词，查看它们在WordNet上到达根节点的路径，很多同义词有只有一个路径，所以先将这些路径都添加到树上。然后迭代地检查剩下的名词，并添加到树上。而如果一个名词有两条路径可以到达根节点，则选则短的一条。结果通过条件概率来预测，通过累乘来到达某一根节点。</p>
+
+<center><img src="/images/pdDetect/yolo2v6.png" /></center>
+
+<p>为了验证这个方法，基于WordNet使用ImageNet1000类来训练Darknet-19。为构建WordTree，添加所有的直接节点到树上，使该树的标签数从1000扩到了1369。在训练时，将实际标签在整个树上传播，比如一个标签是“Norfolk terrier（犬种名）”，那么该标签也会被附上“狗”和“哺乳动物”等标签。为了计算条件概率，模型预测出了1369维向量，再在每个大类(the same concept) 中各自计算的softmax。</p>
+
+<center><img src="/images/pdDetect/yolo2v7.png" /></center>
+
+<p>使用相同参数在该方法下，Darknet-19的top1达到71.9%，top5达到90.4%。尽管添加了369种concept并在树结构上预测，精度也仅有一点点下降。而对于分类任务，这样做有不少好处，在预测未知的物体类别时，结果不会下降得很快，如预测一只不确定品种的狗，结果会是仍然以高置信度预测为“狗”，较低置信度预测为其他品种的狗。</p>
+
+<p><strong>Dataset combination with WordTree</strong>：我们可以使用WordTree来融合多个数据集，将数据集中的类别映射到树上，如下图融合了ImageNet和COCO的类别。</p>
+
+<center><img src="/images/pdDetect/yolo2v8.png" /></center>
+
+<p><strong>Joint classification and detection</strong>：目的是想要训练一个极大尺度的检测器，所以采用COCO检测数据集和full ImageNet release的top9000类合成一个训练集。因为为了评估算法，从ImageNet的检测竞赛用样本中抽取一些类合并到训练集中，最终得到9418类的训练集。因为ImageNet比COCO大很多，为了平衡一下，对COCO进行过采样oversampling，使ImageNet部分仅比COCO部分大4倍。然后该训练集用于YOLO9000的训练。YOLO9000基于VOLOv2训练，但使用3priors而不是5来限制输出大小。当网络从标签上判断图片来自检测数据集时，对loss做普通的反向传播。而对于分类样本则只对分类loss做反向传播，先简单找到对于该类别最高置信度的bounding boxes，假定预测方框与groundtrue的IOU至少为0.3，然后仅在它的预测树上计算loss进行反向传播。</p>
+
+<p>将YOLO9000应用于ImageNet的检测任务中做评估。ImageNet的检测任务中与COCO有44个物体类别重叠，这意味着YOLO9000在这里面有很多类别没训练过。整体达到的mAP为19.7，针对没训练的156种类别mAP为16.0。YOLO9000在仅有部分监督(部分类别未训练)的情况下，其mAP也比DPM的高，并且可以实时检测9000类物体。在ImageNet检测结果来看，对新的动物品种效果很好，但对于衣服等效果不行，因为在COCO中有不少动物的bounding boxes标签，而没有任何衣服的标签，因此YOLO9000的效果与训练集的组成关系也很大。</p>
+
+<center><img src="/images/pdDetect/yolo2v9.png" /></center>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fsr/2016/12/24/srBase.html">&larr; Older</a></li>
+
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-01-30 00:30:58 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>
