@@ -1,0 +1,32 @@
+---
+title: DeepID（CVPR，2014）
+date: 2015-06-29 19:00:00
+categories: fReg
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Sun Y, Wang X, Tang X. Deep Learning Face Representation from Predicting 10,000 Classes[C]// IEEE Conference on Computer Vision and Pattern Recognition. IEEE, 2014:1891-1898.
+
+### 论文算法概述
+
+       如图，对人脸图像切分成多个块，各自输入到一个网络进行特征提取，在底层提取低层特征，特征图数量逐层减少，最后得到160维的特征向量。在训练时，该160维特征向量直接接10000类分类层进行分类监督训练，各个网络训练完后，将各网络的160维向量使用联合贝叶斯组合在一起用于人脸验证，在LFW上实现97.45%的准确率。
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid_1.png"></center>
+
+### 细节
+
+   采用的deep ConvNets包含有4个卷积层，使用max-pooling下采样，紧接着全连接层和softmax层用于分类。输入为39*31*k用于长方形的图像块，31*31*k用于正方形图像块，k为图像通道数，输出固定为160维。
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid_2.png"></center>
+
+   文中以两眼、鼻子、两嘴角的5个关键点对齐人脸，然后进行人脸区域切分。使用60个人脸patches，各含10个人脸区域，3个尺度（如下图所示），训练60个网络，每个网络输出两个（人脸区域水平翻转）160维特征向量，那么整体得到的特征向量长度为160*2*60=19200。然后使用PCA将特征向量降到150维，最后这150维特征基础上训练联合贝叶斯模型，通过对贝叶斯相似度设定阈值进行人脸验证。
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid_3.png"></center>
+
+   其中训练人数与patch的数量对训练结果有不少影响：
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid_4.png"></center>
+
+   论文中模型在CelebFaces上训练，随机选取8700个人的图片训练DeepID，剩下的1477个人训练联合贝叶斯模型，使用100个人脸patch和5个尺度，最终得到32000维特征，用PCA降到150，在联合贝叶斯上对LFW测试，准确率为97.20%。
+

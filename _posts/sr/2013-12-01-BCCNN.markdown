@@ -1,0 +1,19 @@
+---
+title: BCCNN（AAAI，2015）
+date: 2016-12-07 19:00:00
+categories: fSr
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文：Learning Face Hallucination in the Wild
+
+### 论文算法概述
+
+       针对人脸姿态较多，分辨率范围较广和退化情况不确定的情况下，提出的解决方法，称为Bi-channel Convolutional Neural Network (Bi-channel CNN)。前面三层卷积层用于从LR图中提取特征，每层的激活函数采用tanh，然后进行极大值池化。紧接后面的全连接层由两部分组成，一部分用于得到重构部分图像，用于与低分辨率LR图像的上采样图（论中使用双立方插值）叠加得到输出，另一部分得到重构部分和LR图之间的叠加权重alpha。
+
+<center><img src="{{ site.baseurl }}/images/pdSr/bccnn1.png"></center>
+
+### 细节
+
+   采用的图像是从网络上爬出来的，因为任何高清的图像都可以作为训练样本，因此包含了很多尺度。而这里的数据库共有10万张图片，分成三部分，60%作为训练样本，20%为验证集，其余为测试集。所有图片都缩放到100x100像素。在训练和验证集中都随机采用高斯模糊和运动模糊,，使用的下采样因子为2到5，即LR图大小为20*20到50*50之间。高斯模糊的x和y方向的标准差为0到7之间，运动模糊l从0到11，模糊方向为360度。模型网络的输入为48x48的RGB三通道图像，输出为100x100的三通道图像。
