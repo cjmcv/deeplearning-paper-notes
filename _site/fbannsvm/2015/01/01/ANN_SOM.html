@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>SOM神经网络</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">SOM神经网络</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="/images/pdBase/svm_smo1.png"></center>-->
+
+<h3 id="section">概述</h3>
+
+<p><strong>self-organizing map，SOM，自组织映射。一种无导师学习的网络，基于竞争学习，主要用于对输入向量进行区域分类，和自组织竞争网络不同的是，它不但识别输入区域临近的区域，还关注输入向量的分布特性和拓扑结构。<strong></strong></strong></p>
+
+<p>在竞争学习过程中，神经元变化依不同输入模式（刺激）或者输入模式的类别而选择性地调整。这样调整后神经元的位置彼此之间成为有序的，使得对于不同的输入特征，在网络上建立起有意义的坐标系。在拓扑映射中输出神经元的空间位置对应于特殊的定义域或从输入空间抽取数据的特征。SOM的主要目的是将任意维数的输入信号模式转变为一维或二维的离散映射，并且以拓扑有序的方式自适应实现这个变换。</p>
+
+<p>Kohonen的SOM算法的本质是用一个简单的几何计算代替类Hebb规则的复杂性质和侧向相互作用。算法的主要构成参数有：1）根据一定概率分布产生激活模式的连续输入空间。2）以神经元的网络形式表示一个拓扑结构，它定义一个离散输出空间。（3）在获胜神经元i(x)周围定义随时间变化的领域函数<img src="http://latex.codecogs.com/gif.latex? h_{j,i(x)} (n)" /> 。 （4）学习率参数<img src="http://latex.codecogs.com/gif.latex? \eta (x)" />以一初始值开始，然后随着时间n递减，但永不为零。</p>
+
+<center><img src="/images/pdBase/ann_som1.png" /></center>
+
+<hr />
+
+<p>SOM的特点：</p>
+
+<ol>
+  <li>输入空间近似；</li>
+  <li>拓扑排序；</li>
+  <li>密度匹配：特征映射反映输入分布在统计上的变化：在输入空间中样本向量x以高的概率抽取的区域映射到输出空间的更大区域，从而比在输入空间中向量x以低的概率抽取的区域有更好的分辨率。但由于SOM算法计算的特征映射往往趋向于过高表示低输入密度区域和过低表示高输入密度区域，即SOM算法不能为输入数据固有的概率分布提供可信赖的表示。</li>
+  <li>特征选择：从输入空间中给定数据，自组织映射能够为逼近固有分布选择一组最好的特征。</li>
+</ol>
+
+<hr />
+
+<p>优点：</p>
+
+<ol>
+  <li>对输入模式的自动聚类作用；</li>
+  <li>网络结构简单，具有很好的生物神经元特征；</li>
+  <li>容错率；</li>
+  <li>具有特征映射的能力；</li>
+  <li>具有可视化；</li>
+  <li>具有自稳定性；</li>
+  <li>输出的排序性；</li>
+  <li>具有自联想性；</li>
+</ol>
+
+<hr />
+
+<p>缺点：</p>
+
+<ol>
+  <li>聚类数目和初始网络结构固定，需要用户预先指定聚类数目和初始的权值矩阵；</li>
+  <li>可能会出现一些始终不能获胜的神经元和一些因为经常胜利被过度利用的神经元，不能充分利用所有神经元信息而将导致影响聚类质量；</li>
+  <li>要想往SOM网络中加入新的类别必须先完整的重新学习之后方可进行；</li>
+  <li>数据的输入顺序会影响甚至决定了输出结果，数量少时尤为明显；</li>
+  <li>连接权值初始化、计算策略、参数选择不当时会导致网络收敛时间过长，甚至难以达到收敛状态。</li>
+</ol>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbannsvm/2015/01/01/ANN_RBF.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbannsvm/2015/01/01/ANN_b.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-02-02 15:14:10 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>
