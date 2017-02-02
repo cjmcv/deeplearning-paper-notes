@@ -1,0 +1,18 @@
+---
+title: BP算法
+date: 2015-01-01 10:00:00
+categories: fbANNSVM
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 概述
+
+   <strong>输出误差（某种形式）－>隐层（逐层）－>输入层，其主要目的是通过将输出误差反传，将误差分摊给各层所有单元，从而获得各层单元的误差信号，进而修正各单元的权值（即是一个权值调整的过程）。</strong>
+
+<center><img src="{{ site.baseurl }}/images/pdBase/ann_bp1.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdBase/ann_bp2.png"></center>

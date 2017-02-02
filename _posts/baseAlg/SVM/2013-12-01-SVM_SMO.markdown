@@ -1,0 +1,39 @@
+---
+title: SMO
+date: 2015-01-01 08:00:00
+categories: fbANNSVM
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>-->
+
+### 论文算法概述
+
+   <strong>Sequential minimal optimization，序列最小优化。一种用于解决支持向量机训练过程中所产生优化问题的算法。</strong>
+
+   SVM的求解，即为数据画出分割面：
+
+1. 构建拉格朗日公式得到目标函数J()，需将其最小化；
+2. 求偏导，对w求偏导得到关于w的等式，对b求偏导得到限制条件；  
+3. 把偏导结果代入，将目标函数转换成其对偶函数，需使目标函数的对偶函数为最大值，得到参数{a1,a2,…,an}；
+
+------------------------------------------------------------------------------
+
+   <strong>SVM求解的问题</strong>：实际上处理大型问题时，由于存储和计算两方面的要求，这些算法往往会失效。这些算法都要存储与训练集相应的核矩阵，如训练点数目超过4000时，存储函数矩阵需要多达128兆。
+
+   <strong>求解方法</strong>：坐标上升法，如下图左，固定除<img src="http://latex.codecogs.com/gif.latex? a_i"/>之外的所有参数，这时W可看作只是关于<img src="http://latex.codecogs.com/gif.latex? a_i"/>的函数，那么直接对<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>求导优化即可。可以通过更改优化顺序来使W能够更快地增加并收敛。如果W在内循环中能够很快地达到最优，那么坐标上升法会是一个很高效的求极值方法。
+
+   <strong>坐标上升的问题</strong>：固定以外的所有参数，那么将不再是变量（可以由其他值推出），因为问题中规定了<img src="http://latex.codecogs.com/gif.latex? \sum\limits_{i = 1}^N {a_i d_i }  = 0\;\;\; =  > \;\;a_1 d_1  =  - \sum\limits_{i = 2}^m {a_i d_i }"/> ，因此，我们最少一次需要选取两个参数做优化，比如<img src="http://latex.codecogs.com/gif.latex? a_i"/>和<img src="http://latex.codecogs.com/gif.latex? a_j"/>，此时可以由和其他参数表示出来。这样回带到W中，W就只是关于<img src="http://latex.codecogs.com/gif.latex? a_j"/>的函数了，可解。
+
+   <strong>SMO算法解决</strong>：最快的二次规划优化算法，特别针对线性SVM和数据稀疏时性能更优。步骤1：选取一对参数，选取方法使用启发式方法（Maximal violating pair）。步骤2：固定除被选取的参数之外的其他参数，确定W极值。[http://blog.csdn.net/wh357589873/article/details/50349826](http://blog.csdn.net/wh357589873/article/details/50349826)
+
+   <strong>SMO算法终止条件</strong>：
+
+* 满足KKT条件：是指在满足一些有规则的条件下, 一个非线性规划(Nonlinear Programming)问题能有最优化解法的一个必要和充分条件. 所谓KKT最优化条件即为下面三个条件：L对各个x求导为零；  h(x)=0； <img src="http://latex.codecogs.com/gif.latex? \sum {\alpha _i g_i (x) = 0,} \;\alpha _i  \ge 0"/>；[http://blog.csdn.net/on2way/article/details/47729419](http://blog.csdn.net/on2way/article/details/47729419)   
+* 最大迭代次数。
+
+
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>
+
+

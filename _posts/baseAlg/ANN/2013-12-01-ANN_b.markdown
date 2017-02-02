@@ -1,0 +1,66 @@
+---
+title: ANN基础理论
+date: 2015-01-01 11:00:00
+categories: fbANNSVM
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 神经网络中常用的激活函数
+
+<center><img src="{{ site.baseurl }}/images/pdBase/ann_b1.png"></center>
+
+------------------------------------------------------------------------------
+
+### 线性神经网络
+
+   它与感知器的主要不同之处在于其神经元有一个线性激活函数，这允许输出可以是任意值，而不仅仅只是像感知器中那样只能取0或1。
+
+------------------------------------------------------------------------------
+
+### Hebb规则
+
+   Hebb假设：若一条突触两侧的两个神经元同时被激活，那么突触的强度将会增大。
+
+   Hebb规则：如果一个正的输入 <img src="http://latex.codecogs.com/gif.latex? p_j"/>（标量）产生一个正的输出 <img src="http://latex.codecogs.com/gif.latex? a_i"/>（标量），那么应该增加 <img src="http://latex.codecogs.com/gif.latex? w_{ij}"/> （标量）的值，其数学模型：<img src="http://latex.codecogs.com/gif.latex? w_{_{ij} }^{new}  = w_{_{ij} }^{old}  + \alpha f_i (a_{iq} )g_j (p_{jq} )"/> ，其中输入向量<img src="http://latex.codecogs.com/gif.latex? p_q"/>的地j个元素 <img src="http://latex.codecogs.com/gif.latex? p_{jq}"/>，输出向量 <img src="http://latex.codecogs.com/gif.latex? a_q"/>第i个元素<img src="http://latex.codecogs.com/gif.latex? a_{iq}"/> ， <img src="http://latex.codecogs.com/gif.latex? a"/>为学习速度（正常数）。
+
+   缺点：1）随着学习的继续，w将越来越大； 2）噪声积累，以至网络对任何刺激都响应。
+
+------------------------------------------------------------------------------
+
+### Cover定理
+
+   假设空间不是稠密分布的，将复杂的模式分类问题非线性地投射到高维空间将比投射到低维空间更可能是线性可分的。
+
+------------------------------------------------------------------------------
+
+### 前向神经网络和后向神经网络概念
+
+   神经网络有前馈神经网络和反馈神经网络，前向神经网络也就是前馈神经网络。
+
+   <strong>前馈型网络</strong>：各神经元接收前一层的输入，并输出给下一层，没有反馈。节点分为两类，即输入节点和计算节点，每一个计算节点可有多个输入，但只有一个输出，通常前馈型网络可分为不同的层，第i层的输入只与第i-1层的输出相连，输入与输出节点与外界相连，而其他中间层则称为隐层。	
+
+   <strong>反馈型网络</strong>：所有节点都是计算节点，同时可接收输入，并向外界输出。
+
+   常见的前馈神经网络有：感知器、BP网络，RBF网络、LVQ网络、SOM等。 常见的反馈神经网络有：Hopfield网络、Elman网络。
+
+------------------------------------------------------------------------------
+
+### 神经网络的性能分析
+
+   <strong>优点：</strong>
+
+* 知识容量大；非线性逼近能力强；计算速度快（但学习速度慢）等。
+ 
+--
+   
+   <strong>缺点：</strong>
+
+1. 在神经网络的结构上，对于如何最优地确定隐含层数目及各隐含层神经元的数目，人们没有很多的理论作指导；
+
+2. 在一定的训练样本和网络模型与结构下，网络训练的结果存在很多个局部最优点，这样就导致网络的权值不仅与训练样本集相关，还与其初始值的选取直接相关，从而增加了网络的不确定性。
+
+3. 神经网络存在“过学习问题”，说明其泛化能力得不到保证。

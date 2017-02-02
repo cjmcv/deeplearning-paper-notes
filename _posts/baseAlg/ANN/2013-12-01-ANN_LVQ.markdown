@@ -1,0 +1,39 @@
+---
+title: LVQ神经网络
+date: 2015-01-01 11:00:00
+categories: fbANNSVM
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 概述
+
+   Learning Vector Quantization,学习向量量化; 前向有监督神经网络类型，基于竞争学习，由输入层、隐含层和输出层三层组成，输入层与隐含层间为完全连接，每个输出层神经元与隐含层神经元的不同组相连接（同组的 <img src="http://latex.codecogs.com/gif.latex? {\rm{w}}_{{\rm{ij}}}^{(2)}"/>都一样为1或0）。隐含层和输出层神经元之间的连接权值固定。在网络训练过程中，输入层和隐含层神经元间的权值被修改。当某个输入模式被送至网络时，最接近输入模式的隐含神经元因获得激发而赢得竞争，因而允许它产生一个＂1＂，而其他隐含层神经元都被迫产生＂0＂。与包含获胜神经元的隐含层神经元组相连接的输出神经元也发出＂1＂，而其他输出神经元均发出＂0＂。
+
+   <strong>算法具体步骤：</strong>
+
+1. 网络初始化：用较小的随机数设定输入层和隐含层之间的权值初始值；隐含层和输出层神经元之间的连接权值设定为：当竞争层神经元j 被指定给类i时， <img src="http://latex.codecogs.com/gif.latex? {\rm{w}}_{{\rm{ij}}}^{(2)} = 1"/>（即相连接的都为1）;否则 <img src="http://latex.codecogs.com/gif.latex? {\rm{w}}_{{\rm{ij}}}^{(2)} = 0"/>；
+
+2. 输入向量的输入：输人向量<img src="http://latex.codecogs.com/gif.latex? x = \left[ {x_1 ,x_2 ,x_3 , \cdots ,x_n } \right]^{\rm{T}} "/>送入到输入层。训练模式为<img src="http://latex.codecogs.com/gif.latex? \left\{ {x_1 ,\left. {t_1 } \right\}} \right.,\left\{ {x_2 ,\left. {t_2 } \right\},...,\left\{ {x_Q ,\left. {t_Q } \right\}} \right.} \right."/>， <img src="http://latex.codecogs.com/gif.latex? t_{\rm{i}}"/>为分类标签。
+		     
+3. 计算隐含层权值向量与输入向量的距离：隐含层神经元和输入向量的距离，与自组织化映射的情况相同，由下式给出：<img src="http://latex.codecogs.com/gif.latex? d_j  = \sqrt {\sum\nolimits_{i = 1}^n {(x_i  - w_{ij} )^2 } } "/>；（其他网络中常采用输入与权值向量的内积）
+		     
+4. 选择与权值向量的距离最小的神经元：计算并选择输入向量和权值向量的距离最小的神经元，并把其称为胜出神经元，记为j*。
+ 
+5. 更新连接权值：如果胜出神经元和预先指定的分类一致，称为正确分类，否则称为不正确分类。正确分类和不正确分类时权值的调整量分别使用公式：
+	
+   <center><img src="{{ site.baseurl }}/images/pdBase/ann_lvq1.png"></center>
+	
+6. 判断是否满足预先设定的最大迭代次数，满足时算法结束，否则返回2，进入下一轮学习。
+
+---
+
+   <strong>使用实例（识别手写字母）</strong>：预处理字符图像为16*16=256，所以第一层神经元个数为256个（扫描输入）；共26个字母，则输出神经元为26个；隐藏层节点数参考值为输入神经元的两倍。学习速率参考值为0.01~0.8。
+
+   注：隐含层一个圈代表一个神经元，神经元移动即各个输入对该神经元的权值的调整，如左图所示，一个神经元对应各个输入都有一个相应的权值。
+
+<center><img src="{{ site.baseurl }}/images/pdBase/ann_lvq2.png"></center>
+

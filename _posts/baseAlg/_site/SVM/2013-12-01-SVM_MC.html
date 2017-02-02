@@ -1,0 +1,42 @@
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="/images/pdBase/svm_smo1.png"></center>-->
+
+<h3 id="section">概述</h3>
+
+<p><strong>为每个可能的分类组合构造一个而知分类器，通过组合多个二值分类器来构建多值分网络，常见的构造方法可以分为一对多、一对一及DDAGSVM三种。</strong></p>
+
+<ul>
+  <li>
+    <p>一对多：</p>
+
+    <p>在第N类和其他N一1类间构造超平面。在这种方式下，构建N平SVM,每个SVM分别将某一类的数据从其它分类数据集数据中鉴别出来。</p>
+
+    <p><strong>优点</strong>:只需要训练N个SVM,故其所得到的分类函数较少,分类速度相对较快。</p>
+
+    <p><strong>缺点</strong>:(l)单个SVM的训练规模较大,而且训练数据不均匀,加入新的类别时,所有的SVM都必须重新训练,扩展能力不好;	(2)在识别方面可能存在测试样本同时属于多类或不属于任何一类的区域,即存在大量无法识别的阴影区域。如图 (a)所示，阴影区1同时属于Class l、2；阴影区4不属于任何一类。</p>
+  </li>
+  <li>
+    <p>一对一：</p>
+
+    <p>该算法在每两类间就训练一个SVM将它们分开，对于N类问题,就需要N (N一1)个SVM,考虑到将y1与y2分开以及将y1与y2分开的超平面是一样的,因此对于N类问题,仅需N、(N一1)2/个svM就可以了。</p>
+
+    <p><strong>优点</strong>:这种方法单个SVM的训练量较小,所以训练速度较一对多方式快,且训练数据比较均衡,具有很好的扩展能力;</p>
+
+    <p><strong>缺点</strong>:是需要训练的SVM数量较多,当N增大时,SVM个数显著增加,所以其识别速度较一对多方式慢,且其也存在无法识别的阴影区,如图(b)所示,即阴影区1可能同时属于class l、2、3.</p>
+  </li>
+  <li>
+    <p>DDAGSVM:</p>
+
+    <p>是Plnatt等提出的决策导向非循环图(DeeisionDireetedAyccilcGarph,DDAG)方法,它是将多个两类分类器组合成多类分类器。在训练阶段,其与一对一方式相同,即对于N类问题,DDAG构建Nx(N一l)2/个svM。然而在决策阶段,使用从根节点开始的导向非循环图(DAG),具有Nx(N一1)/2个内部节点以及N个叶子节点,每个内部节点都是一个两类分类器,叶子节点为最终的类值,给定一个测试样本,从根节点开始根据分类器的输出值决定其走左侧或右测路径,如此一直到叶子节点为止,得到样本所属的类值。</p>
+
+    <p><strong>优点</strong>：决策速度显著比一对多方式和一对一方式快。</p>
+
+    <p><strong>缺点</strong>：根节点的选择直接影响分类的结果,不同的分类器作为根节点,其分类结果可能不同,从而产生分类结果的不确定性。</p>
+  </li>
+</ul>
+
+<p>PS：一对一方式和DDAGSvM方式较之一对多分类方式更实用。</p>
+
+<center><img src="/images/pdBase/svm_mc1.png" /></center>

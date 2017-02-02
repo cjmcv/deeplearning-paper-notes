@@ -1,0 +1,27 @@
+---
+title: SVM概述
+date: 2015-01-01 08:00:00
+categories: fbANNSVM
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>-->
+
+### 论文算法概述
+
+   仅有一个非线性单元隐藏层的前馈网络，简要而原则性强的学习方法，它由植根于VC维理论的结构风险最小化原则导出。
+
+   主要思想是给定训练样本，建立一个超平面作为决策面，使得正例和反例之间的隔离边缘被最大化；即使样本中离超平面最近的点到超平面的距离最远。对于支持向量机的设计来说核方法本质上是最优的，而最优性是根植于凸优化。<strong>分以下4个步骤进行：</strong>
+
+1. 寻找最优超平面的问题，以这样一个陈述为开始：即在原始权重空间的带约束的优化问题；
+2. 对于上述约束问题建立拉格朗日函数。
+3. 推导出机器最优化条件;
+4. 在对偶空间解决带拉格朗日乘子的优化问题。
+
+    <strong>对不可分离的情况的原问题正式陈述如下：</strong>
+
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_t1.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_t2.png"></center>
+
