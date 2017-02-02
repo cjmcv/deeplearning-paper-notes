@@ -1,0 +1,37 @@
+---
+title: SIFT特征改进
+date: 2015-01-01 11:00:00
+categories: fbFeature
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### PCA-SIFT
+
+   PCA-SIFT与标准SIFT有相同的亚像素位置，尺度和主方向。但在第4步计算描述子的设计，采用的主成分分析的技术。用特征点周围的41×41的像斑计算它的主元，并用PCA-SIFT将原来的2×39×39维的向量降成20维，以达到更精确的表示方式。它的主要步骤为，对每一个关键点：在关键点周围提取一个41×41的像斑于给定的尺度，旋转到它的主方向 ；计算39×39水平和垂直的梯度，形成一个大小为3042的矢量；用预先计算好的投影矩阵n×3042与此矢量相乘；这样生成一个大小为n的PCA-SIFT描述子。
+
+<center><img src="{{ site.baseurl }}/images/pdBase/fea_surf1.png"></center>
+
+---
+
+### SURF（Speeded Up Robust of Features，加速鲁棒特征描述子）[资料链接](http://www.360doc.com/content/15/0303/09/20590214_452140553.shtml)
+
+   优点：Surf算法是对Sift算法的一种改进，主要是在算法的执行效率上，比Sift算法来讲运行更快！
+
+   缺点：首先由于其计算是产生信息的不对称现象,影响了算子的旋转不变性;其次由于其产生的描述符维度较少,在作图像匹配的精确度上也不如SIFT高。
+
+   SURF 的基本步骤与 SIFT 相同，同样包括构建尺度空间、精确定位关键点以及对关键点进行描述三部分，具有尺度和旋转不变性。
+
+   与 SIFT 不同的是：
+
+1. Sift采用的是DOG图像，而surf采用的是Hessian矩阵行列式近似值图像
+
+2. 特征描述子的生成，不统计其梯度直方图，而是统计特征点领域内的harr小波特征
+
+   该算法中主要采用近似的Hessian矩阵、Haar小波变换 和 积分图像。
+
+<center><img src="{{ site.baseurl }}/images/pdBase/fea_surf2.png"></center>
+

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>颜色特征集合</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">颜色特征集合</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="/images/pdBase/svm_smo1.png"></center>-->
+
+<h3 id="section">颜色直方图</h3>
+
+<p>简单描述一幅图像中颜色的全局分布，即不同色彩在整幅图像中所占的比例。颜色直方图特征匹配方法：直方图相交法、距离法、中心距法、参考颜色表法、累加颜色直方图法等。</p>
+
+<center><img src="/images/pdBase/fea_color1.png" /></center>
+
+<p>注意：改图HSV直方图，只画了H和S，因为V是明度；显示的直方图无一明确的标准，编程时记好数即可。HSV直方图，则统计好H、S、V的各个值所占的比例，为三个独立的直方图。</p>
+
+<p>HSV直方图参考资料：</p>
+
+<p><a href="http://wenku.baidu.com/link?url=D1mGRbzdNnzo-lGutMCLiN6SaQTtwLJkNDCtvmtXQc6axH1Et9asTfhILGb-cKWFrbzZjiSvlrMUcsVdhsIUrc7q1q9HOzZRCdPuqp03Dmm">http://wenku.baidu.com/link?url=D1mGRbzdNnzo-lGutMCLiN6SaQTtwLJkNDCtvmtXQc6axH1Et9asTfhILGb-cKWFrbzZjiSvlrMUcsVdhsIUrc7q1q9HOzZRCdPuqp03Dmm</a></p>
+
+<p><a href="http://wenku.baidu.com/link?url=cZKrsY8z-nHbXGVRZwMhzwwsf_tfJCkTuJ8Wu22TW5NE9RDiArtdgTjFnG-yPHwOSgR1iZhOw_efAUT7G3fjdVn3tpiP33N-qfnxp_r6mK3">http://wenku.baidu.com/link?url=cZKrsY8z-nHbXGVRZwMhzwwsf_tfJCkTuJ8Wu22TW5NE9RDiArtdgTjFnG-yPHwOSgR1iZhOw_efAUT7G3fjdVn3tpiP33N-qfnxp_r6mK3</a></p>
+
+<hr />
+
+<h3 id="section-1">颜色集</h3>
+
+<p>颜色集作为对颜色直方图的一种近似。首先将RGB颜色空间转化成视觉均衡的颜色空间（如HSV空间），并将颜色空间量化成若干个bin。然后，用色彩自动分割技术将图像分为若干区域，每个区域用量化颜色空间的某个颜色分量来索引，从而将图像表达一个二进制的颜色索引集。</p>
+
+<p>在图像匹配中，比较不同图像颜色集之间的距离和色彩区域的空间关系（包括区域的分离、包含、交等，每种对应于不同得评分）。因为颜色集表达为二进制的特征向量，可以构造二分查找树来加快检索速度，这对于大规模的图像集合十分有利。</p>
+
+<hr />
+
+<h3 id="section-2">颜色矩</h3>
+
+<p>数学基础：图像中任何的颜色分布均可以用它的矩来表示。此外，由于颜色分布信息主要集中在低阶矩中，因此，仅采用颜色的一阶矩（mean）、二阶矩（variance）和三阶矩（skewness）就足以表达图像的颜色分布。而各个颜色矩都有其对应的一个公式函数。</p>
+
+<p>三个颜色矩的数学定义： <img src="http://latex.codecogs.com/gif.latex? \mu _i  = \frac{1}{N}\sum\limits_{j = 1}^N {p_{i,j} } " />， <img src="http://latex.codecogs.com/gif.latex? \sigma _i  = \left( {\frac{1}{N}\sum\limits_{j = 1}^N {(p_{i,j}  - \mu _i )^2 } } \right)^{1/2} " />， <img src="http://latex.codecogs.com/gif.latex? s_i  = \left( {\frac{1}{N}\sum\limits_{j = 1}^N {(p_{i,j}  - \mu _i )^3 } } \right)^{1/3} " />。 其中<img src="http://latex.codecogs.com/gif.latex? p_{i,j} " /> 表示彩色图像第i个颜色通道分量中灰度为j的像素出现的概率，N表示图像中的像素个数。</p>
+
+<p>图像的3个分量Y，U，V图像的前三阶颜色矩组成一个9维直方图向量，即图像的颜色特征表示如下： <img src="http://latex.codecogs.com/gif.latex? F_{color}  = [\mu Y,\sigma Y,sY,\;\;\mu U,\sigma U,sU,\;\;\mu V,\sigma V,sV] " /></p>
+
+<p>优点：不需要颜色空间量化，特征向量维数低；</p>
+
+<p>缺点：实验发现该方法的检索效率比较低，因而在实际应用中往往用来过滤图像以缩小检索范围。</p>
+
+<hr />
+
+<h3 id="section-3">颜色聚合向量</h3>
+
+<p>针对颜色直方图和颜色矩无法表达图像色彩的空间位置的缺点而提出。核心思想是：将属于直方图每一个bin的像素分成两部分，如果该bin内的某些像素所占据的连续区域的面积大于给定的阈值，则该区域内的像素作为聚合像素，否则作为非聚合像素。</p>
+
+<p>假设αi与βi分别代表直方图的第i个bin中聚合像素和非聚合像素的数量，&lt;α1+ β1, α2 + β2, …, αN +βN &gt; 就是该图像的颜色直方图，而图像的颜色聚合向量则可以表达为&lt;(α1, β1), (α2, β2), …, (αN, βN)&gt;。</p>
+
+<p>优点：包含了颜色分布的空间信息，颜色聚合向量相比颜色直方图可以达到更好的检索效果。</p>
+
+<hr />
+
+<h3 id="section-4">颜色相关图</h3>
+
+<p>这种特征不但刻画了某一种颜色的像素数量占整个图像的比例，还反映了不同颜色对之间的空间相关性。</p>
+
+<p>其中<img src="/images/pdBase/fea_color2.png" />表示像素p1和p2之间的距离。颜色相关图可以看作是一张用颜色对&lt;i, j&gt;索引的表，其中&lt;i, j&gt;的第k个分量表示颜色为c(i)的像素和颜色为c(j)的像素之间的距离小于k的概率。如果考虑到任何颜色之间的相关性，颜色相关图会变得非常复杂和庞大 (空间复杂度为O(N2d))。</p>
+
+<p>一种简化的变种是颜色自动相关图（color auto-correlogram），它仅仅考察具有相同颜色的像素间的空间关系，因此空间复杂度降到O(Nd)。</p>
+
+<p>实验表明，颜色相关图比颜色直方图和颜色聚合向量具有更高的检索效率，特别是查询空间关系一致的图像。</p>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbfeature/2015/01/01/Fea_SUSAN.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbfeature/2015/01/01/Fea_shape.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-02-03 00:24:30 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

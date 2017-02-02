@@ -1,0 +1,21 @@
+---
+title: GLCM灰度共生矩阵
+date: 2015-01-01 11:00:00
+categories: fbFeature
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 概述
+
+   灰度共生矩阵是像素距离和角度的矩阵函数，它通过计算图像中一定距离和一定方向的两点灰度之间的相关性，来反映图像在方向、间隔、变化幅度及快慢上的综合信息。
+
+   灰度共生矩阵用<img src="http://latex.codecogs.com/gif.latex? P_\delta"/>表示，矩阵元素则用以符号表示：<img src="http://latex.codecogs.com/gif.latex? P_\delta  (i,j)\quad (i,j = 0,1,2, \cdots ,L - 1)"/>。其中i, j分别为两个像素的灰度；L为图像的灰度级数；<img src="http://latex.codecogs.com/gif.latex? \delta"/>为两个像素间的位置关系，用<img src="http://latex.codecogs.com/gif.latex? \delta  = (\Delta x,\Delta y)"/>表示，即两个像素在x方向和y方向上的距离分别为<img src="http://latex.codecogs.com/gif.latex? \Delta x,\Delta y"/>，不同的<img src="http://latex.codecogs.com/gif.latex? \delta"/>决定了两像素间的距离和方向，通常方向以45度划分，依次为0度、45度、90度、135度供四个方向。当两像素间位置关系<img src="http://latex.codecogs.com/gif.latex? \delta"/>选定后，就生成一定<img src="http://latex.codecogs.com/gif.latex? \delta"/>下的灰度共生矩阵<img src="http://latex.codecogs.com/gif.latex? P_\delta"/>。
+
+   共生矩阵中的一个元素表示了一种灰度组合下出现的次数。如元素<img src="http://latex.codecogs.com/gif.latex? P_\delta  (1,0)"/>表示了图像上位置关系为 <img src="http://latex.codecogs.com/gif.latex? \delta"/>的两像素灰度分别为1和0的情况出现的次数。显然，不同的位置关系（距离或方向），元素值就不相同。
+
+   灰度直方图是对图像上单个像素具有某个灰度进行统计的结果，而灰度共生矩阵是对图像上保持某距离的两像素分别具有某灰度的状况进行统计得到的。两者最大差别在于，前者表示了单个像素的灰度分布概貌，后者描述了成对像素的灰度组合分布。
+

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>ANN基础理论</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">ANN基础理论</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="/images/pdBase/svm_smo1.png"></center>-->
+
+<h3 id="section">神经网络中常用的激活函数</h3>
+
+<center><img src="/images/pdBase/ann_b1.png" /></center>
+
+<hr />
+
+<h3 id="section-1">线性神经网络</h3>
+
+<p>它与感知器的主要不同之处在于其神经元有一个线性激活函数，这允许输出可以是任意值，而不仅仅只是像感知器中那样只能取0或1。</p>
+
+<hr />
+
+<h3 id="hebb">Hebb规则</h3>
+
+<p>Hebb假设：若一条突触两侧的两个神经元同时被激活，那么突触的强度将会增大。</p>
+
+<p>Hebb规则：如果一个正的输入 <img src="http://latex.codecogs.com/gif.latex? p_j" />（标量）产生一个正的输出 <img src="http://latex.codecogs.com/gif.latex? a_i" />（标量），那么应该增加 <img src="http://latex.codecogs.com/gif.latex? w_{ij}" /> （标量）的值，其数学模型：<img src="http://latex.codecogs.com/gif.latex? w_{_{ij} }^{new}  = w_{_{ij} }^{old}  + \alpha f_i (a_{iq} )g_j (p_{jq} )" /> ，其中输入向量<img src="http://latex.codecogs.com/gif.latex? p_q" />的地j个元素 <img src="http://latex.codecogs.com/gif.latex? p_{jq}" />，输出向量 <img src="http://latex.codecogs.com/gif.latex? a_q" />第i个元素<img src="http://latex.codecogs.com/gif.latex? a_{iq}" /> ， <img src="http://latex.codecogs.com/gif.latex? a" />为学习速度（正常数）。</p>
+
+<p>缺点：1）随着学习的继续，w将越来越大； 2）噪声积累，以至网络对任何刺激都响应。</p>
+
+<hr />
+
+<h3 id="cover">Cover定理</h3>
+
+<p>假设空间不是稠密分布的，将复杂的模式分类问题非线性地投射到高维空间将比投射到低维空间更可能是线性可分的。</p>
+
+<hr />
+
+<h3 id="section-2">前向神经网络和后向神经网络概念</h3>
+
+<p>神经网络有前馈神经网络和反馈神经网络，前向神经网络也就是前馈神经网络。</p>
+
+<p><strong>前馈型网络</strong>：各神经元接收前一层的输入，并输出给下一层，没有反馈。节点分为两类，即输入节点和计算节点，每一个计算节点可有多个输入，但只有一个输出，通常前馈型网络可分为不同的层，第i层的输入只与第i-1层的输出相连，输入与输出节点与外界相连，而其他中间层则称为隐层。</p>
+
+<p><strong>反馈型网络</strong>：所有节点都是计算节点，同时可接收输入，并向外界输出。</p>
+
+<p>常见的前馈神经网络有：感知器、BP网络，RBF网络、LVQ网络、SOM等。 常见的反馈神经网络有：Hopfield网络、Elman网络。</p>
+
+<hr />
+
+<h3 id="section-3">神经网络的性能分析</h3>
+
+<p><strong>优点：</strong></p>
+
+<ul>
+  <li>知识容量大；非线性逼近能力强；计算速度快（但学习速度慢）等。</li>
+</ul>
+
+<p>–</p>
+
+<p><strong>缺点：</strong></p>
+
+<ol>
+  <li>
+    <p>在神经网络的结构上，对于如何最优地确定隐含层数目及各隐含层神经元的数目，人们没有很多的理论作指导；</p>
+  </li>
+  <li>
+    <p>在一定的训练样本和网络模型与结构下，网络训练的结果存在很多个局部最优点，这样就导致网络的权值不仅与训练样本集相关，还与其初始值的选取直接相关，从而增加了网络的不确定性。</p>
+  </li>
+  <li>
+    <p>神经网络存在“过学习问题”，说明其泛化能力得不到保证。</p>
+  </li>
+</ol>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbannsvm/2015/01/01/ANN_b.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fdetect/2015/03/12/DPM.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-02-02 15:25:00 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

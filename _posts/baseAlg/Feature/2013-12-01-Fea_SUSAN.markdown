@@ -1,0 +1,25 @@
+---
+title: SUSAN与DoG角点检测
+date: 2015-01-01 11:00:00
+categories: fbFeature
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### SUSAN (Small univalue segment assimilating nucleus)
+
+   SUSAN特征检测原理：用一个圆形模板在图像上移动，若模板内像素的灰度与模板中心像素 灰度的差值小于一定阈值，则认为该点与核具有相同（或相似）的灰度，观察其所占比例可得出核心是否在角点上。有满足这样条件的像素组成的区域称为USAN，即通过计算USAN区域的大小（即核内满足条件的像素点的大小），如下图所示可以区分该核心点是否在角点上或边缘上。
+
+<center><img src="{{ site.baseurl }}/images/pdBase/fea_susan1.png"></center>
+
+### DoG (Difference of Gaussian)
+
+   DoG是一种灰度图像增强和角点检测的方法，高斯函数差分即是两幅高斯图像的差：<center><img src="{{ site.baseurl }}/images/pdBase/fea_susan2.png"></center>
+
+   具体到图像处理来说就是将两幅图像在不同参数的高斯滤波结果下相减得到DoG图。一个点如果在DoG尺度空间本层以及上下两层的26个领域中是最大或最小值时，就认为该点是图像在该尺度下的一个特征点。Theory：DoG三维图中的最大值和最小值点是角点。
+
+
+<center><img src="{{ site.baseurl }}/images/pdBase/fea_susan3.png"></center>

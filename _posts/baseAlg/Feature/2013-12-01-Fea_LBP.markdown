@@ -1,0 +1,23 @@
+---
+title: LBP特征
+date: 2015-01-01 11:00:00
+categories: fbFeature
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 概述
+
+   LBP（Local Binary Pattern， 局部二值化模型），一种用来描述图像局部纹理特征的算子。它具有旋转不变性和灰度不变性等显著的优点，提取的特征是图像的局部的纹理特征。[资料链接](http://blog.csdn.net/quincuntial/article/details/50541815)
+
+   对LBP特征向量进行提取的步骤（最传统的方法）：
+
+1. 首先将检测窗口划分为3*3的小区域（cell）；
+2. 在3*3的窗口内，以窗口中心像素为阈值，将相邻的8个像素的灰度值与其进行比较，若周围像素值大于中心像素值，则周围的该像素点的位置被标记为1，否则为0。这样，3*3邻域内的8个点经比较可产生8位二进制数（通常转换为十进制数即LBP码，共256种），即得到该窗口中心像素点的LBP值，并用这个值来反映该区域的纹理信息。
+3. 然后计算每个cell的LBP直方图，即每个数字（假定是十进制数LBP值）出现的频率（LBP值（种类）为横轴，出现次数为纵轴）；然后对该直方图进行归一化处理。
+4. 最后将得到的每个cell的统计直方图进行连接成为一个特征向量，也就是整幅图的LBP纹理特征向量；
+
+------------------------------------------------------------------------------

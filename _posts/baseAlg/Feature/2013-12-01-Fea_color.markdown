@@ -1,0 +1,73 @@
+---
+title: 颜色特征集合
+date: 2015-01-01 11:00:00
+categories: fbFeature
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 颜色直方图
+
+   简单描述一幅图像中颜色的全局分布，即不同色彩在整幅图像中所占的比例。颜色直方图特征匹配方法：直方图相交法、距离法、中心距法、参考颜色表法、累加颜色直方图法等。
+
+<center><img src="{{ site.baseurl }}/images/pdBase/fea_color1.png"></center>
+
+   注意：改图HSV直方图，只画了H和S，因为V是明度；显示的直方图无一明确的标准，编程时记好数即可。HSV直方图，则统计好H、S、V的各个值所占的比例，为三个独立的直方图。
+ 
+   HSV直方图参考资料：
+
+[http://wenku.baidu.com/link?url=D1mGRbzdNnzo-lGutMCLiN6SaQTtwLJkNDCtvmtXQc6axH1Et9asTfhILGb-cKWFrbzZjiSvlrMUcsVdhsIUrc7q1q9HOzZRCdPuqp03Dmm](http://wenku.baidu.com/link?url=D1mGRbzdNnzo-lGutMCLiN6SaQTtwLJkNDCtvmtXQc6axH1Et9asTfhILGb-cKWFrbzZjiSvlrMUcsVdhsIUrc7q1q9HOzZRCdPuqp03Dmm)
+			
+[http://wenku.baidu.com/link?url=cZKrsY8z-nHbXGVRZwMhzwwsf_tfJCkTuJ8Wu22TW5NE9RDiArtdgTjFnG-yPHwOSgR1iZhOw_efAUT7G3fjdVn3tpiP33N-qfnxp_r6mK3](http://wenku.baidu.com/link?url=cZKrsY8z-nHbXGVRZwMhzwwsf_tfJCkTuJ8Wu22TW5NE9RDiArtdgTjFnG-yPHwOSgR1iZhOw_efAUT7G3fjdVn3tpiP33N-qfnxp_r6mK3)
+
+------------------------------------------------------------------------------
+
+### 颜色集
+
+   颜色集作为对颜色直方图的一种近似。首先将RGB颜色空间转化成视觉均衡的颜色空间（如HSV空间），并将颜色空间量化成若干个bin。然后，用色彩自动分割技术将图像分为若干区域，每个区域用量化颜色空间的某个颜色分量来索引，从而将图像表达一个二进制的颜色索引集。
+
+   在图像匹配中，比较不同图像颜色集之间的距离和色彩区域的空间关系（包括区域的分离、包含、交等，每种对应于不同得评分）。因为颜色集表达为二进制的特征向量，可以构造二分查找树来加快检索速度，这对于大规模的图像集合十分有利。
+
+
+------------------------------------------------------------------------------
+
+
+### 颜色矩
+
+   数学基础：图像中任何的颜色分布均可以用它的矩来表示。此外，由于颜色分布信息主要集中在低阶矩中，因此，仅采用颜色的一阶矩（mean）、二阶矩（variance）和三阶矩（skewness）就足以表达图像的颜色分布。而各个颜色矩都有其对应的一个公式函数。
+
+   三个颜色矩的数学定义： <img src="http://latex.codecogs.com/gif.latex? \mu _i  = \frac{1}{N}\sum\limits_{j = 1}^N {p_{i,j} } "/>， <img src="http://latex.codecogs.com/gif.latex? \sigma _i  = \left( {\frac{1}{N}\sum\limits_{j = 1}^N {(p_{i,j}  - \mu _i )^2 } } \right)^{1/2} "/>， <img src="http://latex.codecogs.com/gif.latex? s_i  = \left( {\frac{1}{N}\sum\limits_{j = 1}^N {(p_{i,j}  - \mu _i )^3 } } \right)^{1/3} "/>。 其中<img src="http://latex.codecogs.com/gif.latex? p_{i,j} "/> 表示彩色图像第i个颜色通道分量中灰度为j的像素出现的概率，N表示图像中的像素个数。
+
+   图像的3个分量Y，U，V图像的前三阶颜色矩组成一个9维直方图向量，即图像的颜色特征表示如下： <img src="http://latex.codecogs.com/gif.latex? F_{color}  = [\mu Y,\sigma Y,sY,\;\;\mu U,\sigma U,sU,\;\;\mu V,\sigma V,sV] "/> 
+
+   优点：不需要颜色空间量化，特征向量维数低；
+
+   缺点：实验发现该方法的检索效率比较低，因而在实际应用中往往用来过滤图像以缩小检索范围。
+
+------------------------------------------------------------------------------
+
+### 颜色聚合向量
+
+   针对颜色直方图和颜色矩无法表达图像色彩的空间位置的缺点而提出。核心思想是：将属于直方图每一个bin的像素分成两部分，如果该bin内的某些像素所占据的连续区域的面积大于给定的阈值，则该区域内的像素作为聚合像素，否则作为非聚合像素。
+
+   假设αi与βi分别代表直方图的第i个bin中聚合像素和非聚合像素的数量，<α1+ β1, α2 + β2, …, αN +βN > 就是该图像的颜色直方图，而图像的颜色聚合向量则可以表达为<(α1, β1), (α2, β2), …, (αN, βN)>。
+
+   优点：包含了颜色分布的空间信息，颜色聚合向量相比颜色直方图可以达到更好的检索效果。
+
+
+------------------------------------------------------------------------------
+
+### 颜色相关图
+ 
+   这种特征不但刻画了某一种颜色的像素数量占整个图像的比例，还反映了不同颜色对之间的空间相关性。
+
+   其中<img src="{{ site.baseurl }}/images/pdBase/fea_color2.png">表示像素p1和p2之间的距离。颜色相关图可以看作是一张用颜色对<i, j>索引的表，其中<i, j>的第k个分量表示颜色为c(i)的像素和颜色为c(j)的像素之间的距离小于k的概率。如果考虑到任何颜色之间的相关性，颜色相关图会变得非常复杂和庞大 (空间复杂度为O(N2d))。
+
+   一种简化的变种是颜色自动相关图（color auto-correlogram），它仅仅考察具有相同颜色的像素间的空间关系，因此空间复杂度降到O(Nd)。
+
+   实验表明，颜色相关图比颜色直方图和颜色聚合向量具有更高的检索效率，特别是查询空间关系一致的图像。
+
+   

@@ -1,0 +1,54 @@
+---
+title: 形状特征集合
+date: 2015-01-01 11:00:00
+categories: fbFeature
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 大体分类
+
+   <center><img src="{{ site.baseurl }}/images/pdBase/fea_shape1.png"></center>
+
+------------------------------------------------------------------------------
+
+### Hu不变矩
+
+  Hu矩是归一化中心矩的线性组合，之所以这样做是为了能够获取代表图像某个特征的矩函数，这些矩函数对某些变化如缩放、旋转和镜像映射（除h1）具有不变性。每个图像对应着7个Hu矩。
+  
+   p+q阶中心矩定义为：<img src="{{ site.baseurl }}/images/pdBase/fea_shape2.png">，几何矩（标准矩）定义为：<img src="{{ site.baseurl }}/images/pdBase/fea_shape3.png">； 则归一化矩：<img src="{{ site.baseurl }}/images/pdBase/fea_shape4.png">.
+
+   所以Hu矩阵：<img src="http://latex.codecogs.com/gif.latex? h_1  = \eta _{20}  + \eta _{02} "/>（这是7个中的其中一个）。
+
+
+
+------------------------------------------------------------------------------
+
+
+### Zernike矩
+
+   Zernike 矩基于 Zernike多项式的正交化函数，是一组正交矩，具有旋转不变性的特性。
+[资料链接](http://baike.baidu.com/link?url=XQWDcMJNyJ9zx3OBYCr6xly04eKymgUJeNgvu8413vSN41cJhb4iek4peCv1ie4SkjUmUNdNSPBITnSkPq5VrwRbOYFus9nARfn8ILRzN9O)
+
+------------------------------------------------------------------------------
+
+### NMI特征
+
+   NMI特征具有抗灰度及TRS不变性，且提取方法简单，易于实现；与传统的归一化积相关算法、图像不变矩算法相比，该文提出的目标识别方法具有正确率高、速度快等特点。
+[资料链接](http://wenku.baidu.com/link?url=t67TB-amQqjMiO1mXNpL8JsFVv6mUX-09xfGy6J4xuQKkjDldvibxDUYKGB2_JY9VcxuVvOPV0KphTbb6ZsWFsGICZNcVD3kAa7zrFd22Oi)
+
+
+------------------------------------------------------------------------------
+
+### 傅立叶描述子
+   
+   傅里叶级数中的一系列系数是与物体边界曲线的形状有关的，可作为形状的描述，称为傅里叶描述子。
+
+   归一化方法：令系数Z(0)为0，从而使<img src="http://latex.codecogs.com/gif.latex? ||Z(k)||"/>与旋转、平移和曲线起点的选择无关。把每一个系数的幅值<img src="http://latex.codecogs.com/gif.latex? ||Z(k)||"/>除以<img src="http://latex.codecogs.com/gif.latex? ||Z(1)||"/>，则<img src="http://latex.codecogs.com/gif.latex? {||Z(k)||}/{||Z(1)||}"/>是不随尺度变化而变化。归一化的傅立叶描述子<img src="http://latex.codecogs.com/gif.latex? {||Z(k)||}/{||Z(1)||}"/>具有旋转、平移和尺度变换不变性，并且与边界的起点位置无关。
+
+   
+
+   

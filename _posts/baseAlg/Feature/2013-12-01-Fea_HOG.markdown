@@ -1,0 +1,35 @@
+---
+title: HOG方向梯度直方图
+date: 2015-01-01 11:00:00
+categories: fbFeature
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 概述
+
+   <strong>主要思想</strong>：局部目标的表象和形状能够被梯度或边缘的方向密度分布很好地描述。在2005年CVPR上提出HOG+SVM分类器,用于行人检测，流行一时。
+
+   优点：首先，由于HOG是在图像的局部方格单元上操作，所以它对图像几何的和光学的形变都能保持很好的不变性，这两种形变只会出现在更大的空间领域上。其次，在粗的空域抽样、精细的方向抽样以及较强的局部光学归一化等条件下，只要行人大体上能够保持直立的姿势，可以容许行人有一些细微的肢体动作，这些细微的动作可以被忽略而不影响检测效果。因此HOG特征是特别适合于做图像中的人体检测的。
+
+   HOG特征提取方法就是将一个image（你要检测的目标或者扫描窗口）：
+
+1. 灰度化（将图像看做一个x,y,z（灰度）的三维图像）；
+
+2. 采用Gamma校正法对输入图像进行颜色空间的标准化（归一化）；目的是调节图像的对比度，降低图像局部的阴影和光照变化所造成的影响，同时可以抑制噪音的干扰；
+
+3. 计算图像每个像素的梯度（包括大小和方向）；主要是为了捕获轮廓信息，同时进一步弱化光照的干扰。具体实现：水平和垂直方向的梯度：<img src="http://latex.codecogs.com/gif.latex? G_x (x,y) = I(x + 1,y) - I(x - 1,y)"/>、<img src="http://latex.codecogs.com/gif.latex? G_y (x,y) = I(x,y + 1) - I(x,y - 1)"/>；梯度值：<img src="http://latex.codecogs.com/gif.latex? G(x,y) = \sqrt {G_x (x,y)^2  + G_y (x,y)^2 } "/>，梯度方向：<img src="http://latex.codecogs.com/gif.latex? \alpha (x,y) = \tan ^{ - 1} ({G_y (x,y)}/{G_x (x,y)})"/>。或可以参考sobel算法做卷积得到水平和垂直的梯度。
+
+4. 将图像划分成小cells（例如6*6像素/cell，可以是矩形也可以是星形等）；
+
+5. 统计每个cell的梯度直方图（不同梯度的个数，类似于freeman编码，加上梯度幅值），即可形成每个cell的descriptor；
+
+6. 将每几个cell组成一个block（例如3*3个cell/block），一个block内所有cell的特征descriptor串联起来便得到该block的HOG特征descriptor。
+
+7. 将图像image内的所有block的HOG特征descriptor串联起来就可以得到该image（你要检测的目标）的HOG特征descriptor了。这个就是最终的可供分类使用的特征向量了。
+   
+
+   

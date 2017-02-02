@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>SIFT特征</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">SIFT特征</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="/images/pdBase/svm_smo1.png"></center>-->
+
+<h3 id="section">概述</h3>
+
+<p>SIFT (Scale-invariant feature transform，尺度不变特征转换) 算法的特点：SIFT特征是图像的局部特征，其对旋转、尺度缩放、亮度变化保持不变性，对视角变化、仿射变换、噪声也保持一定程度的稳定性；每个关键点有三个信息：位置，所处尺度、方向.</p>
+
+<p>优点：</p>
+
+<ol>
+  <li>
+    <p>独特性（Distinctiveness）好，信息量丰富，适用于在海量特征数据库中进行快速、准确的匹配；</p>
+  </li>
+  <li>
+    <p>多量性，即使少数的几个物体也可以产生大量的SIFT特征向量；</p>
+  </li>
+  <li>
+    <p>高速性，经优化的SIFT匹配算法甚至可以达到实时的要求；</p>
+  </li>
+  <li>
+    <p>可扩展性，可以很方便的与其他形式的特征向量进行联合。</p>
+  </li>
+</ol>
+
+<hr />
+
+<p>算法流程：</p>
+
+<ol>
+  <li>
+    <p>构建高斯差分尺度空间： <img src="http://latex.codecogs.com/gif.latex? D(x,y,\sigma ) = (G(x,y,k\sigma ) - G(x,y,\sigma ))*I(x,y)" />。然后一层一层地构建图像金字塔（注：2kσ中的2是必须的，尺度空间是连续的，高斯平滑导致图像丢失高频信息，所以 Lowe 建议在建立尺度空间前首先对原始图像长宽扩展一倍，以保留原始图像信息，增加特征点数量。尺度越大图像越模糊。（换句话说：在不同模糊情况下，仍然坚挺的点，则认为是特征点。。“三层中26领域的极值为特征点”）</p>
+  </li>
+  <li>
+    <p>检测DOG尺度空间极值点（具体做法看上面DOG）：一个点如果在DOG尺度空间本层以及上下两层的26个领域中是最大或最小值时，就认为该点是图像在该尺度下的一个特征点；在极值比较的过程中，每一组图像的首末两层是无法进行极值比较的，为了满足尺度变化的连续性，我们在每一组图像的顶层继续用高斯模糊生成了 3 幅图像，高斯金字塔有每组S+3层图像。DOG金字塔每组有S+2层图像.。</p>
+  </li>
+  <li>
+    <p>除去不好的特征点，这一步本质上要去掉DoG局部曲率非常不对称的像素。 通过拟和三维二次函数以精确确定关键点的位置和尺度（达到亚像素精度），同时去除低对比度的关键点和不稳定的边缘响应点(因为DoG算子会产生较强的边缘响应)，以增强匹配稳定性、提高抗噪声能力，在这里使用近似Harris Corner检测器。。。（未真正理解）。。。</p>
+  </li>
+  <li>
+    <p>特征点描述子的生成。在所在的尺度空间取以特征点为中心的16<em>16像素大小的邻域，并且邻域划分为4</em>4个子区域（则每个子区域有4<em>4个像素）。然后在每个4</em>4像素的小块上计算8个方向的梯度方向直方图，绘制每个像素梯度方向的累加值，即可形成一个描述子，用高斯窗口对其进行加权（越靠近关键点的像素梯度方向信息贡献越大），将4<em>4个描述子（子区域）根据位置依次排序,形成一个4</em>4*8 =128维的特征向量。</p>
+
+    <p>为了对光线变化更具鲁棒性，描述子都被归一化到单位长度。如果图像的对比度发生变化，每个像素值都会加上一个数值，归一化后，对比度的影响被消除了。对于图像亮度的变化每个像素值都会加上一个数值，然而这对计算的梯度是没有影响的。因此，该描述子对亮度的仿射变换是鲁棒的。</p>
+
+    <p>为了使算子具备旋转不变性，实现旋转不变的基本思想是采用“相对”的概念，为关键点赋一个方向，定义的关键点描述子是相对于这个方向的。具体做法是：要以特征点为中心，在附近邻域内整个像素块旋转θ角，其中θ角为主方向角度，即使主方向旋转到0度。</p>
+
+    <p>其中梯度方向直方图的绘制方法：使用公式<img src="/images/pdBase/fea_sift1.png" />，分别得到每个像素的梯度幅值和方向，而梯度直方图的范围是0～360度，其中每45度一个柱，总共8个柱。</p>
+  </li>
+  <li>
+    <p>特征点匹配。1）利用最近邻和次最近邻的比例（即最近的要很小，且比次近的还小得多），当小于某个比例阈值时，我们才接受这一对匹配，可使用欧式距离；    2）利用最近邻法，定义为特征向量的欧氏距离。</p>
+  </li>
+</ol>
+
+<p>一般使用一种叫kd树的数据结构来完成搜索，搜索内容是以目标图像的关键点为基准，搜索与目标图像的特征点最近邻的原图特征点和次近邻的原图特征点。可使用RANSAC进行特征点的匹配和消除错配。</p>
+
+<center><img src="/images/pdBase/fea_sift2.png" /></center>
+
+<p>对SIFT算法的改进算法有：PCA-SIFT； CSIFT； SURF； ASIFT	。。。</p>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbfeature/2015/01/01/Fea_Moravec.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbfeature/2015/01/01/Fea_SURF.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-02-03 00:24:30 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

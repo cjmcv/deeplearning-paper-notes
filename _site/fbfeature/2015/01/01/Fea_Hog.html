@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>HOG方向梯度直方图</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">HOG方向梯度直方图</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="/images/pdBase/svm_smo1.png"></center>-->
+
+<h3 id="section">大体分类</h3>
+
+<center><img src="/images/pdBase/fea_shape1.png" /></center>
+
+<hr />
+
+<h3 id="hu">Hu不变矩</h3>
+
+<p>Hu矩是归一化中心矩的线性组合，之所以这样做是为了能够获取代表图像某个特征的矩函数，这些矩函数对某些变化如缩放、旋转和镜像映射（除h1）具有不变性。每个图像对应着7个Hu矩。</p>
+
+<p>p+q阶中心矩定义为：<img src="/images/pdBase/fea_shape2.png" />，几何矩（标准矩）定义为：<img src="/images/pdBase/fea_shape3.png" />； 则归一化矩：<img src="/images/pdBase/fea_shape4.png" />.</p>
+
+<p>所以Hu矩阵：<img src="http://latex.codecogs.com/gif.latex? h_1  = \eta _{20}  + \eta _{02} " />（这是7个中的其中一个）。</p>
+
+<hr />
+
+<h3 id="zernike">Zernike矩</h3>
+
+<p>Zernike 矩基于 Zernike多项式的正交化函数，是一组正交矩，具有旋转不变性的特性。
+<a href="http://baike.baidu.com/link?url=XQWDcMJNyJ9zx3OBYCr6xly04eKymgUJeNgvu8413vSN41cJhb4iek4peCv1ie4SkjUmUNdNSPBITnSkPq5VrwRbOYFus9nARfn8ILRzN9O">资料链接</a></p>
+
+<hr />
+
+<h3 id="nmi">NMI特征</h3>
+
+<p>NMI特征具有抗灰度及TRS不变性，且提取方法简单，易于实现；与传统的归一化积相关算法、图像不变矩算法相比，该文提出的目标识别方法具有正确率高、速度快等特点。
+<a href="http://wenku.baidu.com/link?url=t67TB-amQqjMiO1mXNpL8JsFVv6mUX-09xfGy6J4xuQKkjDldvibxDUYKGB2_JY9VcxuVvOPV0KphTbb6ZsWFsGICZNcVD3kAa7zrFd22Oi">资料链接</a></p>
+
+<hr />
+
+<h3 id="section-1">傅立叶描述子</h3>
+
+<p>傅里叶级数中的一系列系数是与物体边界曲线的形状有关的，可作为形状的描述，称为傅里叶描述子。</p>
+
+<p>归一化方法：令系数Z(0)为0，从而使<img src="http://latex.codecogs.com/gif.latex? ||Z(k)||" />与旋转、平移和曲线起点的选择无关。把每一个系数的幅值<img src="http://latex.codecogs.com/gif.latex? ||Z(k)||" />除以<img src="http://latex.codecogs.com/gif.latex? ||Z(1)||" />，则<img src="http://latex.codecogs.com/gif.latex? {||Z(k)||}/{||Z(1)||}" />是不随尺度变化而变化。归一化的傅立叶描述子<img src="http://latex.codecogs.com/gif.latex? {||Z(k)||}/{||Z(1)||}" />具有旋转、平移和尺度变换不变性，并且与边界的起点位置无关。</p>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbfeature/2015/01/01/Fea_GLCM.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbfeature/2015/01/01/Fea_LBP.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-02-02 17:38:34 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>
