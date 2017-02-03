@@ -1,0 +1,37 @@
+---
+title: RBM相关基础理论
+date: 2015-01-01 08:00:00
+categories: fbDnn
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 蒙特卡罗方法概念
+ 
+   蒙卡罗特方法的目的是用随机化的方法求积分。如求一个给定函数h(x)的积分，我们可以将h(x)分解为某个函数f(x)和其概率密度函数p(x)乘积，这样积分就变成：<img src="http://latex.codecogs.com/gif.latex? \int_{\rm{a}}^{\rm{b}} {h(x){\rm{dx}}}  = \int_{\rm{a}}^{\rm{b}} {f(x)p(x){\rm{dx}}}  = E_{p(x)} [f(x)]"/>；
+
+   如果从分布p(x)上采集大量符合分布p(x)的样本，那么就可以用这些样本逼近均值以求得积分：<img src="http://latex.codecogs.com/gif.latex? \int_{\rm{a}}^{\rm{b}} {h(x){\rm{dx}}}  = E_{p(x)} [f(x)] \approx \frac{1}{n}\sum\limits_{i = 1}^n {f(x_i )}"/>。
+
+   其一个核心问题是：如何从这个分布上采集样本？为了将采样集中在概率比较大的地方，提出了多种采样方法，提出了很多方法，而马尔可夫链蒙特卡罗方法（MCMC）就是其中一种。
+
+### 马尔科夫链蒙特卡罗（MCMC）的基本思想
+
+   利用马尔科夫链来产生制定分布下的样本。
+
+### Gibbs采样概念
+
+<center><img src="{{ site.baseurl }}/images/pdBase/dnn_rbmp1.png"></center>
+
+### 对比散度（Contrastive Divergence，CD）算法概述
+
+   CD-k(即k步的CD算法)的基本思想：对于使用Gibbs抽样来解决RBM的抽样问题过程十分缓慢，最大的原因在于需要经过许多步的状态转移才能保证采集到的样本符合目标分布。既然我们的目标是让RBM拟合训练样本的分布，那么是否可以考虑让MCMC的状态以训练样本为起点呢？这样一来，也许这些状态值需要很少次的状态转移就可以抵达RBM的分布了。
+   
+   其算法步骤，也就是下一篇RBM的算法步骤。
+
+### 二分图
+   
+   二分图，又称作二部图；简而言之，就是无向图G=(V,E)的顶点集V可分割为两个互不相交的子集，并且图中每条边依附的两个顶点都分属于这两个互不相交的子集。
+

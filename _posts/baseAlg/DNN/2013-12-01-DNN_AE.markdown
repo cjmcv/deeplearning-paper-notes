@@ -1,0 +1,44 @@
+---
+title: AutoEncoder自动编码器
+date: 2015-01-01 08:00:00
+categories: fbDnn
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 自联想神经网络（在深度学习中称为 自动编码器 ）
+
+   BP神经网络的一种特殊情形。其特点是有对称拓扑结构，即输出量等于输入量，能够实现对输入数据的重构。
+
+   如果这个网络结构已经训练好了，那么其中间层，就可以看过是对原始输入数据的某种特征表示。如果我们把它的第三层去掉，这样就是一个两层的网络。如果，我们把这个学习到特征再用同样的方法创建一个自联想的三层BP网络，如图所示。换言之，第二次创建的三层自联想网络的输入是上一个网络的中间层的输出。用同样的训练算法，对第二个自联想网络进行学习。那么，第二个自联想网络的中间层是对其输入的某种特征表示。如果我们按照这种方法，依次创建很多这样的由自联想网络组成的网络结构，这就是深度神经网络。
+
+---
+
+训练步骤：
+
+1. wake-sleep， code作为下一层的输入，decoder调完去掉; 
+
+2. 在最顶层的编码层添加分类器（如logistic回归、SVM），然后用带标签样本通过有监督学习进行微调.
+
+<center><img src="{{ site.baseurl }}/images/pdBase/dnn_ae1.png"></center>
+
+### 稀疏自动编码器
+
+   在AutoEncoder的基础上加上L1的Regularity限制（L1主要是约束每一层中的节点中大部分都要为0，只有少数不为0，这就是Sparse名字的来源）。其中：
+
+<center><img src="{{ site.baseurl }}/images/pdBase/dnn_ae2.png">
+   
+   其实就是限制每次得到的表达code尽量稀疏，参考稀疏编码。因为稀疏的表达往往比其他的表达要有效（人脑好像也是这样的，某个输入只是刺激某些神经元，其他的大部分的神经元是受到抑制的）。
+
+<center><img src="{{ site.baseurl }}/images/pdBase/dnn_ae3.png">
+
+### 降噪自动编码器
+
+   降噪自动编码器DA是在自动编码器的基础上，训练数据加入噪声，所以自动编码器必须学习去去除这种噪声而获得真正的没有被噪声污染过的输入。因此，这就迫使编码器去学习输入信号的更加鲁棒的表达，这也是它的泛化能力比一般编码器强的原因。DA可以通过梯度下降算法去训练。
+
+---
+
+PS:还有堆栈式自动编码器等。。。

@@ -1,0 +1,33 @@
+---
+title: 梯度弥散
+date: 2015-01-01 12:00:00
+categories: fbDnn
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 概述
+
+   神经网络（如采用误差反向传播算法：Back Propagation，简称BP算法，通过梯度下降方法在训练过程中修正权重使得网络误差最小）在层次深的情况下性能变得很不理想，传播时容易出现所谓的梯度弥散Gradient Diffusion或称之为梯度消失，根源在于非凸目标代价函数导致求解陷入局部最优，且这种情况随着网络层数的增加而更加严重，即随着梯度的逐层不断消散导致其对网络权重调整的作用越来越小。所以只能转而处理浅层结构（小于等于3），从而限制了性能。
+
+   于是，20世纪90年代，有更多的浅层模型相继被提出，比如只有一层隐层节点的SVM和Boosting，以及没有隐层节点的最大熵方法（例如Logistic Regression）等，在很多应用领域取代了传统的神经网络。
+
+---
+
+深度学习中解决该问题的方法：
+
+1. 多伦多大学的Geoff Hinton提出了设想：受限玻尔兹曼机（RBM），即一类具有两层结构的、对称链接无自反馈的随机神经网络模型， 层与层之间是全连接，层内无链接 ，从而形成一个二分图。
+
+2. Hinton在2006年提出自编码器，采用“逐层预训练”即wake-sleep算法，来有效降低梯度弥散影响。该预训练部分为无监督学习，减少了手工设计特征的巨大工作量，能自动地学习特征。要注意预训练完后还要进行类别有监督的调整，所以深度学习整体来说还是有监督学习。
+
+3. 减少参数使用CNN (Convolution Neural Networks)，CNN解决梯度弥散是使用的权值共享的策略。
+
+4. 2012年，Hinton组的Alex Krizhevsky率先将受到Gradient Vanish影响较小的CNN中大规模使用新提出的ReLu函数。
+
+5. 2014年，Google研究员贾扬清则利用ReLu这个神器，成功将CNN扩展到了22层巨型深度网络。
+
+6. 对于深受Gradient Vanish困扰的RNN，其变种LSTM也克服了这个问题。
+

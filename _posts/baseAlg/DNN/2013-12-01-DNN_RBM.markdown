@@ -1,0 +1,42 @@
+---
+title: 受限波尔兹曼机RBM
+date: 2015-01-01 08:00:00
+categories: fbDnn
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 概述
+
+   RBM（Restricted Boltzmann Machine），受限波尔兹曼机。一种可通过输入数据集学习概率分布的随机生成神经网络，是玻尔兹曼机的变体，限定模型为二分图。所谓“随机”是指这种网络中的神经元是随机神经元，其输出只有两种状态（激活、未激活），一般用0/1表示，而状态的具体取值则根据概率统计法则来决定。
+
+   RBM网络结构有n个可视节点和m个隐藏节点，其中每个可视节点只和m个隐藏节点相关，和其他可视节点是独立的，就是这个可视节点的状态只受m个隐藏节点的影响，对于每个隐藏节点也是，只受n个可视节点的影响，这个特点使得RBM的训练变得容易了。RBM网络有几个参数，一个是可视层与隐藏层之间的权重矩阵Wn×m，一个是可视节点的偏移量b=(b1,b2⋯bn)，一个是隐藏节点的偏移量c=(c1,c2⋯cm)，这几个参数决定了RBM网络将一个n维的样本编码成一个什么样的m维的样本。
+
+   首先为了描述容易，先假设每个节点取值都在集合{0,1}中，即∀i,j,vi∈{0,1}，ℎj∈{0,1} 。一个训练样本x过来了取值为x=(x1,x2⋯xn)，根据RBM网络，可以得到这个样本的m维的编码后的样本y=(y1,y2⋯ym)，这m维的编码也可以认为是抽取了m个特征的样本。其中隐藏节点的第j个特征的取值为1的概率为：<img src="http://latex.codecogs.com/gif.latex? p(h_j  = 1\left| v \right.) = \sigma (\sum\nolimits_{i = 1}^n {w_{ji} } v_i  + c_j )"/>；其中<img src="http://latex.codecogs.com/gif.latex? v_i"/>的取值就是<img src="http://latex.codecogs.com/gif.latex? x_i"/>，<img src="http://latex.codecogs.com/gif.latex? h_j"/>的取值就是 <img src="http://latex.codecogs.com/gif.latex? y_j"/>；使用logistics函数定义隐藏神经元被激活的概率：<img src="http://latex.codecogs.com/gif.latex? \sigma (x) = 1/\left( {1 + \exp ( - x)} \right)"/>；
+
+---
+
+   生成<img src="http://latex.codecogs.com/gif.latex? y_i"/>的过程是（使用Gibbs采样方法）：
+
+1. 先利用公式<img src="http://latex.codecogs.com/gif.latex? p(h_j  = 1\left| v \right.) = \sigma (\sum\nolimits_{i = 1}^n {w_{ji} } v_i  + c_j )"/>，根据 x 的值计算概率<img src="http://latex.codecogs.com/gif.latex? p(h_j  = 1\left| v \right.)"/>，其中<img src="http://latex.codecogs.com/gif.latex? y_i"/>的取值就是<img src="http://latex.codecogs.com/gif.latex? x_i"/>的值。
+
+2. 然后产生一个0到1之间的随机数，如果它小于<img src="http://latex.codecogs.com/gif.latex? p(h_j  = 1\left| v \right.)"/>，<img src="http://latex.codecogs.com/gif.latex? y_j"/>的取值就是1，否则就是0。
+
+---
+
+   反过来，现在知道了一个编码后的样本y，想要知道原来的样本x，即解码过程（使用Gibbs采样方法），跟上面也是同理，过程如下：
+
+1. 先利用公式<img src="http://latex.codecogs.com/gif.latex? p(v_i  = 1\left| h \right.) = \sigma (\sum\nolimits_{j = 1}^m {w_{ji} } h_j  + b_i )"/>，根据 y 的值计算概率 <img src="http://latex.codecogs.com/gif.latex? p(h_j  = 1\left| v \right.)"/>，其中<img src="http://latex.codecogs.com/gif.latex? h_j"/> 的取值就是 <img src="http://latex.codecogs.com/gif.latex? y_j"/> 的值。
+
+2. 然后产生一个0到1之间的随机数，如果它小于p(vi=1|h)，hi的取值就是1，否则就是0。“注：h是隐藏层，v是可视层”
+
+---
+
+   RBM的基于CD的快速学习算法：算法步骤如下图所示，其中第一个for循环的两个语句用的是Gibbs采样方法，，即上边的用x/v生成y/h，和用y/h生成x/v。第二个for是迭代刷新参数。
+
+<center><img src="{{ site.baseurl }}/images/pdBase/dnn_rbm1.png"></center>
+
+   

@@ -1,0 +1,44 @@
+---
+title: Sparse Coding稀疏编码
+date: 2015-01-01 08:00:00
+categories: fbDnn
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 概述
+   
+   稀疏编码算法是一种无监督学习方法，它用来寻找一组“超完备”基向量来更高效地表示样本数据。稀疏编码算法的目的就是找到一组基向量<img src="http://latex.codecogs.com/gif.latex? \phi _i "/>，使得我们能将输入向量 x 表示为这些基向量的线性组合：<img src="http://latex.codecogs.com/gif.latex? x = \sum\nolimits_{i = 1}^k {a_i \phi _i } "/>；
+
+   超完备基的好处是它们能更有效地找出隐含在输入数据内部的结构与模式。然而，对于超完备基来说，系数<img src="http://latex.codecogs.com/gif.latex? a_i"/>不再由输入向量 x 唯一确定。因此，在稀疏编码算法中，我们另加了一个评判标准“稀疏性”来解决因超完备而导致的退化（degeneracy）问题。
+ 
+   <strong>“稀疏性”定义为：</strong>只有很少的几个非零元素或只有很少的几个远大于零的元素。要求系数<img src="http://latex.codecogs.com/gif.latex? a_i"/>是稀疏的意思就是说：对于一组输入向量，我们只想有尽可能少的几个系数远大于零。
+
+---
+
+* <strong>Training阶段：</strong>给定一系列的样本图片[x1, x 2, …]，我们需要学习得到一组基[Φ1, Φ2, …]，也就是字典。
+
+   稀疏编码是k-means算法的变体，其训练过程也差不多（EM算法的思想：如果要优化的目标函数包含两个变量，如L(W, B)，那么我们可以先固定W，调整B使得L最小，然后再固定B，调整W使L最小，这样迭代交替，不断将L推向最小值。训练过程就是一个重复迭代的过程，按上面所说，我们交替的更改<img src="http://latex.codecogs.com/gif.latex? a_{i,j}"/>和<img src="http://latex.codecogs.com/gif.latex? \phi _j"/>使得下面这个目标函数最小<img src="http://latex.codecogs.com/gif.latex? \mathop {\min }\limits_{a,\phi } \sum\limits_{i = 1}^m {\left\| {x_i  - \sum\limits_{j = 1}^k {a_{i,j} \phi _j } } \right\|} ^2  + \lambda \sum\limits_{i = 1}^m {\sum\limits_{j = 1}^k {\left| {a_{i,j} } \right|} } "/>。
+ 
+   其中<img src="http://latex.codecogs.com/gif.latex? \lambda \sum\limits_{i = 1}^m {\sum\limits_{j = 1}^k {\left| {a_{i,j} } \right|} } "/> 是稀疏代价函数，它来对远大于零的<img src="http://latex.codecogs.com/gif.latex? "/>进行“惩罚”，即让基向量的线性组合与输入尽可能相同，但系数尽可能小。我们可以把稀疏编码目标函式的第一项解释为一个重构项，这一项迫使稀疏编码算法能为输入向量提供一个高拟合度的线性表达式，而公式第二项即“稀疏惩罚”项。因为很有可能因为减小<img src="http://latex.codecogs.com/gif.latex? a_{i,j} "/>或增加<img src="http://latex.codecogs.com/gif.latex? \phi _j "/>至很大的常量，使得稀疏惩罚变得非常小。为防止此类事件发生，我们将限制<img src="http://latex.codecogs.com/gif.latex? \left\| {\phi _j } \right\|^2 "/>要小于某常量 C 。包含了限制条件的稀疏编码代价函数的完整形式如下：<img src="http://latex.codecogs.com/gif.latex? \left\| {\phi _j } \right\|^2  \le C,\;\;\forall i = 1,...,k"/>。
+
+   每次迭代分两步：
+
+   1. 固定字典Φ[k]，然后调整a[k]，使得上式，即目标函数最小（即解LASSO问题）。
+
+   2. 然后固定住a [k]，调整Φ [k]，使得上式，即目标函数最小（即解凸QP问题）。
+
+   两步不断迭代，直至收敛。这样就可以得到一组可以良好表示这一系列x的基，也就是字典。
+
+---
+
+* <strong>Coding阶段：</strong>给定一个新的图片x，由上面得到的字典，通过解一个LASSO问题得到稀疏向量a。这个稀疏向量就是这个输入向量x的一个稀疏表达了。 <img src="http://latex.codecogs.com/gif.latex? \mathop {\min }\limits_a \sum\limits_{i = 1}^m {\left\| {x_i  - \sum\limits_{j = 1}^k {a_{i,j} \phi _j } } \right\|} ^2  + \lambda \sum\limits_{i = 1}^m {\sum\limits_{j = 1}^k {\left| {a_{i,j} } \right|} } "/>
+
+
+   
+
+
+   

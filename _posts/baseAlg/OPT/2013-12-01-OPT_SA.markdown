@@ -1,0 +1,39 @@
+---
+title: 模拟退火算法SA
+date: 2015-01-01 11:00:00
+categories: fbOpt
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 概述
+
+   一种适合于解决大规模组合优化问题的通用而有效的近似算法，理论上算法具有概率的全局优化性能，具有描述简单、使用灵活、运用广泛、运行效率高和较少受到初始条件约束等优点。
+
+   模拟退火其实也是一种贪心算法，但是它的搜索过程引入了随机因素。模拟退火算法以一定的概率来接受一个比当前解要差的解，因此有可能会跳出这个局部的最优解，达到全局的最优解。
+
+---
+
+步骤：
+
+1. 初始化：初始温度T(充分大)，初始解状态S(是算法迭代的起点)， 每个T值的迭代次数L 
+
+2. 对k=1，……，L做第(3)至第6步：
+
+3. 产生新解S′ 
+
+4. 计算增量Δt′=C(S′)-C(S)，其中C(S)为评价函数
+
+5. 若Δt′<0则接受S′作为新的当前解，否则以概率exp(-Δt′/T)接受S′作为新的当前解. 
+
+6. 如果满足终止条件则输出当前解作为最优解，结束程序。终止条件通常取为连续若干个新解都没有被接受时终止算法。
+
+7. T逐渐减少，且T->0，然后转第2步。
+
+注：Metropolis准则：以概率接受新状态：<img src="http://latex.codecogs.com/gif.latex? p = \exp [ - {(E_j  - E_i )} / {k_B T}]"/>；在高温下，可接受与当前状态能量差较大的新状态；在低温下，只接受与当前状态能量差较小的新状态。
+
+
+   
