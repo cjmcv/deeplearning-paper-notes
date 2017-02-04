@@ -1,0 +1,80 @@
+---
+title: 常用的线检测算法
+date: 2015-01-01 09:00:00
+categories: fbImgb
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### Hough
+
+一：
+
+1. 在图像中检测直线的问题，其实质是找到构成直线的所有的像素点。那么问题就是从找到直线，变成找到符合y=mx+b的所有(x,y)的点的问题。
+
+2. 进行坐标系变化y=mx+b，变成b=-xm+y。即b为y轴，m为x轴，直线上的点(x1,y1)，在转换坐标系后为一条直线。
+
+3. 直线上每一个点在MB坐标系中都表现为直线，而且，这些直线都相交于一个点，(m,b)。找到所有点的问题，转变为寻找直线的问题。
+
+4. 对于图像中的每一个点，在MB坐标系中对应着很多的直线。找到直线的交点，就对应着找到图像中的直线。
+
+在m为无穷大时无法使用，在实际使用时，用极坐标来做。如2
+
+二：
+
+   在将直角坐标系转到极坐标系中，图像空间中的每一个点(x,y)就会被映射为一个<img src="http://latex.codecogs.com/gif.latex? (r,\theta )"/>空间中的正弦曲线，而图像空间中共线的点所对应的<img src="http://latex.codecogs.com/gif.latex? (r,\theta )"/>空间中正弦曲线相交于一点<img src="http://latex.codecogs.com/gif.latex? (r',\theta ')"/>，
+       
+   为每一个点假设n个方向的直线，通常n=180，此时检测的直线的角度精度为1°，利用公式<img src="http://latex.codecogs.com/gif.latex? r = x\cos \theta  + y\sin \theta "/>分别计算这n条直线的<img src="http://latex.codecogs.com/gif.latex? (r,\theta )"/>坐标，得到n个坐标点。如果要判断的点共有N个，最终得到的<img src="http://latex.codecogs.com/gif.latex? (r,\theta )"/>坐标有Nxn个。有关这Nxn个<img src="http://latex.codecogs.com/gif.latex? (r,\theta )"/>坐标，其中<img src="http://latex.codecogs.com/gif.latex? \theta"/>是离散的角度，共有180个取值。统计<img src="http://latex.codecogs.com/gif.latex? (r,\theta )"/>的出现次数，设定一个阈值，次数高于这个阈值而认为是一条直线。
+
+推导：<img src="http://latex.codecogs.com/gif.latex? (p,q) = (r\cos \theta ,r\sin \theta )"/>，则垂线的斜率为<img src="http://latex.codecogs.com/gif.latex? \tan \theta  = {\sin \theta } / {\cos \theta }"/>，则原直线的斜率为<img src="http://latex.codecogs.com/gif.latex?  - {1 / \tan \theta }} = { - \cos \theta } / {\sin \theta }}"/>（1）；设直线上任意点为(x,y)，则斜率为<img src="http://latex.codecogs.com/gif.latex? {(y - p)}/{(x - q)} = {(y - r\sin \theta )} / {(x - r\cos \theta )}"/>（2）；结合(1)(2)可得<img src="http://latex.codecogs.com/gif.latex? r = x\cos \theta  + y\sin \theta"/>。
+
+### LSD [链接](http://blog.csdn.net/ivandark/article/details/29562201)
+
+   一种新的直线段检测算法，《LSD: a Line Segment Detector》发表于PAMI2010。LSD的核心是像素合并于误差控制。号称是能在线性时间（linear-time）内得到亚像素级准确度的直线段检测算法。
+	
+   LSD的计算步骤：一、图像缩放；二、梯度计算；三、梯度排序；四、梯度阈值；五、区域增长；六、矩形估计；
+
+### Radon变换（拉东变换）
+
+   Radon 变换定义在任意空间域，一个 n 维函数<img src="http://latex.codecogs.com/gif.latex? f(x_1 ,x_2 ,x_3 ,...,x_n )"/>的Radon变换定义为n-1维超平面上的积分值。若考虑 n=2 的特例，Radon变换是计算图像在某一指定角度射线方向上投影的变换。可看成是先将图片旋转一定角度后将其对x轴进行积分。旋转图像如下：<img src="http://latex.codecogs.com/gif.latex? \left\{ {\begin{array}{*{20}c}
+   {x = x_0 \cos \beta  + y_0 \sin \beta }  \\
+   {y =  - x_0 \sin \beta  + y_0 \cos \beta }  \\
+\end{array}} \right.
+"/>，<img src="http://latex.codecogs.com/gif.latex? \left[ {\begin{array}{*{20}c}
+   x  \\
+   y  \\
+   1  \\
+\end{array}} \right] = \left[ {\begin{array}{*{20}c}
+   {\cos \beta } & {\sin \beta } & 0  \\
+   { - \sin \beta } & {\cos \beta } & 0  \\
+   0 & 0 & 1  \\
+\end{array}} \right]\left[ {\begin{array}{*{20}c}
+   {x_0 }  \\
+   {y_0 }  \\
+   1  \\
+\end{array}} \right]
+"/>，后将其沿着x轴积分。
+
+   一个最简单而直接的应用就是拿来检测图像里面含有的直线成分，很显然地，任何直线都会导致Radon像在该直线对应（d，α）处的极值。
+
+<center><img src="{{ site.baseurl }}/images/pdBase/imgb_line1.png"></center>
+
+---
+
+### Hough变换检测圆
+
+   因为直角坐标系上有<img src="http://latex.codecogs.com/gif.latex? (x - a)^2  + (y - b)^2  = r^2 "/>，则在参数空间中有<img src="http://latex.codecogs.com/gif.latex? (a - x_i )^2  + (b - y_i )^2  = r^2"/>；所以圆可以表示为<img src="http://latex.codecogs.com/gif.latex? x = a + r\cos \theta ,\;\;y = b + r\sin \theta "/>，则在参数空间中可表示为<img src="http://latex.codecogs.com/gif.latex? a = x + r\cos \theta ,\;\;b = y + r\sin \theta"/>，先设定一个三维累加器A(a,b,r)，对图像上每一个前景像素点带入式子的x、y中， 由360度遍历，r由给出的范围遍历，将得到的(a,b,r)对累加器A(a,b,r)进行累加。
+
+### 圆检测的标准RHT（随机Hough变换）
+
+   设平面点集D包含一个或多个不同的圆,标准RHT的基本思路是:反复从D中随机选取不在同一直线上的三个点,利用这三点确定圆的参数<img src="http://latex.codecogs.com/gif.latex? \theta {\rm{  =  [a,b,r]}}"/>,其中(a,b)为圆心,r为半径,并设置一个累加器S,将每次计算所得的圆参数和累加器中的数值放入参数集<img src="http://latex.codecogs.com/gif.latex? {\rm{P  =  [}}\theta {\rm{,S]  =  [a,b,r,s]}}"/>中.当 对应的累加值s超过指定的阈值N时,利用最小二乘法将这些点拟合得到新的参数<img src="http://latex.codecogs.com/gif.latex? \theta _i"/>,重新确定D中位于由<img src="http://latex.codecogs.com/gif.latex? \theta _i"/>确定的圆上的点,若此点数超过一个圆为真实圆时所需的最小点数,则可以确定参数为<img src="http://latex.codecogs.com/gif.latex? \theta _i"/>的圆是真实圆.继续循环,直到检测出所有圆。（随机抽3个数，设置参数累加器（允许误差），累加达阈值则重新拟合，点数够的为圆）
+
+<center><img src="{{ site.baseurl }}/images/pdBase/imgb_line2.png"></center>
+
+--
+
+<center><img src="{{ site.baseurl }}/images/pdBase/imgb_line3.png"></center>
+

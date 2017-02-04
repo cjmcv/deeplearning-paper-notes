@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>常用的光照补偿算法</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">常用的光照补偿算法</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="/images/pdBase/svm_smo1.png"></center>-->
+
+<h3 id="gamma">Gamma矫正</h3>
+
+<p>可调整对比度，<img src="http://latex.codecogs.com/gif.latex? out(x,y) = in(x,y)^{1/gamma} " />，（gamma大于1时可使暗的部分加亮，亮的部分基本不变），使用查表法可以加快速度。</p>
+
+<h3 id="he">直方图均衡化（HE）</h3>
+
+<p>直方图x轴坐标为灰度值大小[0,255]，y轴为在该图像中对应灰度值的像素个数。</p>
+
+<center><img src="/images/pdBase/imgb_light1.png" /></center>
+
+<h3 id="section">直方图规定化（又称为直方图匹配）</h3>
+
+<p>使一副图像直方图变成规定形状的直方图而对图像进行的变换的增强方法。优点：消除图像色调差异；缺点：两幅图像亮度相差很大时无法做规定化。</p>
+
+<p>算法描述：</p>
+
+<ol>
+  <li>
+    <p>对源图像和参考图像分别做直方图均衡化，得到源图像直方图和规定直方图。</p>
+  </li>
+  <li>
+    <p>确定源图像直方图与规定直方图的对应映射关系，原则是针对源图像均衡化后的直方图的每一个灰度级概率密度，查找最接近的规定直方图灰度概率密度，即频率累计直方图<img src="http://latex.codecogs.com/gif.latex? |V_2  - V_1 |" />最小者建立映射关系，建立灰度映射表。</p>
+  </li>
+  <li>
+    <p>按映射结果对像素点进行投影。</p>
+  </li>
+</ol>
+
+<center><img src="/images/pdBase/imgb_light2.png" /></center>
+
+<h3 id="section-1">功率谱均衡滤波器（同态滤波）</h3>
+
+<p>同态滤波是把频率过滤和灰度变换结合起来的一种图像处理方法，它依靠图像的照度/反射率模型作为频域处理的基础，利用压缩亮度范围和增强对比度来改善图像的质量。目的是消除不均匀照度的影响而又不损失图像细节。
+依据：图像的灰度有照射分量和反射分量合成。反射分量反映图像内容，随图像细节不同在空间上作快速变化。照射分量在空间上通常均具有缓慢变化的性质。即照射分量的频谱落在空间的低频区域，反射分量的频谱落在空间高频区域。同态滤波能够减少低频并增加高频,从而能减少光照变化并锐化边缘或细节。</p>
+
+<center><img src="/images/pdBase/imgb_light3.png" /></center>
+
+<h3 id="retinex">Retinex增强</h3>
+
+<p>一种图像增强方法，基础理论是物体的颜色是由物体对长波（红色）、中波（绿色）、短波（蓝色）光线的反射能力来决定的，而不是由反射光强度的绝对值来决定的，物体的色彩不受光照非均匀性的影响，具有一致性，即retinex是以色感一致性（颜色恒常性）为基础的。不同于传统的线性、非线性的只能增强图像某一类特征的方法，Retinex可以在动态范围压缩、边缘增强和颜色恒常三个方面打到平衡，因此可以对各种不同类型的图像进行自适应的增强。</p>
+
+<p>这套理论建立在以下三个假设之上：</p>
+
+<ol>
+  <li>
+    <p>真实世界是无颜色的，我们所感知的颜色是光与物质的相互作用的结果。我们见到的水是无色的，但是水膜—肥皂膜却是显现五彩缤纷，那是薄膜表面光干涉的结果。</p>
+  </li>
+  <li>
+    <p>每一颜色区域由给定波长的红、绿、蓝三原色构成的；</p>
+  </li>
+  <li>
+    <p>三原色决定了每个单位区域的颜色。</p>
+  </li>
+</ol>
+
+<h3 id="section-2">其他</h3>
+
+<ol>
+  <li>
+    <p>光照锥</p>
+  </li>
+  <li>
+    <p>基于球面谐波基图像的光照补偿算法</p>
+  </li>
+  <li>
+    <p>商光照–渲染（QIR）</p>
+  </li>
+  <li>
+    <p>小波分解进行光照补偿</p>
+  </li>
+</ol>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbimgb/2015/01/01/Imgb_inter.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbimgb/2015/01/01/Imgb_line.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-02-05 00:29:37 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

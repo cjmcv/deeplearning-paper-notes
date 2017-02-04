@@ -1,0 +1,16 @@
+---
+title: 沃尔什-哈达玛变换WHT
+date: 2015-01-01 10:00:00
+categories: fbImgT
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 概述
+
+   哈达玛变化是一种特殊排序的沃尔什变换，又称为沃尔什-哈达玛变换。哈达玛变换矩阵也是一个仅包含+1和-1两个矩阵元素的方阵，任意二行或任意二列相乘后的各数之和必定为零，即不同的行或不同的列之间都彼此正交，哈达玛变换核矩阵与沃尔什变换不同之处仅仅是行的次序不同。哈达玛矩阵的最大优点在于它具有简单的递推关系，即高阶矩阵可用两个低阶矩阵的克罗内积（Kronecker Product）求得，如下图所示。
+
+<center><img src="{{ site.baseurl }}/images/pdBase/ImgTrans_wht1.png"></center>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>常用的轮廓模型</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">常用的轮廓模型</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="/images/pdBase/svm_smo1.png"></center>-->
+
+<h3 id="snake">Snake模型主动轮廓模型（蛇模型）</h3>
+
+<p>Snake模型是一种参数活动轮廓模型，一条可变形的参数曲线及相应的能量函数，以最小化能量目标函数为目标，控制参数曲线变形，具有最小能量的闭合曲线就是目标轮廓。首先需要在感兴趣区域的附近给出一条初始曲线，接下来最小化能量泛函，让曲线在图像中发生变形并不断逼近目标轮廓。</p>
+
+<p>Kass等提出的原始Snakes模型由一组控制点：v(s)=[x(s), y(s)]   s∈[0, 1] 组成，这些点首尾以直线相连构成轮廓线。其中x(s)和y(s)分别表示每个控制点在图像中的坐标位置。 s 是以傅立叶变换形式描述边界的自变量。在Snakes的控制点上定义能量函数（反映能量与轮廓之间的关系）：<img src="/images/pdBase/imgb_outline2.png" /></p>
+
+<p>其中第1项称为弹性能量是v的一阶导数的模，第2项称为弯曲能量，是v的二阶导数的模，弹性能量和弯曲能量合称内部能量（内部力），用于控制轮廓线的弹性形变，起到保持轮廓连续性和平滑性的作用；第3项是外部能量（外部力），在基本Snakes模型中一般只取控制点或连线所在位置的图像局部特征例如梯度，例如梯度：<img src="http://latex.codecogs.com/gif.latex? E_{ext} (\mathop {v(s)}\limits^ \to  ) = P(\mathop {v(s)}\limits^ \to  ) =  - |\nabla I(v)|^2 " />，当轮廓C靠近目标图像边缘，那么C的灰度的梯度将会增大，总的能量就会变小。</p>
+
+<p>缺点：</p>
+
+<ol>
+  <li>
+    <p>没有一种明确的方法来指导如何确定能量参数的取值（重点）；</p>
+  </li>
+  <li>
+    <p>对初始位置敏感，需要依赖其他机制将Snake放置在感兴趣的图像特征附近，当初始轮廓目标较远时，往往收敛到局部最小值，而不是真是的轮廓；</p>
+  </li>
+  <li>
+    <p>很难控制曲线的拓扑变化，不能自动分裂取提取多个目标的轮廓。</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="geodesic-acitve-contour-modelgac">测地线活动轮廓模型（Geodesic Acitve Contour Model，GAC）</h3>
+
+<center><img src="/images/pdBase/imgb_outline1.png" /></center>
+
+<p>算法步骤：</p>
+
+<ol>
+  <li>
+    <p>输入一个图像 ,利用高斯滤波法对这个原始图像进行平滑,对平滑后的图像 梯度运算，得到边缘停止函数<img src="http://latex.codecogs.com/gif.latex? g(I) = \frac{1}1" />；</p>
+  </li>
+  <li>
+    <p>定义初始轮廓线；</p>
+  </li>
+  <li>
+    <p>设定迭代次数，曲线依据水平集演化方程进行演化；</p>
+  </li>
+  <li>
+    <p>设定重新初始化的次数和周期，在水平集演化过程中，周期性地对水平集进行初始化，随后按重新初始化后的水平集方程继续演化，到下次周期时再次对其重新初始化，直到满足迭代次数为止。</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="section">几何活动轮廓模型和参数活动轮廓模型的比较</h3>
+
+<p>参数活动轮廓模型和几何活动轮廓模型都属于变形轮廓的范畴,但是由于其基础理论和曲线的演化原理不同,它们有着不同的特点。</p>
+
+<ul>
+  <li>
+    <p>参数活动轮廓模型用参数显式的表示曲线,这样可以结合先验知识人为的修改曲线的内部能量和外部能量,以免模型陷入局部极小值。模型通过内能控制轮廓线的连续性和光滑性,能在一定程度上克服图像的噪声和边缘狭缝。但是参数活动轮廓模型对初始曲线的选取依赖性很大,由于外力的分布特点,初始曲线的位置直接影响到最终轮廓线的准确与否。模型不能自动的实现分裂与合并,因为曲线参数只能定义一条闭合的曲线不可能将曲线分割成两条。</p>
+  </li>
+  <li>
+    <p>与参数活动轮廓模型相比较，几何活动轮廓模型需要确定的参数较少,比较容易实现,能实现模型自动的拓扑改变,轮廓线能自动的进项分割和合并。但是不能在模型上实现交互的操作,不能结合先验知识。</p>
+  </li>
+</ul>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbimgb/2015/01/01/Imgb_morp.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbimgb/2015/01/01/Imgb_seg.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-02-05 00:29:37 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

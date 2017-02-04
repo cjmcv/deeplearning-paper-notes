@@ -1,0 +1,43 @@
+---
+title: 形态学处理
+date: 2015-01-01 09:00:00
+categories: fbImgb
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="{{ site.baseurl }}/images/pdBase/svm_smo1.png"></center>-->
+
+### 区域生长
+
+   基本思想是将图像中满足某种相似性准则的像素点集合起来构成区域。从选定种子点开始，往周围进行扩散。相似性准则可以使灰度级、彩色、组织、梯度或其他特性，相似性测度可以根据所确定的阈值来判定。
+
+### 开运算
+   
+   腐蚀erode->膨胀dilate
+
+### 闭运算
+
+   膨胀dilate->腐蚀erode
+
+### 形态学梯度
+   
+   gradient(src) = dilate(src) - erode(src) 
+
+### 顶帽
+
+   TopHat(src) = src - open(src) 
+
+### 黑帽
+
+   BlackHat(src) = close(src) - src
+
+### 高斯金字塔
+
+   （在SIFT中有使用高斯差分金字塔）用来向下降采样图像。先用高斯核对Gi层进行卷积，然后删除所有的偶数行和偶数列，得到新的图像面积会变为源图像的四分之一。循环，得到整个金字塔图像。
+
+### 拉普拉斯金字塔
+
+   用来向上采样重建图像。先在每个维度上扩大为原来的两倍，新增的行（偶数行）以0填充。然后给指定的滤波器（拉普拉斯）进行卷积，去估计“丢失”像素的近似值。
+

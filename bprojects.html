@@ -4,7 +4,8 @@ title: BaseAlg
 
   <!--<center><font color="blue" size="50px">Algorithms</font></center> -->
   <center><h1>基础算法</h1></center>
-  <center>包含<strong>大一到大三</strong>接触的机器学习/模式识别/图像处理的基础算法笔记。<strong>2015年后未再更新</strong>，该基础算法笔记部分摘抄自课本/论文/博客，仅供个人学习研究</center>
+  <center>包含<strong>大一到大三</strong>接触的机器学习/模式识别/图像处理的基础算法笔记。该基础算法笔记部分摘抄自课本/论文/博客，仅供个人学习研究</center>
+  <center><strong>标记</strong>神经网络与深度学习ok，特征ok，图像处理与数学基础（“图像复原算法”与“图像编码”未开始整理上传），机器学习与模式识别基础全未开始整理上传</center>
 
   <center>---------------------------------------------------------------------------</center>
 
@@ -91,6 +92,54 @@ title: BaseAlg
           {% for category in site.categories %}
             {% if category[0] == 'fbDnn'  %}
             <h1>深度学习基础 ({{category | last | size}})</h1>
+            <div class="post">
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	  {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">  <!--- 4 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+	  <!--<img src="{{ site.baseurl }}/images/pdDetect/pDetect.jpg">-->
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fbImgT'  %}
+            <h1>图像变换 ({{category | last | size}})</h1>
+            <div class="post">
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	  {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">  <!--- 4 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+	  <!--<img src="{{ site.baseurl }}/images/pdDetect/pDetect.jpg">-->
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fbImgb'  %}
+            <h1>其他图像处理基础 ({{category | last | size}})</h1>
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}

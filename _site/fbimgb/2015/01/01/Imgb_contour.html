@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>常用的边缘检测算法</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">常用的边缘检测算法</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<!--<img src="http://latex.codecogs.com/gif.latex? a^{i}"/>
+<center><img src="/images/pdBase/svm_smo1.png"></center>-->
+
+<h3 id="sobellaplacian">Sobel算子（一阶导）、Laplacian算子（二阶偏导）</h3>
+
+<h3 id="log">LOG算子（高斯拉普拉斯函数）</h3>
+
+<p>也叫Marr边缘检测，它把的Gauss平滑滤波器和Laplacian锐化滤波器结合了起来，先平滑掉噪声，再进行边缘检测。</p>
+
+<h3 id="canny">Canny算子</h3>
+
+<p>首先在x和y方向求一阶导数，然后组合为4个方向的导数。这些方向导数达到局部最大值的点就是组成边缘的候选点。后设定两个阈值，如果一个像素的梯度大于上限阈值，则被认为是边缘像素，如果低于下限阈值，则被抛弃，如果介于二者之间，只有当其高于上限阈值的像素连接时才会被接受。</p>
+
+<p>步骤：</p>
+
+<ol>
+  <li>
+    <p>用高斯滤波器平滑图象；</p>
+  </li>
+  <li>
+    <p>用一阶偏导的有限差分来计算梯度的幅值和方向；</p>
+  </li>
+  <li>
+    <p>对梯度幅值进行非极大值抑制；</p>
+  </li>
+  <li>
+    <p>用双阈值算法检测和连接边缘。</p>
+  </li>
+</ol>
+
+<h3 id="prewitt">Prewitt（普瑞维特）算子</h3>
+
+<p>与sobel相似，其模板为将sobel的模板中间的2与-2改成1和-1</p>
+
+<h3 id="robort">Robort（罗伯特）算子</h3>
+
+<p>一种最简单的算子，是一种利用局部差分算子寻找边缘的算子，他采用对角线方向相邻两象素之差近似梯度幅值检测边缘。检测垂直边缘的效果好于斜向边缘，定位精度高，对噪声敏感,无法抑制噪声的影响。其模板为2*2的对角为1/-1、0/0。</p>
+
+<h3 id="kirsch">Kirsch（凯西）算子</h3>
+
+<p>采用8个模板对图像上的每一个像素点进行卷积求导数，这8个模板代表8个方向，对图像上的8个特定边缘方向作出最大响应，运算中取最大值作为图像的边缘输出。</p>
+
+<p>int ntemplate[8][9]={</p>
+
+<p>{5,5,5,-3,0,-3,-3,-3,-3},</p>
+
+<p>{-3,5,5,-3,0,5,-3,-3,-3},</p>
+
+<p>{-3,-3,5,-3,0,5,-3,-3,5},</p>
+
+<p>{-3,-3,-3,-3,0,5,-3,5,5},</p>
+
+<p>{-3,-3,-3,-3,0,-3,5,5,5},</p>
+
+<p>{-3,-3,-3,5,0,-3,5,5,-3},</p>
+
+<p>{5,-3,-3,5,0,-3,5,-3,-3},</p>
+
+<p>{5,5,-3,5,0,-3,-3,-3,-3}}</p>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbimgb/2015/01/01/Imgb_colors.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbimgb/2015/01/01/Imgb_filter.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-02-05 00:29:37 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>
