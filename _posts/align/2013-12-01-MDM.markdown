@@ -1,0 +1,37 @@
+---
+title: MDM（CVPR, 2016）
+date: 2016-08-16 19:00:00
+categories: fAlign
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Trigeorgis G, Snape P, Nicolaou M A, et al. Mnemonic Descent Method: A Recurrent Process Applied for End-to-End Face Alignment[C]// IEEE International Conference on Computer Vision & Pattern Recognition. IEEE, 2016.
+
+作者主页：[http://trigeorgis.com/](http://trigeorgis.com/)
+
+代码（python,tensorflow）：[https://github.com/trigeorgis/mdm](https://github.com/trigeorgis/mdm)
+
+### 论文算法概述
+
+       级联回归被广泛应用于非线性最小二乘问题，如可变形图像对齐。这里提出一种联合训练 卷积 递归 神经网络结构。递归模块通过假设级联组成的非线性动态系统有助于优化回归器，实际上通过记忆单元在各层的信息共享充分利用了各个级联层之间的信息；卷积模块使网络可以提取特征用于替代手动特征。
+
+### 文中贡献：
+
+1. 提出非线性级联框架用于非线性函数的下降方向的端到端学习； 
+	   
+2. 在人脸对齐中首次提出使用单个模型从原始图像到预测输出的端到端训练。在训练过程中，通过CNN学习新图像的特征，吸收问题特定的信息；
+
+3. 介绍在下降方向学习中的记忆单元相关概念，认为这是高度区分的，是本方法的主要优点。
+
+### 级联回归
+
+   如图为三层级联的MDM模型，使用从均值人脸中提取到的图像块作为网络的初始值，每个提取到的30*30的图像块在每一级联中都通过卷积网络fc得到对外观变化更具鲁棒性的特征表示。对于当前的状态，ht为记忆模块，由递归网络实现，生成新的状态ht+1和一系列新的梯度下降方向，代表网络下一步该重视的地方。三层级联后得到最终的landmark位置。MDM与之前的级联模型相比有一个很大的不同点是网络的权重是共享的。
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/mdm1.png"></center>
+
+### 实验结果
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/mdm2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/mdm3.png"></center>

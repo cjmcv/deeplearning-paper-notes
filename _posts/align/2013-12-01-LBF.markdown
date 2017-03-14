@@ -1,0 +1,29 @@
+---
+title: LBF（CVPR, 2014）
+date: 2015-12-26 19:00:00
+categories: fAlign
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<strong>论文：</strong> 
+
+1. Ren S, Cao X, Wei Y, et al. Face Alignment at 3000 FPS via Regressing Local Binary Features[C]// IEEE Conference on Computer Vision and Pattern Recognition. IEEE, 2014:1685-1692.
+
+2. Chen D, Ren S, Wei Y, et al. Joint Cascade Face Detection and Alignment[M]// Computer Vision – ECCV 2014. Springer International Publishing, 2014:109-122.
+	 
+<strong>工程代码：</strong>
+
+1. MATLAB: [https://github.com/jwyang/face-alignment](https://github.com/jwyang/face-alignment)
+
+2. C++: [https://github.com/yulequan/face-alignment-in-3000fps](https://github.com/yulequan/face-alignment-in-3000fps)
+
+<strong>博客推荐: </strong>
+
+* [http://www.cnblogs.com/nsnow/p/4590509.html](http://www.cnblogs.com/nsnow/p/4590509.html)
+
+### 算法使用感觉
+
+   速度较快，特征点跳动较小。使用从一个场景中收集的训练样本进行训练后，得到的模型能够较好地应用在该场景中，但场景更换后效果会下降，对场景依赖较大。
+
+       

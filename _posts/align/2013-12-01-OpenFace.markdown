@@ -1,0 +1,53 @@
+---
+title: OpenFace（ToolKit, 2016）
+date: 2016-06-12 19:00:00
+categories: fAlign
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： OpenFace: an open source facial behavior analysis toolkit. Tadas Baltrušaitis, Peter Robinson, and Louis-Philippe Morency in IEEE Winter Conference on Applications of Computer Vision, Lace Placid, NY, March 2016
+
+项目主页: [https://www.cl.cam.ac.uk/research/rainbow/projects/openface/](https://www.cl.cam.ac.uk/research/rainbow/projects/openface/)
+
+### 论文算法概述
+
+       Openface使用Conditional Local Neural Fields (CLNF)进行人脸关键点检测和跟踪。CLNF是Constrained Local Model (CLM)算法中的一种，使用了LNF patch experts和（Non-uniform Regularised landmark mean shift）NU-RLMS拟合函数。CLNF包含两个组件：形状模型Point Distribution Model (PDM) ，可以提取形变的人脸关键点； patch模型，patch experts可以提取每个关键点的局部外观形变。
+
+	   原来的CLNF模型对68个人脸关键点一起检测，而这里则单独训练点集分布以及眼睛、嘴唇、眉毛的patch expert模型。然后将各个独立的模型联合对关键点进行拟合。跟踪一张脸达很长时间很容易导致跟踪漂移或人脸离开ROI，所以这里采用了一个人脸（关键点）确认的步骤。使用一个简单的三层卷积神经网络，在提供使用分段仿射变换的对齐人脸下进行训练，用来预测期望的关键点检测误差。当人脸确认步骤失败后，重新进行初始化。在不同的方向使用多个初始化假定，并选择最佳收敛相似度的模型。
+
+### 主要贡献
+
+1. 扩展Constrained Local Model (CLM)在困难条件下进行人脸跟踪； 使用了多尺度公式进行扩展，并演示了它如何根据nonuniform regularised landmark mean shift来考虑patch experts的置信度。
+
+2. 提出3D Constrained Local Model（CLM-Z），一种基于CLM的跟踪器，利用了可见图像的深度信息；展示如何综合地生成该模型的训练数据，并提出一种新的正则化方式使CLM-Z可以处理数据缺失的深度信息。CLM-Z模型性能上优于传统CLM算法与其他的人头姿态跟踪算法。
+
+3. Continuous Conditional Neural Field（CCNF）是一个回归器，可以学习复杂的非线性关系和一些信号的时间和空间上特征。Constrained Local Neural Field (CLNF)是CCNF的一个例子可以被用于在CLM框架中作为patch experts，并适用于复杂光照下的人脸关键点提取。
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/openface1.png"></center>
+
+### LNF patch expert
+
+   又叫Grid-CCNF（Continuous Conditional Neural Field），它首先学习像素值和patch特征相应图之间的非线性关系，然后学习patch特征图中像素之间的关系。两种空间上的关系由LNF模型进行提取，特征是空间相似且稀疏的。空间相似，确保相邻像素有相近的对齐概率；稀疏，减少了特征相应图的峰值。
+   
+<center><img src="{{ site.baseurl }}/images/pdAlign/openface2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/openface3.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/openface4.png"></center>
+
+### 实现细节
+
+1. 一个模型有34个非刚性参数和6个刚性参数。
+
+2. 在7个角度4个尺度上各独立的CLNF  patch experts集（7*4=28个patch experts集）进行训练，使用的多尺度可以使适用于更高和更低的分辨率图像；
+
+3.初始化CLNF模型使用的是dlib中的人脸检测，并训练一个简单的线性映射，将人脸检测框映射到68个关键点。跟踪时是基于前一帧图像的关键点检测结果对CLNF进行初始化。如果CNN确认模型中返回的置信度不高，则使用人脸检测器重新初始化CLNF；
+   
+### 存在问题
+
+1. 不能处理夸张的表情，可以考虑通过使用合理的先验知识或采用多个形状模型来解决。
+
+2. CLM很依赖于好的初始化，人脸检测稳定性会直接影响到关键点提取的准确率。
+
+3. 内存管理机制需要优化。

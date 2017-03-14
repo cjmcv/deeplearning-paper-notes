@@ -1,6 +1,6 @@
 ---
 title: SRGAN（arXiv, 2016）
-date: 2016-11-16 19:00:00
+date: 2016-12-26 19:00:00
 categories: fGan fSr
 ---
 
@@ -42,5 +42,5 @@ categories: fGan fSr
 
    从ImageNet中随机抽取35w样本，通过双立方插值进行4倍下采样。从不同的16张图像上随机裁剪96x96的图像块作为一个mini-batch。基于MSE优化的SRResNet作为GAN的生成器初始化预训练模型以避免陷入局部最优，交替训练。在测试的时候将batch-normalization的更新关掉，使输出仅取决与输入。
    
-<center><img src="{{ site.baseurl }}/images/pdGan/simgan7.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdGan/srgan7.png"></center>
 

@@ -1,0 +1,29 @@
+---
+title: CJCRF（CVPR, 2016）
+date: 2016-08-02 19:00:00
+categories: fAlign
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Wu Y, Ji Q. Constrained Joint Cascade Regression Framework for Simultaneous Facial Action Unit Recognition and Facial Landmark Detection[C]// IEEE Conference on Computer Vision and Pattern Recognition. IEEE Computer Society, 2016:3400-3408.
+
+### 论文算法概述
+
+       考虑到表情识别和人脸对齐是两个非常相关的人脸感知任务，作者在级联形状回归算法框架的基础上提出新的算法（CJCRF）来联合预测表情，这里是联合进行识别脸部运动单元（Facial Action Unit）和面部特征点定位，并相互约束提高准确率。
+	   
+### 算法框架图
+
+算法分两步:
+
+1. 首先使用受限玻尔兹曼机RBM模型，建模脸部运动单元与人脸形状之间的联系。下中图3蓝色人脸形状展示了不同的脸部运动单元（AU12，AU15和AU25）对应的人脸形状先验（红色为平均人脸形状）。下中图4：给定一个特定的人脸形状（蓝色），不同的脸部运动单元（AU）被激活的概率分布情况。
+
+2. 接着，以脸部运动单元与人脸形状之间的联系作为约束，嵌入到级联形状回归框架下来联合估计特征点的位置和脸部运动单元。实验表明，Constrained Joint Cascade Regression Framework (CJCRF)可以同时提升特征点定位任务和脸部运动单元识别任务的精度。由论文结果中可以看出引入脸部运动单元信息可以提升面部特征点定位模型对于夸张表情的鲁棒性。
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/cjcrf1.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/cjcrf2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/cjcrf3.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/cjcrf4.png"></center>

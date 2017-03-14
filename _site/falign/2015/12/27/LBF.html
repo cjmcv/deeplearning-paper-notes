@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>LBF（CVPR, 2014）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">LBF（CVPR, 2014）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 27 Dec 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p><strong>论文：</strong></p>
+
+<ol>
+  <li>
+    <p>Ren S, Cao X, Wei Y, et al. Face Alignment at 3000 FPS via Regressing Local Binary Features[C]// IEEE Conference on Computer Vision and Pattern Recognition. IEEE, 2014:1685-1692.</p>
+  </li>
+  <li>
+    <p>Chen D, Ren S, Wei Y, et al. Joint Cascade Face Detection and Alignment[M]// Computer Vision – ECCV 2014. Springer International Publishing, 2014:109-122.</p>
+  </li>
+</ol>
+
+<p><strong>工程代码：</strong></p>
+
+<ol>
+  <li>
+    <p>MATLAB: <a href="https://github.com/jwyang/face-alignment">https://github.com/jwyang/face-alignment</a></p>
+  </li>
+  <li>
+    <p>C++: <a href="https://github.com/yulequan/face-alignment-in-3000fps">https://github.com/yulequan/face-alignment-in-3000fps</a></p>
+  </li>
+</ol>
+
+<p><strong>博客推荐: </strong></p>
+
+<ul>
+  <li><a href="http://www.cnblogs.com/nsnow/p/4590509.html">http://www.cnblogs.com/nsnow/p/4590509.html</a></li>
+</ul>
+
+<h3 id="section">算法使用感觉</h3>
+
+<p>速度较快，特征点跳动较小。使用从一个场景中收集的训练样本进行训练后，得到的模型能够较好地应用在该场景中，但场景更换后效果会下降，对场景依赖较大。</p>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fdetect/2015/12/05/Selective-Search.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fdetect/2016/01/03/RCNN.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-03-14 20:43:01 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

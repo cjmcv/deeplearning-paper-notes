@@ -1,0 +1,36 @@
+---
+title: DeepIR（arXiv, 2017）
+date: 2017-01-15 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Sun, Xudong, Wu, Pengcheng, Hoi, Steven C. H. Face Detection using Deep Learning: An Improved Faster RCNN Approach[J]. 2017.
+
+### 论文算法概述
+
+       在faster RCNN上采用了一些策略，如：特征拼接、困难样本挖掘、多尺度训练、模型预训练以及参数调整，来训练人脸，在FDDB上刷新了数据。
+
+	   首先，使用wider face数据集去训练Faster RCNN的CNN网络，然后使用该模型在wider face上进行测试，从而获取困难样本，这些困难样本再次输入到网络中进行第二阶段的训练，这样模型在FDDB上的效果会更好一些。在最后的微调时，使用多尺度训练，并且采用特征拼接的策略去提升模型效果。整个训练过程与faster RCNN一样为端到端训练，候选框由矩形改为椭圆形。       对
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/deepir1.png"></center>
+	   
+### Feature Concatenation
+
+   传统的Fast RCNN中，ROI池化层是应用在最后的特征图上来产生区域图像的特征，这样的方法通常不是最优的，容易忽略一些重要特征，并且特征在更深的卷积层输出具有更广的感受野，这样会导致粒度更粗。为了获取更精确的ROI的细节，作者提出了结合多个卷积层的特征图的池化结果，来生成最终的池化特征用于检测任务来提高ROI池化结果。需要注意的是，这些特征包括较低层到较高层的特征，都是各自经过ROI池化和L2正则化的。这些特征都将拼接并缩放到与原始特征尺度（未采用feature concatenation时）相匹配。其中使用1x1卷积来调整通道数，框架如下：
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/deepir2.png"></center>
+
+### Hard Negative Mining
+
+   困难样本是指分类器预测判断错误的样本。因此，将这些困难样本再次输入到模型中，模型会对这些样本进行加强使适应这些少数的预测错误的样本，以提高分类效果。文中困难样本从第一步的预训练模型中获取，预测结果与ground true的IOU少于0.5任务是困难样本。微调时，将这些困难样本添加到ROIs中，并使前景和背景的比例为1:3（预训练时也为1:3）。
+
+### Multi-Scale Training
+
+   Faster RCNN常用的做法是将所有训练图像缩放到以固定尺度上。若通过随机缩放图像到任意尺度，那么检测器可以通过大范围的尺度来学习特征提高模型的尺度不变性。文中，在每张训练图像在输入网络之前先随机到三个尺度中的其中一个后再输入。实验结果表明，使用多个尺度训练使模型对不同的尺度更具有鲁棒性。
+  
+### 实验结果 
+
+   略微超过mtcnn的95%和小米。
+

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>OpenFace（ToolKit, 2016）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">OpenFace（ToolKit, 2016）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 13 Jun 2016
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文： OpenFace: an open source facial behavior analysis toolkit. Tadas Baltrušaitis, Peter Robinson, and Louis-Philippe Morency in IEEE Winter Conference on Applications of Computer Vision, Lace Placid, NY, March 2016</p>
+
+<p>项目主页: <a href="https://www.cl.cam.ac.uk/research/rainbow/projects/openface/">https://www.cl.cam.ac.uk/research/rainbow/projects/openface/</a></p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   Openface使用Conditional Local Neural Fields (CLNF)进行人脸关键点检测和跟踪。CLNF是Constrained Local Model (CLM)算法中的一种，使用了LNF patch experts和（Non-uniform Regularised landmark mean shift）NU-RLMS拟合函数。CLNF包含两个组件：形状模型Point Distribution Model (PDM) ，可以提取形变的人脸关键点； patch模型，patch experts可以提取每个关键点的局部外观形变。
+
+   原来的CLNF模型对68个人脸关键点一起检测，而这里则单独训练点集分布以及眼睛、嘴唇、眉毛的patch expert模型。然后将各个独立的模型联合对关键点进行拟合。跟踪一张脸达很长时间很容易导致跟踪漂移或人脸离开ROI，所以这里采用了一个人脸（关键点）确认的步骤。使用一个简单的三层卷积神经网络，在提供使用分段仿射变换的对齐人脸下进行训练，用来预测期望的关键点检测误差。当人脸确认步骤失败后，重新进行初始化。在不同的方向使用多个初始化假定，并选择最佳收敛相似度的模型。
+</code></pre>
+</div>
+
+<h3 id="section-1">主要贡献</h3>
+
+<ol>
+  <li>
+    <p>扩展Constrained Local Model (CLM)在困难条件下进行人脸跟踪； 使用了多尺度公式进行扩展，并演示了它如何根据nonuniform regularised landmark mean shift来考虑patch experts的置信度。</p>
+  </li>
+  <li>
+    <p>提出3D Constrained Local Model（CLM-Z），一种基于CLM的跟踪器，利用了可见图像的深度信息；展示如何综合地生成该模型的训练数据，并提出一种新的正则化方式使CLM-Z可以处理数据缺失的深度信息。CLM-Z模型性能上优于传统CLM算法与其他的人头姿态跟踪算法。</p>
+  </li>
+  <li>
+    <p>Continuous Conditional Neural Field（CCNF）是一个回归器，可以学习复杂的非线性关系和一些信号的时间和空间上特征。Constrained Local Neural Field (CLNF)是CCNF的一个例子可以被用于在CLM框架中作为patch experts，并适用于复杂光照下的人脸关键点提取。</p>
+  </li>
+</ol>
+
+<center><img src="/images/pdAlign/openface1.png" /></center>
+
+<h3 id="lnf-patch-expert">LNF patch expert</h3>
+
+<p>又叫Grid-CCNF（Continuous Conditional Neural Field），它首先学习像素值和patch特征相应图之间的非线性关系，然后学习patch特征图中像素之间的关系。两种空间上的关系由LNF模型进行提取，特征是空间相似且稀疏的。空间相似，确保相邻像素有相近的对齐概率；稀疏，减少了特征相应图的峰值。</p>
+
+<center><img src="/images/pdAlign/openface2.png" /></center>
+
+<center><img src="/images/pdAlign/openface3.png" /></center>
+
+<center><img src="/images/pdAlign/openface4.png" /></center>
+
+<h3 id="section-2">实现细节</h3>
+
+<ol>
+  <li>
+    <p>一个模型有34个非刚性参数和6个刚性参数。</p>
+  </li>
+  <li>
+    <p>在7个角度4个尺度上各独立的CLNF  patch experts集（7*4=28个patch experts集）进行训练，使用的多尺度可以使适用于更高和更低的分辨率图像；</p>
+  </li>
+</ol>
+
+<p>3.初始化CLNF模型使用的是dlib中的人脸检测，并训练一个简单的线性映射，将人脸检测框映射到68个关键点。跟踪时是基于前一帧图像的关键点检测结果对CLNF进行初始化。如果CNN确认模型中返回的置信度不高，则使用人脸检测器重新初始化CLNF；</p>
+
+<h3 id="section-3">存在问题</h3>
+
+<ol>
+  <li>
+    <p>不能处理夸张的表情，可以考虑通过使用合理的先验知识或采用多个形状模型来解决。</p>
+  </li>
+  <li>
+    <p>CLM很依赖于好的初始化，人脸检测稳定性会直接影响到关键点提取的准确率。</p>
+  </li>
+  <li>
+    <p>内存管理机制需要优化。</p>
+  </li>
+</ol>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fdetect/2016/03/16/FCN.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/falign/2016/08/03/CJCRF.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-03-14 20:43:01 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

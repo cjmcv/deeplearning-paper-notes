@@ -1,0 +1,33 @@
+---
+title: CFSS（CVPR, 2015）
+date: 2016-01-26 19:00:00
+categories: fAlign
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Zhu S, Li C, Chen C L, et al. Face alignment by coarse-to-fine shape searching[C]// CVPR. 2015:4998-5006.
+
+项目主页(含代码): [http://mmlab.ie.cuhk.edu.hk/projects/CFSS.html](http://mmlab.ie.cuhk.edu.hk/projects/CFSS.html)
+
+### 论文算法概述
+
+       提出一种从粗到细的搜索方式，在包含有多个形状的形状空间中粗略搜索，用粗略的方式去约束使得到更好的解。1）由于缺少初始化，可以防止最终结果陷入局部最优；2）提高鲁棒性以应对各种人脸姿态。
+
+### 算法贡献：
+
+1、初始化独立：回归级联的方法依赖于初始化，当初始化不好时容易陷入局部最优解。现有的方法为了避免这种情况通常采用一些启发式的猜想或策略，以缓和这个问题，但也无法从根本上解决。而提出的从粗到细的框架减少了对初始化的依赖，它开始的第一步是搜索整个形状空间，而并没有将其锁定在一个特定的初始化位置上。
+
+2、对各种姿态鲁棒性更强：在前期，同时适应和考虑各种不同的姿态，逐渐地注重在形状子空间中估计得到最好的形状。试验证明，该种方式在应对各种姿态上鲁棒性比级联回归的强。在搜索过程中，提出一种混合特征来提高速度。由于从粗到细的搜索方法的容错能力较强，有能力利用各种特征的优势和特性。例如：在早期可以灵活地使用低精度高运算效率的特征（如BRIEF），在后期则使用更精确但相对较慢的特征（如SIFT）。这样可以有较高的精度而不需要全程使用高精度特征。
+
+### 搜索过程
+   
+   构建2n维的形状空间，里面的候选形状从训练过程中获得。在一张人脸图像中，人脸对齐有L个阶段，在每个阶段中要在子形状空间中找到更好的形状，一步步往最优解靠近。在早期从差异较大的形状中选，后期在差异较小的形状中选，从粗到细。
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/cfss1.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/cfss2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/cfss3.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdAlign/cfss4.png"></center>

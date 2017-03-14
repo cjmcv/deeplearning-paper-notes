@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>DRDA（CVPR, 2016）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">DRDA（CVPR, 2016）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 07 Aug 2016
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文： Zhang J, Kan M, Shan S, et al. Occlusion-Free Face Alignment: Deep Regression Networks Coupled with De-Corrupt AutoEncoders[C]// IEEE Conference on Computer Vision and Pattern Recognition. IEEE Computer Society, 2016:3428-3437.</p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   提出一种级联几个深度回归网络结合去遮挡自动编码机来解决局部遮挡问题。开始用一个深度回归网络去预估人脸形状，然后设计个去遮挡自动编码机基于当前的人脸形状去恢复外观，然后去遮挡后的脸用于连续的深度回归网络去进一步限制人脸形状。文章贡献如下：1）提出人脸对齐的新算法可解决局部遮挡的问题； 2）提出的去遮挡自动编码机可以自动恢复遮挡部分真实的外观，且恢复的部分可以和未被遮挡部分整合到一起得到更高的准确度。 3）在OCFW和COFW中获得很好的效果。
+</code></pre>
+</div>
+
+<h3 id="section-1">深度回归网络,表征外观到形状的非线性映射</h3>
+
+<p>第二项为正则项:</p>
+
+<center><img src="/images/pdAlign/drda1.png" /> <img src="/images/pdAlign/drda2.png" /></center>
+
+<h3 id="section-2">自动编码机,复原遮挡部分</h3>
+
+<p>传统自动编码机网络包含编码和解码两部分，用最小化输入的重构误差来进行非监督训练。由于自动编码机受欢迎的重构能力，提出的去遮挡自动编码机设计用来恢复遮挡部分的原来外观。考虑到实际情况中人脸外观受不同的姿态和表情影响，把人脸区域分成几个组成部分，并设计几个独立的去遮挡自动编码机网络。（一个训练集构建方式：收集大量正常人脸图片，使用背景块对人脸图像进行随机贴补，形成遮挡样本。）在使用时，输入遮挡图像进行重构，根据原图的遮挡部分截取重构图像中对应部分对原图进行覆盖，获得的图像输入进行下一步形状优化。（确定被遮挡部分的方式：计算输入和重构输出图像的差异，简单认为差异大于一定阈值的像素为被遮挡的像素，在分割的几个组块中被遮挡像素占比例高于30%的认为改组块被遮挡了）</p>
+
+<h3 id="section-3">级联</h3>
+
+<p>脸形状由回归网络得到，但由于部分遮挡以及姿态、表情等的影响，不能很好的达到效果，为了得到更好的效果，几个连续的回归网络组合去遮挡自动编码机被级联在一起。</p>
+
+<h3 id="section-4">实现细节</h3>
+
+<p>整体模型包括三阶，第一阶中，回归网络有三层，包含两个非线性隐藏层和一个线性层，隐藏神经元分别有784个和400个。紧接着的两阶中，回归网络更深，包含三个隐藏层，分别有1296，178和400个隐藏神经元，和一个线性回归层。整体网络的第一阶输入人脸图像为80*80，后面两阶使用更高的分辨率用于更精确的估计。初始形状为均值人脸。对于每阶，权重衰减系数为0.001；人脸关键点设置68点，分成7个组件，每个组件会有一个包含一个隐藏层的去遮挡自动编码机，隐藏单元为576个；使用sigmoid函数去激活深度回归网络和去遮挡自动编码机。</p>
+
+<center><img src="/images/pdAlign/drda3.png" /></center>
+
+<center><img src="/images/pdAlign/drda4.png" /></center>
+
+<center><img src="/images/pdAlign/drda5.png" /><img src="/images/pdAlign/drda6.png" /></center>
+
+<center><img src="/images/pdAlign/drda7.png" /></center>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/falign/2016/08/03/CJCRF.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fdetect/2016/08/09/YOLO.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-03-14 20:43:01 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

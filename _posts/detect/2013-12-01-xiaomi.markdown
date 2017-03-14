@@ -1,0 +1,15 @@
+---
+title: Xiaomi（arXiv, 2016）
+date: 2016-11-16 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Wan S, Chen Z, Zhang T, et al. Bootstrapping Face Detection with Hard Negative Examples[J]. 2016.
+
+### 论文算法概述
+
+       Faster RCNN将物体检测问题转变为物体分类问题来降低复杂度，通过从图像中获取到的一系列RoIs进行评分来检测物体。这样会出现一个在物体分类中不常见的问题，那就是正负样本高度不平衡，bg/fg=100/1。在这样的正负样本比例下是无法同时考虑到所有region proposals的。而Faster RCNN考虑到这个问题，对负样本进行采样使每个mini-batch中正负样本比例为3/1，以减缓该问题。但是原先的负样本过多，仅有少量的样本是困难样本，随机采样效果不好，常用的做法是做困难样本挖掘hard negative mining，即交替地进行grow和booststrap，设定阈值筛选false positive，再加入到训练样本中继续训练。该论文即在Faster RCNN上使用困难样本挖掘，用于人脸检测。
+
+	   该论文给出的数据刷新了FDDB。
