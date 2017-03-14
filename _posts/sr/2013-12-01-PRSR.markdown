@@ -1,0 +1,39 @@
+---
+title: PRSR（ARxIV, Google, 2017）
+date: 2017-02-18 19:00:00
+categories: fSr
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Pixel Recursive Super Resolution
+
+### 论文算法概述
+
+       提出一种像素递归的超分辨率重构模型，为图像合成逼真的细节的同时提高其分辨率。一张低分辨率图像可能会对应多种可能的高分辨率，因此使用一个像素独立的条件模型来对超分辨率过程进行建模通常会导致细节被平滑。相反该模型基于一个低分辨率输入，通过对高分辨率图像像素的统计依赖（statistical dependencies）的合适建模，能够表示出一个多模态的条件分布（multimodal conditional distribution）。采用PixelCNN框架来定义在自然图像上的强先验（strong prior），并联合一个深度条件卷积网络（deep conditioning convolutional network）来优化这个先验。人类评估表明由该模型得到的输出样本比强L2回归基线更接近真实照片。
+
+	   整体模型包含有条件网络（conditioning network）和先验网络（conditioning network）两部分，其中条件网络将低分辨率图像分布映射到到分辨率图像，由深层次的ResNet实现；先验模型则对高分辨率细节建模使输出更接近现实，由PixelCNN实现。
+
+	   注：该算法论文中不以PSNR和SSIM为评价标准，以混淆人眼判断为目的，关注视觉质量，算法SRGAN也一样。
+
+### Synthetic multimodal task
+
+   为展示像素独立的模型无法有效地对带条件的图像进行建模，作者生成了一个多模态的数据集做实验。如图，上面为数据集的生成方式，输入一张图像，缩放到一定大小以50%地概率随机放置到左上角或右下角。下面为实验结果，可以看到，像素独立的L2回归和交叉熵模型没有得到多模态的预测结果，左上和右下角都有输出；而PixelCNN输出是随机的，且多个样本出现两个角落的概率都为50%，而不会同时出现在两个角落，表现为多模态。
+
+<center><img src="{{ site.baseurl }}/images/pdSr/prsr1.png"></center>
+
+### Pixel recursive super resolution
+
+   以前论文中使用高斯和多项式分布来分别对连续与离散的像素值建模的实现超分辨率的方法缺少了高分辨率像素之间的条件依赖性（conditional dependency），通常有两种方法对输出像素之间的统计相关性建模。一种是定义输出像素的条件分布并联合多项式高斯混合模型或一个无向图模型如条件随机场，这种方法必须要给出输出像素特定的统计依赖关系，计算量大；文中采用的是第二种方法，使用链式法则对条件分布进行因式分解。
+
+<center><img src="{{ site.baseurl }}/images/pdSr/prsr2.png"></center>
+
+   这里生成的每个输出维度都由输入、之前的输出以及之前对应输出像素的通道数决定。该方法的好处是可以灵活地获取条件依赖性的组成部分，并且其推论很简单明了。受PixelCNN模型的启发，使用多项式分布对离散像素值建模（上式左）。该整体模型由一个条件网络（conditioning network）和一个先验网络（prior network）组成，在最后一层融合，进行联合训练。条件网络是一个像素独立预测的模型，用于将低分辨率图像映射到高分辨率中。同时先验网络用于添加自然的高分辨率细节使输出看起来更真实。最后简单地将两个网络输出相加并使用softmax操作（上式右）。
+
+<center><img src="{{ site.baseurl }}/images/pdSr/prsr3.png"></center>
+
+### 实现细节
+
+   将图像使用双立方插值缩放到32x32和8x8，组成输出/输入对（8x8低分辨率与32x32高分辨率）。
+
+<center><img src="{{ site.baseurl }}/images/pdSr/prsr4.png"></center>
