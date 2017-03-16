@@ -1,5 +1,5 @@
 ---
-title: DeepIR（arXiv, 2017）
+title: DeepIR（2017）
 date: 2017-01-15 19:00:00
 categories: fDetect
 ---

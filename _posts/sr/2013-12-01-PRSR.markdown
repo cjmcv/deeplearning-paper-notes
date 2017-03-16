@@ -1,5 +1,5 @@
 ---
-title: PRSR（ARxIV, Google, 2017）
+title: PRSR（Google, 2017）
 date: 2017-02-18 19:00:00
 categories: fSr
 ---
