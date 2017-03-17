@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>JPEG</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">JPEG</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<h3 id="jpeg">JPEG标准</h3>
+
+<p>主要步骤：1）正向离散余弦变换(FDCT)； 2）量化(quantization)； 3）Z字形编码(zigzag scan)； 4）使用差分脉冲编码调制(differential pulse code modulation，DPCM)对直流系数(DC)进行编码； 5）使用行程长度编码(run-length encoding，RLE)对交流系数(AC)进行编码； 6）熵编码；</p>
+
+<ul>
+  <li>
+    <p>正向离散余弦变换(FDCT):对每个单独的彩色图像分量，把整个分量图像分成8×8的图像块，并作为二维离散变换DCT的输入。通过DCT变换，把能量集中在少数几个系数上。计算二维DCT与二维FFT相似，分解情况一样。</p>
+  </li>
+  <li>
+    <p>量化(Quantization) ：量化是对经过FDCT变换后的频率系数进行量化，其目的是减小非“0”系数的幅度以及增加“0”值系数的数目。对于有损压缩算法，使用均匀量化器进行量化。量化步距是按照系数所在的位置和每种颜色分量的色调值来确定。因为人眼对亮度信号比对色差信号更敏感，因此使用了两种量化表：亮度量化值和色差量化值；由于人眼对低频分量的图像比对高频分量的图像更敏感，因此图中的左上角的量化步距要比右下角的量化步距小。</p>
+  </li>
+  <li>
+    <p>Z字形编排(Zigzag Scan)：量化后的系数要重新编排，目的是为了增加连续的“0”系数的个数，就是“0”的游程长度，方法是按照Z字形的式样编排，其结果是把一个8 × 8的矩阵变成一个1 × 64的矢量，频率较低的系数放在矢量的顶部。</p>
+  </li>
+  <li>
+    <p>直流系数(DC)的编码：DC系数的特点：8×8图像块经过DCT变换之后得到的DC直流系数有两个特点，一是系数的数值比较大，二是相邻8×8图像块的DC系数值变化不大。JPEG算法使用了差分脉冲调制编码(DPCM)技术，对相邻图像块之间量化DC系数的差值(Delta)进行编码。</p>
+  </li>
+  <li>
+    <p>交流系数(AC)的编码：AC系数的特点：1×64矢量中包含有许多“0”系数，并且许多“0”是连续的。JPEG使用非常简单和直观的游程长度编码(RLE)对它们进行编码。JPEG使用了1个字节的高4位来表示连续“0”的个数，而使用它的低4位来表示编码下一个非“0”系数所需要的位数，跟在它后面的是量化AC系数的数值。</p>
+  </li>
+  <li>
+    <p>熵(Entropy)编码：使用熵编码的原因：对DPCM编码后的直流DC系数和RLE编码后的交流AC系数作进一步的压缩。在JPEG有损压缩算法中，使用霍夫曼编码器来减少熵，霍夫曼编码器使用很简单的查表(lookup table)方法进行编码 。</p>
+  </li>
+  <li>
+    <p>JPEG的扩展编码系统：1）顺序编码模型(sequential encoding model)，自上而下，从左至右方式发送； 2）累进编码模型(Progressive encoding)，多扫描，逐次逼近； 3）层次编码模型(Hierarchical encoding model)，多分辨率。</p>
+  </li>
+</ul>
+
+<center><img src="/images/pdBase/encoder_c1.png" /><img src="/images/pdBase/encoder_c2.png" />&lt;\center&gt;
+
+---
+
+### JPEG2000标准
+
+   JPEG中采用DCT变换考察整个时域过程的频域特征或整个频域过程的时域特征。JPEG2000采用以小波变换为主的多分辨率编码方式。统一了面向静态图像和二值图像的编码方式, 是既支持低比率压缩又支持高比率压缩的通用编码方式。
+
+   <strong>JPEG2000主要特点如下：</strong>
+   
+1. 高压缩率。与JPEG相比,可修复约30％的速率失真特性。JPEG和JPEG2000在压缩率相同时, JPEG2000的信噪比将提高30％左右;
+
+2. 无损压缩。预测编码作为对图像进行无损编码的成熟方法被集成在JPEG2000中;	
+
+3. 渐进传输。JPEG2000可实现以空间清晰度和信噪比为首的各种可调节性,从而实现渐进传输,即具有“渐现”特性；
+
+4. 感兴趣区域压缩。JPEG2000 支持所谓的“感兴趣区域”。
+</center>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbimgt/2015/01/01/EncoderAlg1.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbimgt/2015/01/01/EncoderAlg3.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-03-17 09:00:31 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>
