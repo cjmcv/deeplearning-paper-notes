@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Bagging/Boosting/adaboost</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">Bagging/Boosting/adaboost</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<h3 id="bagging">Bagging</h3>
+
+<p>一种要求“不稳定”的投票分类方法：从数据集中有放回地抽取N个实例组成训练集，训练得到一个模型，多次抽取的样本集彼此相似，但源于随机性有稍有不同。经过多次样本抽取与模型训练后得到多个模型。使用时，对于未知样本X分类，每个模型都得出一个分类，得票数最高的即为样本X的分类。</p>
+
+<p>不稳定：数据集的小的变动能够使得分类结果显著的变动</p>
+
+<hr />
+
+<h3 id="boosting">Boosting</h3>
+
+<p>在提升中，我们通过在前一个学习器所犯的错误上训练下一个学习器，积极地尝试产生互补的学习器。所谓的弱学习器是误差概率小于1/2的学习器。</p>
+
+<hr />
+
+<p><strong>步骤：</strong></p>
+
+<ol>
+  <li>
+    <p>给定一个大训练集。随机n1&lt;N个样本，作为训练集X1来训练d1。</p>
+  </li>
+  <li>
+    <p>随机抽取n2&lt;N，然后将d1中判断错误的样本结合n2作为训练集X2来训练d2。</p>
+  </li>
+  <li>
+    <p>抽取d1和d2分类不一致的样本作为训练集X3。</p>
+  </li>
+  <li>
+    <p>校验：给定一个实例我们首先将其提供给d1和d2；如果二输出一致，这就作为输出结果，否则d3的输出作为结果。</p>
+  </li>
+</ol>
+
+<p>已证明整个系统降低了错误率，但缺点是明显依赖于数据和基学习器： 需要一个比较大的训练集，并且基学习器应当是弱的但又不是太弱，而且提升对噪声和离群点尤其敏感。</p>
+
+<hr />
+
+<p><strong>样本的权重：</strong></p>
+
+<ol>
+  <li>
+    <p>没有先验知识的情况下，初始的分布应为等概分布，也就是训练集如果有N个样本，每个样本的分布概率为1/N</p>
+  </li>
+  <li>
+    <p>每次循环一后提高错误样本的分布概率，分错样本在训练集中所占权重增大， 使得下一次循环的弱学习机能够集中力量对这些错误样本进行判断。</p>
+  </li>
+</ol>
+
+<p>弱学习机的权重：准确率越高的弱学习机权重越高。</p>
+
+<p>循环控制：损失函数达到最小，在强学习机的组合中增加一个加权的弱学习机，使准确率提高，损失函数值减小。</p>
+
+<hr />
+
+<p>ps：adaboost算法是属于boosting算法的改进。</p>
+
+<hr />
+
+<h3 id="adaboost">adaboost</h3>
+
+<p>提升的一个变种，其中重复使用相同的训练集因而不要求数据集很大。AdaBoost还可以组合任一数量的基学习器（常见的是使用简单的矩形特征（Haar-like）、决策树）；其思想是将实例抽取的概率修改成误差的函数。</p>
+
+<hr />
+
+<p><strong>步骤</strong>：</p>
+
+<center><img src="/images/pdBase/dm_bagboost1.png" /></center>
+
+<p>一旦完成训练，AdaBoost就采用投票方法，给定一个实例，所有的决定其分类，而后取一个加权的投票结果，其中权重与基学习器（在训练集上的）准确率成正比：<img src="/images/pdBase/dm_bagboost2.png" /></p>
+
+<hr />
+
+<p><strong>Adaboost算法目的：</strong>使用训练样本集对多个弱分类器（或说基学习器）进行训练（得到最佳阈值）并筛选，得到各个分类器的正确率，小于1/2的舍去，大于1/2的留下，并根据正确率大小赋予相应的权值，采用加权投票组合成一个强分类器。其训练思想为将实例的抽取概率改成误差的函数。</p>
+
+<hr />
+
+<p><strong>个人理解：</strong></p>
+
+<p>在人脸检测中，在全部的haar-like特征都提取完后，需要进行弱分类器的筛选与训练(得到最佳阈值)，筛选和训练的过程是adaboost中完成。</p>
+
+<p>取一个弱分类器，按样本抽取的概率分布取N个样本对该弱分类器进行训练，得到最佳阈值的同时调整样本抽取概率，在训练好后，若该分类器的识别率在50%以上，则留下，否则舍去。继而进行下一个弱分类器的训练和筛选，同时对加权组合的强分类器的识别结果作判断，若满足要求则不再增加弱分类器到该强分类器中，转而对下一个强分类器进行生成。</p>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbdm/2015/01/01/DM_Apriori.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbdm/2015/01/01/DM_C45.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-03-19 22:53:48 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

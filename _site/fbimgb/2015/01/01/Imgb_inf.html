@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>信息论</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">信息论</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<h3 id="section">熵的概念</h3>
+
+<center><img src="/images/pdBase/imgb_inf1.png" /></center>
+
+<p>随机变量越随机，越是难预测和非结构化，它的熵就越大。假设一个概率接近于1，其他的概率接近于0。那么该随机变量就没有什么随机性，他的熵就更小。如果所有概率相等，那么它们都远离0和1，意味着它们的熵较大。</p>
+
+<hr />
+
+<h3 id="section-1">负熵</h3>
+
+<center><img src="/images/pdBase/imgb_inf2.png" /></center>
+
+<hr />
+
+<h3 id="section-2">最大熵原则</h3>
+
+<p>最大熵原则：当根据不完整的信息作为依据进行推断，应该由满足分布限制条件的具有最大熵的概率分布推得。（即利用部分信息确定随机变量集合概率分布的方法）</p>
+
+<p>基本思想：1）求满足某些约束的信源事件概率分布时，应使得信源的熵最大； 2）可以使我们依靠优先的数据达到尽可能客观的效果； 3）克服可能引入的偏差。</p>
+
+<center><img src="/images/pdBase/imgb_inf3.png" /></center>
+
+<hr />
+
+<h3 id="section-3">互信息</h3>
+
+<p>用于描述两个系统间的信息相关性，或者一个系统所包含的另一个系统中信息的多少，或者说互信息I(Y;X)是通过观察系统输入X来决定输出Y的不确定性的度量。它可以用熵来表示：</p>
+
+<center><img src="/images/pdBase/imgb_inf4.png" /></center>
+
+<table>
+  <tbody>
+    <tr>
+      <td>其中微分熵h(X)是在观察系统输出Y之前关于系统输入X的不确定性，而条件微分熵h(X</td>
+      <td>Y)是在观察了系统输出Y之后的系统输入X的不确定性。这一熵差称为系统输入X和系统输出Y之间的互信息，若其互信息为0，则X和Y是统计上独立的。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>两个连续随机变量X和Y之间的互信息具有三个重要性质：1）非负性，I(Y;X)&gt;=0； 2）对称性；I(Y;X)=I(X;Y) 3）不变性，在随机变量的可逆变换下互信息是不变的：</p>
+
+<p>ps：作用于神经网络时，其输入输出相应记为多维向量X、Y；可用互信息进行图像配准，就是寻找一个空间变换关系，使得经过该变换后两幅间的互信息达到最大。</p>
+
+<hr />
+
+<h3 id="section-4">最大互信息原则</h3>
+
+<p>从神经系统的输入层观测到的随机向量X到系统的输出层得到的随机向量Y之间的变换应该这样选择：这种变换使得输出层神经元的活动共同最大化关于输入层的神经元的活动的信息。最大化的目标函数是向量X和Y之间的互信息I(Y;X)。</p>
+
+<hr />
+
+<h3 id="section-5">相对熵</h3>
+
+<center><img src="/images/pdBase/imgb_inf5.png" /></center>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbimgb/2015/01/01/Imgb_gendis.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbimgb/2015/01/01/Imgb_inter.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-03-19 22:53:48 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

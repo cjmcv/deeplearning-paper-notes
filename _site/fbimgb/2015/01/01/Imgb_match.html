@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>模板匹配</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读</a></li>
+    <li><a href="/bprojects.html">基础算法</a></li>
+    <li><a href="/programs.html">开源码学习</a></li>
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">模板匹配</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 01 Jan 2015
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<h3 id="section">模版匹配概念</h3>
+
+<p>与常用的字符串匹配相类似，如对于简单字符，可将其归一化后，选一相应的开始点后，依次遍历相乘，相同的目标点相乘为1，目标点与非目标点相乘为0，可计算出相似程度。</p>
+
+<p>在OpenCv和EmguCv中支持以下6种对比方式：</p>
+
+<ol>
+  <li>
+    <p>CV_TM_SQDIFF 平方差匹配法：该方法采用平方差来进行匹配；最好的匹配值为0；匹配越差，匹配值越大。</p>
+  </li>
+  <li>
+    <p>CV_TM_CCORR 相关匹配法：该方法采用乘法操作；数值越大表明匹配程度越好。</p>
+  </li>
+  <li>
+    <p>CV_TM_CCOEFF 相关系数匹配法：1表示完美的匹配；-1表示最差的匹配。</p>
+  </li>
+  <li>
+    <p>CV_TM_SQDIFF_NORMED 归一化平方差匹配法</p>
+  </li>
+  <li>
+    <p>CV_TM_CCORR_NORMED 归一化相关匹配法</p>
+  </li>
+  <li>
+    <p>CV_TM_CCOEFF_NORMED 归一化相关系数匹配法</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="section-1">图像尺寸大小归一化用于模板匹配</h3>
+
+<center><img src="/images/pdBase/imgb_match1.png" /></center>
+
+<hr />
+
+<h3 id="ssda-">SSDA-序贯相似性检测</h3>
+
+<p>一种改进的图像模板匹配方法：SSDA算法的相似性判决指标为图像像素灰度差的绝对值之和: <img src="/images/pdBase/imgb_match2.png" /></p>
+
+<p>步骤：</p>
+
+<ol>
+  <li>
+    <p>预先设定好一个阈值序列thresh(n)，在匹配的时候，用模板遍历整个图像；</p>
+  </li>
+  <li>
+    <p>每当模板到一处地方的时候，随机抽取k个像素点计算相似度e(u,v,k)并与Thresh(k)进行比较，若e(u,v,k)&lt;thresh(k)则继续抽取，k++，直到e(u,v,k)&gt;=thresh(k)时停止，记下k；对不同的待匹配点进行上述匹配计算，最后取最大的 k值对应的待匹配点位置，认为这就是需要找的匹配点。</p>
+
+    <p>SSDA 算法与一般的穷尽搜索算法的最大区别是：它不需要计算所选区域中所有点引起的误差之和，而是计算部分误差和序列 e，将 e 与一个已经定义的误差阈值序列比较，如前 m 个点引起的误差和大于第 m 个误差阈值时，停止计算，换下一个点进行匹配。但该方法的阈值选择较困难，阈值选取的好，处理速度快、跟踪准确。阈值选取过大，处理速度提不高；选取过小，跟踪又不准确。所以实际运用中多采用自动阈值。</p>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="fft">基于FFT的快速模版匹配</h3>
+
+<p>参考<a href="http://www.docin.com/p-1243627283.html">基于PCA和分块FFT的快速模板匹配算法</a></p>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fbimgb/2015/01/01/Imgb_line.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fbimgb/2015/01/01/Imgb_morp.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-03-19 22:53:48 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>
