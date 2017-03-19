@@ -1,5 +1,5 @@
 ---
-title: 常用的光照补偿算法
+title: 光照补偿
 date: 2015-01-01 09:00:00
 categories: fbImgb
 ---

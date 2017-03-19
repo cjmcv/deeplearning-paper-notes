@@ -1,5 +1,5 @@
 ---
-title: 常用的插值算法
+title: 插值算法
 date: 2015-01-01 09:00:00
 categories: fbImgb
 ---

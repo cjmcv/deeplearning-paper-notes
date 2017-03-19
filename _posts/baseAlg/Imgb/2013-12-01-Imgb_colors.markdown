@@ -1,5 +1,5 @@
 ---
-title: 常用的颜色空间
+title: 颜色空间
 date: 2015-01-01 09:00:00
 categories: fbImgb
 ---

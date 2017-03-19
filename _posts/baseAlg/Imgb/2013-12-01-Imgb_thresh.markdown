@@ -1,5 +1,5 @@
 ---
-title: 常用的阈值化算法
+title: 阈值化
 date: 2015-01-01 09:00:00
 categories: fbImgb
 ---

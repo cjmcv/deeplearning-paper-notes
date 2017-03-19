@@ -1,5 +1,5 @@
 ---
-title: 常用的图像分割算法
+title: 图像分割
 date: 2015-01-01 09:00:00
 categories: fbImgb
 ---

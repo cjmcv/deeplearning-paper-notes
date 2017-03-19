@@ -1,11 +1,11 @@
 ---
 title: temp（2016）
 date: 2016-10-10 19:50:00
-categories: fbSVM fbANN fbFeature fbOpt 
+categories: 
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
-
+fbSVM fbANN fbFeature fbOpt 
 代码：[https://github.com/daijifeng001/caffe-rfcn](https://github.com/daijifeng001/caffe-rfcn);  [https://github.com/daijifeng001/r-fcn ](https://github.com/daijifeng001/r-fcn );  [https://github.com/Orpine/py-R-FCN](https://github.com/Orpine/py-R-FCN)
 
 博客推荐：[http://blog.csdn.net/zb1165048017/article/details/52767478](http://blog.csdn.net/zb1165048017/article/details/52767478);  [http://blog.csdn.net/bea_tree/article/details/51817263](http://blog.csdn.net/bea_tree/article/details/51817263);  [http://blog.csdn.net/u010678153/article/details/52639136](http://blog.csdn.net/u010678153/article/details/52639136)

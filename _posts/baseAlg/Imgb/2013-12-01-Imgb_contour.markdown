@@ -1,5 +1,5 @@
 ---
-title: 常用的边缘检测算法
+title: 边缘检测
 date: 2015-01-01 09:00:00
 categories: fbImgb
 ---

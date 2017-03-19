@@ -1,5 +1,5 @@
 ---
-title: 常用的轮廓模型
+title: 轮廓模型
 date: 2015-01-01 09:00:00
 categories: fbImgb
 ---
