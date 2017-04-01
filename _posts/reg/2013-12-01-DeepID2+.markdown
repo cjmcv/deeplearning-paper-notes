@@ -1,0 +1,55 @@
+---
+title: DeepID2+（CVPR，2015）
+date: 2015-10-02 19:00:00
+categories: fReg
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Sun Y, Wang X, Tang X. Deeply learned face representations are sparse, selective, and robust[J]. 2014:2892-2900.
+
+### 论文算法概述
+
+       在DeepID2的基础上进行优化，同样以识别与验证两个信号进行监督，但增加了特征向量维度，并给前面的网络层添加监督。同时作者发现高性能深度网络的三个特点：1）神经元都适当的稀疏，适度的稀疏能使深度网络的鉴别能力最大化，甚至使DeppID2+在神经元输出为二值化的情况下仍能获得较好的识别效果；2）高层的神经元对身份与身份相关的属性较敏感，尽管在训练时没有用属性去监督，但也明显地学到了这些高层次的内容；3）尽管在训练集中没有针对遮挡情况进行训练，DeepID2+对遮挡情况仍具有较高的鲁棒性。
+
+### DeepID2+ nets
+
+   DeepID2中有4个卷积层，分别有20、40、60和80个特征图，其中第3和第4后面接着160维的全连接层，由人脸识别和验证两个任务进行监督。给定两张图像得到两个特征向量，每个特征向量都被分类到8192个身份中（训练样本共8192个人）的一个，从而得到人脸识别误差。若两张图属同一人，则验证误差为<img src="{{ site.baseurl }}/images/pdReg/deepid2+_1.png">，否则为<img src="{{ site.baseurl }}/images/pdReg/deepid2+_2.png">.
+   
+   DeepID2+网络从DeepID2中继承而来，网络结构如figure2所示，conv-n为第n个卷积层，FC-n为第n个全连接层，Id和Ve为监督信号，左边和右边为不同的输入。
+   
+   <strong>相比于DeepID2，DeepID2+有三点改进：</strong>
+   
+* 四个卷积层的特征图都为128，最后的全连接层从160增加到512维。
+
+* 加大了训练数据集，使用了CelebFaces+和WDRef数据集，并添加了LFW中的一些新数据。约29w张人脸图，1w2个身份。而DeepID2的为16w人脸，8k身份。
+
+* 在DeepID2中，监督信号仅添加在全连接层上，而该全连接层由第三和第四卷积层连接。较低层则由梯度反传进行监督。这里将每层卷积层都接一个512维全连接层，每层都有两个监督信号同时进行监督。
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2+_3.png"></center>
+
+### High-performance of DeepID2+ nets：
+
+1. 针对conv-n，比较DeepID2+网络分别与仅由conv-4反传监督信号、较少的训练集、较少的特征图个数进行性能比较，结果如下图所示：
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2+_4.png"></center>
+
+2. 测试时，做法与DeepID2+类似，训练25个网络去提取由DeepID2中的方式筛选得到的25个人脸图像块，然后使用联合贝叶斯进行联合预测。效果如下（注，单模型在LFW上是98.70%）：
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2+_5.png"></center>
+
+### 网络分析
+
+1. DeepID2+网络对每张图片都约有一半神经元处于激活状态，神经元激活状态的适当稀疏使网络具有最大的鉴别能力。为验证神经元的激活模式，将神经元输出二值化，发现性能下降不大。
+   
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2+_6.png"></center>
+
+2. DeepID2+特征表达能力较强，如下图为DeepID2+的神经元和LBP特征的激活情况，以及单个神经元（特征）的分类准确率。左列是对于单个身份的所有图像中神经元（特征）的激活情况的均值和标准差。均值由红线表示，标准差表示为由均值-标准差 到 均值+标准差的纵向小线段；中列是对于所有剩下图像的均值和标准差，与左列较为接近；右列是单个神经元（特征）的分类准确率，红点表示神经元处于激活状态，蓝点为抑制状态。
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2+_7.png"></center>
+
+3. DeepID2+特征对一些人脸属性有较好的分类效果。
+
+4. 对遮挡鲁棒性强。
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2+_8.png"></center>

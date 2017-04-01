@@ -1,0 +1,21 @@
+---
+title: L-Softmax（ICML，2016）
+date: 2016-12-10 19:00:00
+categories: fReg
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Liu W, Wen Y, Yu Z, et al. Large-Margin Softmax Loss for Convolutional Neural Networks[J]. 2016.
+
+推荐博客: [http://blog.csdn.net/shaoxiaohu1/article/details/53325945](http://blog.csdn.net/shaoxiaohu1/article/details/53325945)
+
+Caffe实现: [http://www.cnblogs.com/idiotgroup/p/5925974.html](http://www.cnblogs.com/idiotgroup/p/5925974.html)
+
+### 论文算法概述
+
+       对Softmax Loss进行改进，提出了large-margin softmax (L-Softmax) loss，L-Softmax在训练时显式地促使减小内类误差并增大类间间距。如下左图为Softmax和L-Softmax的对比图，其中m=1的为Softmax，m=2,3,4的为L-Softmax。主要思想如下右图，在训练时，Softmax loss需要使theta1 < theta2去将样本x分类成第1类，而L-Softmax则需要m*theta1 < theta2，添加了类间间距的要求。
+
+<center><img src="{{ site.baseurl }}/images/pdReg/lsoftmax1.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdReg/lsoftmax2.png"></center>

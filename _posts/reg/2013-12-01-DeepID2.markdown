@@ -1,0 +1,44 @@
+---
+title: DeepID2（NIPS，2014）
+date: 2015-09-26 19:00:00
+categories: fReg
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Sun Y, Wang X, Tang X. Deep Learning Face Representation by Joint Identification-Verification[J]. 2014, 27:1988-1996.
+
+### 论文算法概述
+
+       为减小人脸识别的类内间距与增大类间间距，提出同时使用人脸识别和人脸验证的信息作为监督信号。人脸识别为1对N，其监督信号（softmax）用于使类间间隔拉大，但对相同人脸对的公共特征提取效果较弱；人脸验证为1对1，其监督信号（基于L2范式）用于使类内间距减小，也使模型更容易适应未参与过训练的人脸对的验证。从人脸图像的各个区域和分辨率下提取DeepID2特征，并拼接到一起组成人脸的特征表示，使用PCA进行降维，使用联合贝叶斯进行分类，在LFW中人脸验证准确率为99.15%。
+
+### Identification-verification guided deep feature learning
+
+   为使用不同的卷积网络同时去提取特征，各网络结构都如下图所示，包含有4个卷积层，第三和第四卷积层局部权值共享，最终使用fc层在第三层和第四层上获取160维的特征向量。
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2_1.png"></center>
+
+   训练过程中有两个监督信号，一个是人脸识别信号，以身份作为类别将人脸图像分到其中一类中，使用softmax层实现，输出属于每一类的概率。为了准确分类，该信号促使网络学习身份相关的区别特征，使类间间隔加大。
+   
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2_2.png"></center>
+
+   另一个是人脸验证信号，促使从相同身份的人脸图像上学习到的特征更相似，使类内误差减小。普遍采用的方法是L1/L2范式和余弦相似度，而文中采用一种基于L2范式的损失函数，fi和fj表示两个人脸图像的特征，y=1表示同一身份，y=-1表示不同身份，不同身份时距离需要大于边界m：
+  
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2_3.png"></center>
+
+   <strong>训练流程</strong>：
+   
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2_4.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2_5.png"></center> 
+  
+### Face Verification
+
+   整个测试流程为人脸对齐、特征提取和人脸验证，使用SDM获得21点进行对齐，然后裁剪200个人脸patches，包含不同的位置、尺度、颜色通道等，水平翻转得400个patches。使用200个上述的卷积网络分别去提取特征向量，每个卷积网路得到2*160维的特征（加上水平翻转后的图像块）。为减少特征冗余，使用一种前项-后向贪婪算法，去选择高效完备的图像块及其网络，文中采用的个数为25，如上figure2所示。则这25个图像块，分别通过其对应网络获得160维特征，则一张人脸图像得到的特征向量长度为4000=25*160，然后通过PCA降维至180，基于该特征向量训练联合贝叶斯分类器。
+   
+### 实验结果
+
+   为充分利用从大量图像块中提取到的特征，作者重复使用7次上面提到的前项-后向贪婪算法选取特征，每次的选择是从之前的选择中未被留下的部分中进行选取。然后在每次选择的特征上训练联合贝叶斯模型，然后再将这七个联合贝叶斯模型使用SVM进行融合，得到最佳的效果在LFW上为99.15%。
+   
+<center><img src="{{ site.baseurl }}/images/pdReg/deepid2_6.png"></center> 
+
