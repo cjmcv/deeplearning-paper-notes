@@ -1,0 +1,45 @@
+---
+title: HMM
+date: 2015-01-01 09:00:00
+categories: fbSeq
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+### 马尔科夫链
+
+   如果随机过程{X_n ,n = 1,2,...}的构造使得X_n+1的条件概率分布仅依靠于X_n的值而与其他以前的值无关，称这个过程为马尔可夫链。
+   
+### 隐马尔可夫模型(Hidden Markov Model，HMM)
+
+   隐马尔可夫模型 (Hidden Markov Model) 是一种统计模型，用来描述一个含有隐含未知参数的马尔可夫过程，只是它的状态不能直接被观察到，但是可以通过观察向量间接的反映出来，即每一个观察向量由一个具有相应概率密度分布的状态序列产生，又由于每一个状态也是随机分布的，所以HMM是一个双重随机过程。HMM的533：五要素、三假设、三解决。
+   
+   <strong> 对 HMM 来说，有如下三个重要假设，尽管这些假设是不现实的：</strong> 
+   
+   <center><img src="{{ site.baseurl }}/images/pdBase/seq_hmm1.png"></center>
+   
+   ---
+   
+   <strong>隐马尔可夫模型可以用五个元素来描述：</strong>
+   
+1. 模型的隐状态数目（N），虽然这些状态是隐含的，但在许多实际应用中，模型的状态通常有具体的物理意义； 
+  	
+2. 每个状态的不同观测值的数目（M），注：隐藏状态的数目和可以观察到的状态的数目可能是不一样的;
+ 
+3. 状态转移概率矩阵（A），描述了HMM模型中各个状态之间的转移概率；
+
+4. 观测概率矩阵（B ）, 表征特定状态下发射符号(观察值)的概率；
+
+5. 初始状态概率矩阵（π）;
+
+   ---
+   
+   <strong> HMM需要解决三个基本问题：</strong>
+   
+   <center><img src="{{ site.baseurl }}/images/pdBase/seq_hmm2.png"></center>
+   
+   ---
+   
+  （评估：给模型，求观察；  学习：给观察，调模型；  解码：给观察和模型，求隐藏）
+  
+Baum-Welch算法用作训练（学习），Viterbi算法用作识别（解码），三个算法都采用动态规划方法。

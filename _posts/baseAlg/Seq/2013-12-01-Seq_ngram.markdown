@@ -1,0 +1,18 @@
+---
+title: NGram
+date: 2015-01-01 09:00:00
+categories: fbSeq
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+### 概述
+   
+   N-gram语言模型是统计语言模型的一种，假设一个词根的出现依赖于它前面的（N-1）个词根，而Bigram模型则是当N取2时的情况。定义一个句子S由L个词根W组成，
+   
+   <center><img src="{{ site.baseurl }}/images/pdBase/seq_ngram1.png"></center>
+   
+   算法原理简单，但在训练数据不足时会导致的数据稀疏问题。
+
+   针对数据稀疏问题可用平滑处理解决该问题，常用算法有：Good-Turing估计法、加一平滑法、Back-off 平滑、线性插值平滑、Witten-Bell平滑等等。	
+   

@@ -1,0 +1,30 @@
+---
+title: HMM-Baum Welch
+date: 2015-01-01 09:00:00
+categories: fbSeq
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+### 概述
+   
+   也叫前向后向算法，是一种最大期望（EM，Expectation Maximum Algorithm）算法的特殊形式，它避免了 EM 算法的暴力计算，而采用动态规划思想来解决问题。
+
+   （采用期望最大化算法的原因：这是一个最大似然问题，知道输出，调节参数使该输出的概率最大。但因为需要调节的参数有3个，问题很复杂。通过EM算法能使问题简化）
+
+   <center><img src="{{ site.baseurl }}/images/pdBase/seq_bw1.png"></center>
+   
+   对于网格中的每一个状态，前向后向算法既计算到达此状态的“前向”概率，又计算生成此模型最终状态的“后向”概率，这些概率都可以通过前面的介绍利用递归进行高效计算。可以通过利用近似的 HMM 模型参数来提高这些中间概率从而进行调整，而这些调整又形成了前向后向算法迭代的基础。
+   
+   <strong>该算法主要涉及两个变量:</strong>
+   
+   变量一：
+   
+   <center><img src="{{ site.baseurl }}/images/pdBase/seq_bw2.png"></center>
+   
+   ---
+   
+   变量二：
+   
+   <center><img src="{{ site.baseurl }}/images/pdBase/seq_bw3.png"></center>
+   
