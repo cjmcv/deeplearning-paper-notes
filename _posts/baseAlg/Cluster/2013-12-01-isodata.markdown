@@ -1,0 +1,17 @@
+---
+title: ISODATA
+date: 2015-01-01 09:00:00
+categories: fbCluster
+---
+
+### 概述
+
+   与K均值算法相似，聚类中心也是通过样本均值的迭代运算来决定，还加入了一些试探步骤，能自动地进行类的合并和分裂。
+   
+---
+   
+   <strong>ISODATA具体实现步骤：</strong>
+   
+   <center><img src="{{ site.baseurl }}/images/pdBase/cluster_isodata1.png"></center>
+
+   <center><img src="{{ site.baseurl }}/images/pdBase/cluster_isodata2.png"></center>

@@ -1,0 +1,49 @@
+---
+title: 贝叶斯决策
+date: 2015-01-01 09:00:00
+categories: fbClass
+---
+
+### 概述
+
+<center><img src="{{ site.baseurl }}/images/pdBase/class_bay2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdBase/class_bay3.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdBase/class_bay4.png"></center>
+
+### 基于后验概率的三种贝叶斯估计
+
+<center><img src="{{ site.baseurl }}/images/pdBase/class_bay6.png"></center>
+
+   最大后验估计、后验均值估计、后验中值估计都是贝叶斯估计的一种特殊形式，都涉及到了似然估计和先验概率。它们都是点估计，就是用实际样本指标数值作为总体参数的估计值。
+
+   而Bayesian方法的特点是使用这些分布来总结数据、得到推论。Bayesian 方法试图算出后验均值或者中值以及posterior interval，而不是后验模。
+
+   个人理解：最大后验估计：取后验概率为最大值时对应的结果；后验期望估计：取后验概率为均值时的结果；后验中值估计：取后验概率为中值时的结果。这些结果选取在问题中都有对应实际样本指标数值，因此为点估计
+   
+---
+
+### 相关概念
+
+<center><img src="{{ site.baseurl }}/images/pdBase/class_bay1.png"></center>
+
+---
+
+* 点估计
+
+   用实际样本指标数值作为总体参数的估计值。由样本数据估计总体分布所含未知参数的真值，所得到的值，称为估计值。点估计的精确程度用置信区间表示。
+
+   点估计的常用方法有矩估计法、顺序统计量法、最大似然法、最小二乘法等。
+
+* 朴素贝叶斯
+
+   贝叶斯分类是一系列分类算法的总称，这类算法均以贝叶斯定理为基础，故统称为贝叶斯分类。朴素贝叶斯算法是其中应用最为广泛的分类算法之一。朴素贝叶斯分类器基于一个简单的假定：输入相互独立。
+
+---
+
+* 贝叶斯网络
+
+   贝叶斯网络是表示变量间概率依赖关系的有向无环图，这里每个节点表示领域变量，每条边表示变量间的概率依赖关系，同时对每个节点都对应着一个条件概率分布表(CPT) ，指明了该变量与父节点之间概率依赖的数量关系。
+   
+<center><img src="{{ site.baseurl }}/images/pdBase/class_bay5.png"></center>
