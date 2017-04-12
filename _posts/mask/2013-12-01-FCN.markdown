@@ -1,7 +1,7 @@
 ---
 title: FCN（CVPR，2015）
 date: 2016-03-15 19:50:00
-categories: fDetect
+categories: fMask
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
@@ -20,7 +20,7 @@ categories: fDetect
 
        Longjon用于语义分割所采用的全卷积网络（FCN)的结构示意图, 在Alexnet基础上, 最后的channel=4096的feature map经过一个1x1的卷积层, 变为channel=21的feature map, 然后经过上采样和crop（由于步长（stride）不为一的卷积层和池化层产生的特征图（feature map）大小会有一些向下取整操作, 导致最后的feature map大小与原图不是严格的倍数关系，crop层进行裁剪）, 变为与输入图像同样大小的channel=21的feature map, 也就是图中的pixel-wise prediction。 在Longjon的试验中一共有20个语义类别, 加上背景类别每个像素应该有21个softmax预测类, 因此pixel-wise prediction中channel=21。
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/fcn1.jpg"></center>
+<center><img src="{{ site.baseurl }}/images/pdMask/fcn1.jpg"></center>
 
 ### 细节记录
 
@@ -40,7 +40,7 @@ categories: fDetect
 
 以上是对CNN的结果做处理，得到了dense prediction，而作者在试验中发现，得到的分割结果比较粗糙，所以考虑加入更多前层的细节信息，也就是把倒数第几层的输出和最后的输出做一个fusion，实际上也就是加和。这样就得到第二行和第三行的结果，实验表明，这样的分割结果更细致更准确。在逐层fusion的过程中，做到第三行再往下，结果又会变差，所以作者做到这里就停了。可以看到如上三行的对应的结果：
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/fcn2.jpg"></center>
+<center><img src="{{ site.baseurl }}/images/pdMask/fcn2.jpg"></center>
 
 
 ### 问题&解决办法
@@ -61,7 +61,7 @@ categories: fDetect
    2. 采用whole image做训练，不进行patch wise sampling。实验证明直接用全图已经很effective and efficient。
    3. 对class score的卷积层做全零初始化。随机初始化在性能和收敛上没有优势。
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/fcn3.jpg"></center>
+<center><img src="{{ site.baseurl }}/images/pdMask/fcn3.jpg"></center>
 
 ### 优缺点
 

@@ -1,0 +1,43 @@
+---
+title: Mask RCNN（Facebook, 2017）
+date: 2017-03-25 19:00:00
+categories: fDetect fMask
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： He K, Gkioxari G, Dollár P, et al. Mask R-CNN[J]. 2017.
+
+### 论文算法概述
+
+       在Faster RCNN的基础上，添加一个与方框分类回归部分网络平行的用于每个ROI提取mask的分支，可以在检测目标的同时输出对应分割mask，该网络称为Mask RCNN。这生成mask的网络分支可以看成是一个小的应用在每个ROI上的FCN模型，以像素对像素的方式得到掩码图像。
+
+	   Mask RCNN与Faster RCNN另一个较大的改进是，针对ROIPool设计了一个像素对像素的对齐操作，称为ROIAlign。ROIPool有以下影响：1. 将生成mask的准确率从10%提升到50%； 2. 作者发现这该操作是去除mask生成和目标分类耦合性的必要一步：这里为每个类别单独去预测mask，类别由分类的网络分支决定，而没有不同类别之间的竞争关系，即对每个像素做二分类，为单纯的分割问题（实验中效果很好）；但相反，如FCN中是直接对目标生成mask而不管物体类别，则FCN实际上是对每个像素进行多分类，分割与分类的耦合性极强（实验中效果很差）。
+
+<center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn1.png"></center>
+
+### Mask R-CNN
+
+   该网络分为两个阶段，第一阶段是RPN，第二阶段是同时进行的分类回归和mask生成（在Faster RCNN中分类和回归两个分支是同时进行的，这里添加了生成mask的第三个并行分支），与以往很多先分割后基于mask进行分类的做法不一样。
+
+   在训练时，整体损失为分类、回归和掩码的三个损失之和。其中mask分支中对每个ROI有K个m x m维度的输出，K为类别数，m为像素。根据GT中的类别k，计算第k个feature map中per-pixel sigmoid取平均作为L_mask，即只有GT的类别所对应特征图参与L_mask的计算，其余不参与。Mask分支的输出取决与分类分支中得到的类别号，根据类别号来选择对应的mask输出。
+
+### RoIAlign
+
+   RoiPool是应用于每个Roi提取到的特征图上的基本操作，将ROI的特征转化到一个小的固定尺寸（H x W）的特征图中，设ROI宽高为w-h，则ROIPool核大小为（h/H * w/W），ROI上（y，x）的坐标直接取整映射到输出特征图上的（y/H，x/W）的坐标上，在h-w并不是H-W的整数倍时，这样运算就会涉及到浮点到整数转换的像素位置的精度损失，如横轴上可能会偏移1到W-1个像素。这点损失对分类任务影响不大，因为分类任务对物体平移具有一定不变性。但对于像素位置要求更精确的分割任务，其影响较大。
+
+   为了解决这个问题，作者提出了ROIAlign层，对提取的特征与输入正确地对应起来。采用双线性插值的方法，（y，x）到（y/H，x/W）的映射时不取整，整块ROI进行完全均分而不舍弃部分像素，这样每个池化bin就涵盖浮点数个像素，利用双线性插值来凑整计算池化。
+
+<center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn2.png"></center>
+
+### Network Architecture
+
+   下面介绍了两个简单的方案:
+
+<center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn3.png"></center>
+
+### 测试结果
+
+   在COCO上的表现如下表格所示，ResNet-101-FPN，采用Faster R-CNN的4步训练方法，Nvidia Tesla M40 GPU上运行195ms每帧。
+   
+<center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn4.png"></center>
