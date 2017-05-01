@@ -1,0 +1,31 @@
+---
+title: OHEM（CVPR, 2016）
+date: 2017-04-29 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Shrivastava A, Gupta A, Girshick R. Training Region-Based Object Detectors with Online Hard Example Mining[J]. 2016:761-769.
+
+Github:[https://github.com/abhi2610/ohem](https://github.com/abhi2610/ohem)
+
+### 论文算法概述
+
+       提出了一种新的bootstrapping方法，称为OHEM，基于SGD修改而来，用于训练深度卷积的检测模型。适用于在该检测任务中拥有着几千个候选样本，但每次SGD的mini-batch都仅包含有一张或两张图像（较少）时的情况。候选样本是从分布中二次采样得到的，具有多样性和高损失的特征。因为只使用到了候选样本中一个的很小的子集，所以梯度计算在该方法下仍能高效运行。
+	   
+	   文中作者将OHEM应用到Fast RCNN检测算法上，有一下几个优点：1、去掉了大部分region-based ConvNets都普遍需要的先验条件和超参数； 2、提高了mAP； 3、当训练集较大和较复杂时，该方法能提高其效率。
+	   
+### Online hard example mining
+
+   看回hard example mining中定义的两个步骤：(a)固定模型，用该模型去找到一些新的重要样本添加到训练集中；(b)固定训练集，去训练微调模型。如训练在RCNN或SPPnet中的SVMs，步骤a涵盖多张图像（10张到100张），直到正在使用的训练集达到预先设定的大小，然后在步骤b中SVM被训练去拟合该部分训练集。重复两个步骤使训练集中包含有所有支持向量。
+
+   将相似的策略应用在FRCN中，训练速度却很慢。因为在选择样本时并没有做模型的微调训练。这里主要关注点是将两个步骤合并在一起，使用online SGD训练FRCN。尽管SGD每次迭代中的图片样本数很少，但每张图片都会包含有几千个ROI，可以在这里去选取hard examples去训练而不是用基于启发式采样的子样本集。该策略使模型在SGD下能够及时更新，使训练不会出现延迟。
+   
+### Implementation details
+
+   在RFCN检测器中实现OHEM的方式有很多，一种最普通的方式是修改loss层去做hard example selection，这loss层为每个ROI计算loss，然后基于loss进行排序，挑选出hard ROIs，并将non-hard RoIs的loss置0。这个做法很直接，但不够高效，因为尽管部分ROI的loss为0，没有梯度的更新，但ROI network仍需要为每个ROI分配空间，对每个ROI进行反向传播（这是当前深度学习工具的一个限制缺陷）。
+
+   为了解决该问题，文中提出的框架如图2所示。主要包含有两个一样的ROI network，其中一个是只读的，即只为所有ROIs的前向运算分配空间，而忽略反向传播的部分。对于一个SGD迭代，给定卷积特征图，只读的ROI 网络进行前向传播并计算出所有ROIs的loss（图2绿色部分）。然后 hard RoI采样模块上面提到的方法挑选hard ROIs，作为普通ROI网络（可读可写，图2b所示）的输入，网络的前向和反向计算都只处理hard ROIs。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/ohem1.png"></center>

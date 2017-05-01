@@ -8,7 +8,7 @@ categories: fDetect fGan
 
 论文： A-Fast-RCNN : Hard Positive Generation via Adversary for Object Detection
 
-Github: (https://github.com/xiaolonw/adversarial-frcnn)[https://github.com/xiaolonw/adversarial-frcnn] 
+Github: [https://github.com/xiaolonw/adversarial-frcnn](https://github.com/xiaolonw/adversarial-frcnn])
 
 ### 论文算法概述
 

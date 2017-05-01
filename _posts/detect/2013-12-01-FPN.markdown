@@ -1,5 +1,5 @@
 ---
-title: FPN（arXiv, 2016）
+title: FPN（2016）
 date: 2017-03-26 19:00:00
 categories: fDetect
 ---
