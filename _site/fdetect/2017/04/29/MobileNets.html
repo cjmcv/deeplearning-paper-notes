@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>MobileNets（Google, 2017）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读(2015--)</a></li>
+    <li><a href="/bprojects.html">基础算法(2013-2015)</a></li>
+    <!-- <li><a href="/programs.html">开源码学习</a></li> -->
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">MobileNets（Google, 2017）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 29 Apr 2017
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文： MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications</p>
+
+<p>github: <a href="https://github.com/pby5/MobileNet_Caffe">https://github.com/pby5/MobileNet_Caffe</a></p>
+
+<p><a href="https://github.com/Zehaos/MobileNet">https://github.com/Zehaos/MobileNet</a></p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   MobileNets基于流线型结构，使用depthwise separable convolution（出自《Xception: Deep learning with depthwise separable convolutions》）构建而成的深度神经网络，并引入两个简单的全局超参数去平衡速度和精度。构建小的高效的模型是常被关注的问题，常见的处理方法可分为两类，压缩预训练模型或直接训练小模型，很多论文中主要关注模型大小，参数变少了，但前向时间却变长了。而MobileNets主要关注速度问题，同时兼顾模型大小。
+</code></pre>
+</div>
+
+<h3 id="depthwise-separable-convolution">Depthwise Separable Convolution</h3>
+
+<p>MobileNet模型基于depthwise separable convolutions，这种卷积可以分解为一个depthwise convolution和1x1的pointwise convolution。depthwise convolution对每个输入通道采用单一滤波器，pointwise convolution则使用1x1卷积去线性融合depthwise convolution的输出，共两步操作。而标准的卷积中，滤波和信息融合都会在一步中完成。这样分解能够较大程度上减少网络计算量和模型大小。如图2中表示由标准卷积2(a)分解成一个depthwise convolution 2(b)和一个1x1 pointwise convolution 2(c).</p>
+
+<center><img src="/images/pdDetect/mobilenet1.png" /></center>
+
+<p>一个标准的卷积层以Df x Df x M的特征图F输入，得到Df x Df x N的特征图G输出，Df表示特征图空间上的高度和宽度，M/N为通道数。设Dk为卷积核大小。则参数数量为Dk x Dk x M x N，计算量可以表示为Dk x Dk x M x Df x Df x N。MobileNets模型中，通过使用depthwise separable convolution来将输出通道数N和卷积核大小Dk隔离开。MobileNets中depthwise convolution采用的是单一的滤波器，计算量为Dk x Dk x M x Df x Df，pointwise convolution用于线性的信息融合，其计算量为1x 1x M x N x Df x Df，所以depthwise separable convolution的整体计算量为Dk x Dk x M x Df x Df + M x N x Df x Df。MobileNets中使用3x3的depthwise separable convolution可以减少8~9倍的运算量，而准确率下降不多。</p>
+
+<h3 id="depthwise-separable-convolution-1">Depthwise Separable Convolution</h3>
+
+<p>MobileNet除了第一层卷积为普通卷积外，其他卷积均由depthwise separable convolution堆叠而成，网络结构如table1所示，除了softmax分类层外，所有层都接着batchnorm和ReLU。其中最后一层卷积后添加一个均值池化将特征图大小变为1x1后输入全连接层。若depthwise separable convolution按两层算，则MobileNet有28个网络层。</p>
+
+<center><img src="/images/pdDetect/mobilenet2.png" /></center>
+
+<h3 id="width-multiplier-thinner-models">Width Multiplier: Thinner Models</h3>
+
+<p>为使模型更轻量化，引入宽度因子alpha，作用在输入和输出的通道数上，则一层depthwise separable convolution的计算量为Dk x Dk x (alpha x M) x Df x Df + (alpha x M) x (alpha x N) x Df x Df，alpha的取值范围是0到1。</p>
+
+<h3 id="resolution-multiplier-reduced-representation">Resolution Multiplier: Reduced Representation</h3>
+
+<p>为使模型更轻量化，引入分辨率因子p，作用在输入大小Df上，则一层depthwise separable convolution的计算量为Dk x Dk x (alpha x M) x (p x Df) x (p x Df) + (alpha x M) x (alpha x N) x (p x Df) x (p x Df)，p的取值范围是0到1。</p>
+
+<h3 id="experiments">Experiments</h3>
+
+<center><img src="/images/pdDetect/mobilenet3.png" /></center>
+
+<center><img src="/images/pdDetect/mobilenet4.png" /></center>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fdetect/2017/03/27/FPN.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fdetect/2017/04/30/OHEM.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-05-02 20:57:31 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>
