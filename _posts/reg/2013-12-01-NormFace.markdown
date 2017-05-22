@@ -1,7 +1,7 @@
 ---
 title: NormFace（2017）
 date: 2017-05-21 19:00:00
-categories: fDetect
+categories: fReg
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
