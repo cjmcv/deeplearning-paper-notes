@@ -102,35 +102,9 @@
 
 <center><img src="/images/pdReg/sphereface3.png" /></center>
 
-<table>
-  <tbody>
-    <tr>
-      <td>要x准确分类为class 1，则需p1&gt;p2，即需要W1^T x + b1 &gt; W2^T x + b2，则决策边界为(W1-W2)x+b1-b2=0，其中由点积公式a.b=</td>
-      <td>a</td>
-      <td> </td>
-      <td>b</td>
-      <td>·cos(theta)得:</td>
-    </tr>
-  </tbody>
-</table>
+<p>要x准确分类为class 1，则需p1&gt;p2，即需要W1^T x + b1 &gt; W2^T x + b2，则决策边界为(W1-W2) x + b1 - b2 = 0，其中由点积公式a . b=\a\ \b\ · cos(theta)得:<img src="/images/pdReg/sphereface4.png" />.</p>
 
-<center><img src="/images/pdReg/sphereface4.png" /></center>
-
-<table>
-  <tbody>
-    <tr>
-      <td>为简化，归一化权重去掉偏置，即使令</td>
-      <td> </td>
-      <td>Wi</td>
-      <td> </td>
-      <td>=1，bi=0，则当cos(theta1)&gt;cos(theta2)时，x才被正确分类。但如果用cos(m x theta1)&gt;cos(theta2)来代替（其中m&gt;=2，整数），这本质上会使决策变得更严格，因为需要cos(theta1)的更低的界限仍比cos(theta2)高。则类别1的决策线为cos(m x theta1)=cos(theta2)。类似的，如果需要cos(m x theta2)&gt;cos(theta1)来使特征正确分类到class2，则class2的决策线为cos(m x theta2)=cos(theta1)。假设所有训练样本都能被正确分类，则这决策面会生成angular margin:</td>
-    </tr>
-  </tbody>
-</table>
-
-<center><img src="/images/pdReg/sphereface5.png" /></center>
-
-<p>其中theta12是W1与W2间的角度。从角度的观点看，将x正确分类到class1需要theta1&lt;theta2/m，而把x正确分类到class2需要theta2&lt;theta1/m，比原先的theta1&lt;theta2和theta2&lt;theta1的要求更严格。则有以下修改后的softmax公式：</p>
+<p>为简化，归一化权重去掉偏置，即使令\Wi=1，bi=0，则当cos(theta1)&gt;cos(theta2)时，x才被正确分类。但如果用cos(m x theta1)&gt;cos(theta2)来代替（其中m&gt;=2，整数），这本质上会使决策变得更严格，因为需要cos(theta1)的更低的界限仍比cos(theta2)高。则类别1的决策线为cos(m x theta1)=cos(theta2)。类似的，如果需要cos(m x theta2)&gt;cos(theta1)来使特征正确分类到class2，则class2的决策线为cos(m x theta2)=cos(theta1)。假设所有训练样本都能被正确分类，则这决策面会生成<img src="/images/pdReg/sphereface5.png" />的一个angular margin.其中theta12是W1与W2间的角度。从角度的观点看，将x正确分类到class1需要theta1&lt;theta2/m，而把x正确分类到class2需要theta2&lt;theta1/m，比原先的theta1&lt;theta2和theta2&lt;theta1的要求更严格。则有以下修改后的softmax公式：</p>
 
 <center><img src="/images/pdReg/sphereface6.png" /></center>
 
@@ -211,7 +185,7 @@
       <center>
       &copy; 2017 陈健明 &middot;
       <a href="https://github.com/cjmcv"> Github Site </a>
-      2017-06-01 22:35:54 +0800
+      2017-06-01 22:44:36 +0800
       </center>
     </p>
   </footer>

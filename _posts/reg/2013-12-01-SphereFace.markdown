@@ -24,15 +24,9 @@ categories: fReg
 
 <center><img src="{{ site.baseurl }}/images/pdReg/sphereface3.png"></center>
    
-   要x准确分类为class 1，则需p1>p2，即需要W1^T x + b1 > W2^T x + b2，则决策边界为(W1-W2)x+b1-b2=0，其中由点积公式a.b=|a||b|·cos(theta)得:
-
-<center><img src="{{ site.baseurl }}/images/pdReg/sphereface4.png"></center>
+   要x准确分类为class 1，则需p1>p2，即需要W1^T x + b1 > W2^T x + b2，则决策边界为(W1-W2) x + b1 - b2 = 0，其中由点积公式a . b=\a\ \b\ · cos(theta)得:<img src="{{ site.baseurl }}/images/pdReg/sphereface4.png">.
    
-   为简化，归一化权重去掉偏置，即使令||Wi||=1，bi=0，则当cos(theta1)>cos(theta2)时，x才被正确分类。但如果用cos(m x theta1)>cos(theta2)来代替（其中m>=2，整数），这本质上会使决策变得更严格，因为需要cos(theta1)的更低的界限仍比cos(theta2)高。则类别1的决策线为cos(m x theta1)=cos(theta2)。类似的，如果需要cos(m x theta2)>cos(theta1)来使特征正确分类到class2，则class2的决策线为cos(m x theta2)=cos(theta1)。假设所有训练样本都能被正确分类，则这决策面会生成angular margin: 
-
-<center><img src="{{ site.baseurl }}/images/pdReg/sphereface5.png"></center>
-
-   其中theta12是W1与W2间的角度。从角度的观点看，将x正确分类到class1需要theta1<theta2/m，而把x正确分类到class2需要theta2<theta1/m，比原先的theta1<theta2和theta2<theta1的要求更严格。则有以下修改后的softmax公式：
+   为简化，归一化权重去掉偏置，即使令\Wi\=1，bi=0，则当cos(theta1)>cos(theta2)时，x才被正确分类。但如果用cos(m x theta1)>cos(theta2)来代替（其中m>=2，整数），这本质上会使决策变得更严格，因为需要cos(theta1)的更低的界限仍比cos(theta2)高。则类别1的决策线为cos(m x theta1)=cos(theta2)。类似的，如果需要cos(m x theta2)>cos(theta1)来使特征正确分类到class2，则class2的决策线为cos(m x theta2)=cos(theta1)。假设所有训练样本都能被正确分类，则这决策面会生成<img src="{{ site.baseurl }}/images/pdReg/sphereface5.png">的一个angular margin.其中theta12是W1与W2间的角度。从角度的观点看，将x正确分类到class1需要theta1<theta2/m，而把x正确分类到class2需要theta2<theta1/m，比原先的theta1<theta2和theta2<theta1的要求更严格。则有以下修改后的softmax公式：
    
 <center><img src="{{ site.baseurl }}/images/pdReg/sphereface6.png"></center>
 
