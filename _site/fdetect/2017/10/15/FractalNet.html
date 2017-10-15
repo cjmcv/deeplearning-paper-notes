@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>FractalNet（2016）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读(2015--)</a></li>
+    <li><a href="/bprojects.html">基础算法(2013-2015)</a></li>
+    <!-- <li><a href="/programs.html">开源码学习</a></li> -->
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">FractalNet（2016）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 15 Oct 2017
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文： Larsson G, Maire M, Shakhnarovich G. FractalNet: Ultra-Deep Neural Networks without Residuals[J]. 2016.</p>
+
+<p>Github: <a href="https://github.com/gustavla/fractalnet">https://github.com/gustavla/fractalnet</a>  <a href="https://github.com/snf/keras-fractalnet">https://github.com/snf/keras-fractalnet</a></p>
+
+<p>博客: <a href="http://blog.sina.com.cn/s/blog_7147954d0102wbvx.html">http://blog.sina.com.cn/s/blog_7147954d0102wbvx.html</a></p>
+
+<h3 id="section">论文算法概述</h3>
+
+<ol>
+  <li>
+    <p>引入FractalNet，一种基于自相似性（selfsimilarity）的神经网络架构的设计策略。这种设计出来的网络包含有不同长度的相互交错的子路径，而不包含任何pass-through connections：每个内部信号在进入随后的层以前都会先进行滤波和非线性变换。</p>
+  </li>
+  <li>
+    <p>该设计可以使网络达到很深的程度，可作为与resnet相对的构建极深的网络的另外一种方式。FractalNet表明对于训练极深的神经网络路径长度（path length）是关键，而残差仅是附带的，而关键在于FractalNet和ResNet的共同特点，那就是网络深，但在训练时梯度传播的路径短而高效。</p>
+  </li>
+  <li>
+    <p>提出了drop-path，对于极深的fractal网络的有着直观和有效的正则化作用，而且drop-path也可以看成是一种对fractal网络中耗时和精度之间进行折衷的方法。</p>
+  </li>
+</ol>
+
+<h3 id="fractal-networks">Fractal Networks</h3>
+
+<center><img src="/images/pdDetect/fractalnet1.png" /></center>
+
+<p>如图1中左边是fractal架构简单的拓展方式，由原本的形态分裂成两条分支，最后以逐元素相加取平均（element-wise mean）的方式进行联合。设f1为输入输出之间的单一层，则可将结构由<img src="/images/pdDetect/fractalnet2.png" />，递归拓展成<img src="/images/pdDetect/fractalnet3.png" />。网络深度可以定位为是输入到输出之间的最长路径上的卷积层数量，则如右边一个block为f4，其中最常路径上卷积层数量为8，即深度为8。实际应用中，图1中的卷积操作也可以更换成其他操作，联合的方式也可以换成其他的。</p>
+
+<h3 id="regularization-via-drop-path">Regularization via Drop-path</h3>
+
+<p>Drop-path，其用意与DropOut和DropConnect相似，dropout是为了防止激活输出之间的相互适应，而drop-path则是通过随机联合层的操作来防止并行分支之间的相互适应，达到正则化效果。即若不这样做，容易变成以网络的一个输入分支为向量，另外的分支为修正偏置项，各分支之间具有较强的耦合性，容易出现过拟合。作者主要考虑了两个采样策略：</p>
+
+<ol>
+  <li>
+    <p>Local：在一个联合（join）中，以一定概率随机屏蔽一些输入，并确保至少保留一个输入。</p>
+  </li>
+  <li>
+    <p>Global：在整个网络中，选取一条单一的路径。促使网络中每条通道都是一个独立的强预测器。</p>
+
+    <p>在论文实验中，作者采用50%的Local和50%的Global采样。而实验结果还显示，数据扩增对如ResNet等网络作用很大，而在使用Drop-path进行正则化后，可以使网络在没有数据扩增的情况下也能达到郊有竞争力的效果。</p>
+
+    <center><img src="/images/pdDetect/fractalnet4.png" /></center>
+
+    <center><img src="/images/pdDetect/fractalnet5.png" /></center>
+  </li>
+</ol>
+
+<h3 id="experiments">Experiments</h3>
+
+<center><img src="/images/pdDetect/fractalnet6.png" /></center>
+
+<center><img src="/images/pdDetect/fractalnet7.png" /></center>
+
+<center><img src="/images/pdDetect/fractalnet8.png" /></center>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fdetect/2017/10/14/HyperNet.html">&larr; Older</a></li>
+
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-10-15 22:59:38 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

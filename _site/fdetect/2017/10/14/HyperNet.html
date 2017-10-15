@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>HyperNet（CVPR, 2016）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">陈健明</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">陈健明</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读(2015--)</a></li>
+    <li><a href="/bprojects.html">基础算法(2013-2015)</a></li>
+    <!-- <li><a href="/programs.html">开源码学习</a></li> -->
+    <li><a href="/about.html">关于</a></li>
+    <hr />
+
+    
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">HyperNet（CVPR, 2016）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 14 Oct 2017
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文： Kong T, Yao A, Chen Y, et al. HyperNet: Towards Accurate Region Proposal Generation and Joint Object Detection[J]. 2016:845-853.</p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   提出一种深的分层的网络结构HyperNet，用于同时处理region proposal的生成和物体检测，主要是通过融合从粗到细的多个层次的特征图进行。
+</code></pre>
+</div>
+
+<center><img src="/images/pdDetect/hypernet1.png" /></center>
+
+<h3 id="hyper-feature-production">Hyper Feature Production</h3>
+
+<p>使用一个预训练模型的卷积层提取整张图像的特征图，如Fast R-CNN一样，保持输入图像的长宽比例，并将短的一边缩放至600像素。然后低层采用极大值池化，在高层则采用反卷积的方式将各层的输出特征图采样至同一维度，并在每个采样结果后面添加一个卷积层用以提取更多的语义特征以及将特征压缩至统一空间。最后因为各层特征图原本的分辨率并不一致，特征值大小差异可能较大，防止部分特征图被抑制，所以采用LRN（local response normalization）归一化后才将其拼接到一起。</p>
+
+<h3 id="region-proposal-generation-and-object-detection">Region Proposal Generation and Object Detection</h3>
+
+<p>设计了一个轻量级的卷积网络（1 ROI Pooling + 1 Conv + 1 FC + 2 sliding output）用于生成region proposal，约30K个。后用0.7的NMS留下约1K个，在训练时取前200。而检测使用的是FC-Dropout-FC-Dropout的方式，并在两个FC前添加了一个3 x 3 x 36的卷积层。</p>
+
+<h3 id="joint-training">Joint Training</h3>
+
+<p>Region proposal的IOU大于0.45为正例，小于0.3为负例子，采用softmax loss分类，smoothed L1 loss回归坐标。</p>
+
+<center><img src="/images/pdDetect/hypernet2.png" /></center>
+
+<h3 id="speeding-up">Speeding up</h3>
+
+<p>将3 x 3 x 4的卷积层挪到ROI Pooling前面，有两个好处：1、维度从126降至4；2、“The sliding window classifier is more simple (from Conv-FC to FC)”。</p>
+
+<center><img src="/images/pdDetect/hypernet3.png" /></center>
+
+<h3 id="experiments">Experiments</h3>
+
+<center><img src="/images/pdDetect/hypernet4.png" /></center>
+
+<center><img src="/images/pdDetect/hypernet5.png" /></center>
+
+<center><img src="/images/pdDetect/hypernet6.png" /></center>
+
+<center><img src="/images/pdDetect/hypernet7.png" /></center>
+
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/ftrick/2017/06/04/XNOR-Net.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fdetect/2017/10/15/FractalNet.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 陈健明 &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-10-15 22:59:38 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,46 @@
+---
+title: HyperNet（CVPR, 2016）
+date: 2017-10-13 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Kong T, Yao A, Chen Y, et al. HyperNet: Towards Accurate Region Proposal Generation and Joint Object Detection[J]. 2016:845-853.
+
+### 论文算法概述
+
+       提出一种深的分层的网络结构HyperNet，用于同时处理region proposal的生成和物体检测，主要是通过融合从粗到细的多个层次的特征图进行。
+	   
+<center><img src="{{ site.baseurl }}/images/pdDetect/hypernet1.png"></center>
+
+### Hyper Feature Production
+
+   使用一个预训练模型的卷积层提取整张图像的特征图，如Fast R-CNN一样，保持输入图像的长宽比例，并将短的一边缩放至600像素。然后低层采用极大值池化，在高层则采用反卷积的方式将各层的输出特征图采样至同一维度，并在每个采样结果后面添加一个卷积层用以提取更多的语义特征以及将特征压缩至统一空间。最后因为各层特征图原本的分辨率并不一致，特征值大小差异可能较大，防止部分特征图被抑制，所以采用LRN（local response normalization）归一化后才将其拼接到一起。
+
+### Region Proposal Generation and Object Detection
+
+   设计了一个轻量级的卷积网络（1 ROI Pooling + 1 Conv + 1 FC + 2 sliding output）用于生成region proposal，约30K个。后用0.7的NMS留下约1K个，在训练时取前200。而检测使用的是FC-Dropout-FC-Dropout的方式，并在两个FC前添加了一个3 x 3 x 36的卷积层。
+   
+### Joint Training
+
+   Region proposal的IOU大于0.45为正例，小于0.3为负例子，采用softmax loss分类，smoothed L1 loss回归坐标。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/hypernet2.png"></center>
+  
+### Speeding up
+
+   将3 x 3 x 4的卷积层挪到ROI Pooling前面，有两个好处：1、维度从126降至4；2、“The sliding window classifier is more simple (from Conv-FC to FC)”。
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/hypernet3.png"></center>
+   
+### Experiments
+
+   <center><img src="{{ site.baseurl }}/images/pdDetect/hypernet4.png"></center>
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/hypernet5.png"></center>
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/hypernet6.png"></center>
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/hypernet7.png"></center>
+   
