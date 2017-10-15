@@ -12,7 +12,7 @@ categories: fDetect
 
        提出的MultiPath主要对Fast R-CNN做了以下三点修改：1、skip connections，用于融合多层的特征信息；2、foveal structure，用于发掘在各分辨率下物体的上下文信息；3、integral loss，用于提高检测效果。对于region proposals的提取则使用DeepMask替换Fast R-CNN的selective search，而MultiPath网络充当分类器。
 	   
-	   <center><img src="{{ site.baseurl }}/images/pdDetect/multipath1.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdDetect/multipath1.png"></center>
 
 ### Foveal Structure
 
