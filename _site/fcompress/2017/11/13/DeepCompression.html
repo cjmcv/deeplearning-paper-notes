@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Deep Compression（2016）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">cjmcv</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">cjmcv</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读(2015--)</a></li>
+    <li><a href="/bprojects.html">基础算法(2013-2015)</a></li>
+    <li><a href="/about.html">个人简历</a></li>
+    <li><a href="/statement.html">版权声明</a></li>
+    <li><a href="https://github.com/cjmcv"> <font color="#00BFFF"> Github Site </font></a></li>
+    <hr />
+
+
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">Deep Compression（2016）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 13 Nov 2017
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文： Han S, Mao H, Dally W J. Deep Compression: Compressing Deep Neural Networks with Pruning, Trained Quantization and Huffman Coding[J]. Fiber, 2015, 56(4):3–7.</p>
+
+<p>Github：<a href="https://github.com/songhan/Deep-Compression-AlexNet">https://github.com/songhan/Deep-Compression-AlexNet</a></p>
+
+<h3 id="section">论文算法概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   提出Deep Compression用于网络压缩，共包含压缩三个阶段，分别是剪枝Pruning，只留下网络的重要连接而把冗余的连接去掉；量化Quantization，可以使多个连接共享同样的权重，仅需要保存实际有效的权重及其索引即可；霍夫曼编码Huffman Coding，利用有效权重的有偏分布进行编码。整体可使模型减小35到49倍的大小而不影响其准确率。
+</code></pre>
+</div>
+
+<center><img src="/images/pdCompress/deepcompression1.png" /></center>
+
+<h3 id="network-pruning">Network Pruning</h3>
+
+<p>首先对网络进行普通的训练，然后将其中权重值小于某阈值的所有连接剪去，最后对裁剪过的网络进行再次训练。这里网络剪枝能能使Alexnet和VGG16的参数分别减少9倍和13倍。对于剪枝后的稀疏网络的保存使用compressed sparse row (CSR) 或compressed sparse column (CSC) 格式，仅需要2a+n+1个数，其中a为非0元素的个数，n为行数或列数。为进一步压缩，不保存绝对位置，以相对位置索引代替，而这索引在卷积层中用8bit来保存，在全连接层中用5bit保存。若需要的索引数值大于边界值，则补0示意，如图2所示。</p>
+
+<center><img src="/images/pdCompress/deepcompression2.png" /></center>
+
+<h3 id="trained-quantization-and-weight-sharing">Trained Quantization and Weight Sharing</h3>
+
+<p>该阶段通过减少表示每个权重所需要的bit数来进行压缩。如图3所示，假设一层网络（fc）有4个输入神经元和4个输出神经元，那么其权重和梯度都应是4x4的矩阵。权重被量化为4级，分别用4个颜色表示，所有在同一级的权重都共享相同的值，因此对于每层的权重只需要保存其在共享权重表centroids中的对应的下标即可。在训练更新的时候，所有梯度通过量级进行分组并归并到一起，乘以学习率，再由上次迭代得到的共享centroids减去得到结果。这样原始需要保存16个32-bit的权重就变成了保存4个32-bit的有效共享权重和16个2bit的下标索引。</p>
+
+<center><img src="/images/pdCompress/deepcompression3.png" /></center>
+
+<ul>
+  <li>
+    <p>Weight sharing，对训练好的网络的每层使用K均值聚类来决定每层的共享权重，被聚集在同一个cluster里面的权重都将共享同一份权重。需要注意的是权重不跨层共享，每层各自聚类。</p>
+  </li>
+  <li>
+    <p>Initialization of shared weights，使用K均值需要进行初始化，初始化会对结果影响很大，作者试验了三种初始化方法：Forgy(random)，density-based和linear initialization。以alexnet中conv3的权重为例，设13个clusters，如图4所示为三种不同的初始化方法的聚类结果。可见Forgy initialization和density-based initialization对分布的拟合情况较好。而大权重比小权重作用大，但只有少数这样的大权重，这样对于Forgy initialization和density-based initialization，聚类时就很容易将这些少数的大权重忽略掉。所以作者最终采用了没有这个问题的Linear initialization。</p>
+  </li>
+</ul>
+
+<center><img src="/images/pdCompress/deepcompression4.png" /></center>
+
+<h3 id="huffman-codeing">Huffman Codeing</h3>
+
+<p>哈夫曼编码（最优前缀编码）是可变字长编码(VLC)的一种，用于数据的无损压缩。如图5所示，分别为AlexNet最后一层全连接层的量化权重和稀疏的索引矩阵的概率分布图。两个分布都是有偏好非均匀的，如量化权重的分布呈双波峰，而相对索引的稀疏矩阵的值很少超过20。所以较有利于进行哈夫曼编码。实验证明，使用哈夫曼编码对这非均匀分布进行编码可节省20~30的空间。</p>
+
+<center><img src="/images/pdCompress/deepcompression5.png" /></center>
+
+<h3 id="experiment">Experiment</h3>
+
+<center><img src="/images/pdCompress/deepcompression6.png" /></center>
+
+<center><img src="/images/pdCompress/deepcompression7.png" /></center>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/fdetect/2017/11/05/FocalLoss.html">&larr; Older</a></li>
+
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 cjmcv &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-11-13 22:38:20 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

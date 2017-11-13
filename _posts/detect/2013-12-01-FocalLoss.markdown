@@ -12,7 +12,13 @@ categories: fDetect
 
 ### 论文算法概述
 
-       物体检测主要有两大类：1、two-stage检测器，如Faster RCNN，需要region proposal作为前提，准确率高但速度慢。2、one-stage检测器，如YOLO、SSD，简单快速但准确率相对较低；作者认为one-stage检测器准确率低是因为其在训练时前景和背景两类样本极度不均衡导致的。对于two-stage检测器基于region proposal，如Selective Search、EdgeBoxes、DeepMask、RPN等会将大大减少候选目标（约至1~2k），排除掉大部分的背景样本，同时在second stage中，例如固定前景背景比例（1：3）、使用online hard example mining（OHEM）都能使前景背景比例容易控制。相反，对于one-stage检测器通过全图直接生成大量候选目标（~100k），虽然也可以采用类似的启发式采样方法，但极易被分类的背景样本仍占主导，会导致训练低效，以往一般会使用bootstrapping或hard example mining解决该问题。为了更好处理该问题，作者提出的解决方案是使用focal loss代替标准的cross entropy loss，该loss其实是一个dynamically scaled cross entropy loss，其中在正确类别的置信度提高同时，缩放因子会衰减至0，即会逐渐减少容易样的贡献，专注于少量的困难样本。能使one-stage检测器在有较快速度的前提下具有超过当前所有two-stage检测器的准确率。作者还设计了一个使用该loss的one-stage检测器，RetinaNet进行实验。
+   物体检测主要有两大类：
+1. two-stage检测器，如Faster RCNN，需要region proposal作为前提，准确率高但速度慢。
+2. one-stage检测器，如YOLO、SSD，简单快速但准确率相对较低；
+
+   作者认为one-stage检测器准确率低是因为其在训练时前景和背景两类样本极度不均衡导致的。对于two-stage检测器基于region proposal，如Selective Search、EdgeBoxes、DeepMask、RPN等会将大大减少候选目标（约至1~2k），排除掉大部分的背景样本，同时在second stage中，例如固定前景背景比例（1：3）、使用online hard example mining（OHEM）都能使前景背景比例容易控制。相反，对于one-stage检测器通过全图直接生成大量候选目标（~100k），虽然也可以采用类似的启发式采样方法，但极易被分类的背景样本仍占主导，会导致训练低效，以往一般会使用bootstrapping或hard example mining解决该问题。
+
+   为了更好处理该问题，作者提出的解决方案是使用focal loss代替标准的cross entropy loss，该loss其实是一个dynamically scaled cross entropy loss，其中在正确类别的置信度提高同时，缩放因子会衰减至0，即会逐渐减少容易样的贡献，专注于少量的困难样本。能使one-stage检测器在有较快速度的前提下具有超过当前所有two-stage检测器的准确率。作者还设计了一个使用该loss的one-stage检测器，RetinaNet进行实验。
 	   
 <center><img src="{{ site.baseurl }}/images/pdDetect/focalloss1.png"></center>
 	   
