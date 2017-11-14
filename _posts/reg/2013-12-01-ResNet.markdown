@@ -1,7 +1,7 @@
 ---
 title: ResNet（2015）
 date: 2016-09-10 19:50:00
-categories: fDetect
+categories: fReg
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
@@ -16,11 +16,11 @@ Github: [https://github.com/KaimingHe/deep-residual-networks](https://github.com
 
        深度网络可以提取到低/中/高层的特征，通过增加网络层数可以丰富提取到的特征。但训练一个好的模型并不是直接叠加更多的网络层就可以实现的。在增加层数时会有梯度弥散和梯度暴增的问题，使网络难以收敛，而normalized initialization [23, 9, 37, 13] and intermediate normalization layers[16]可以很大程度上解决这些问题。但网络逐渐收敛后，还有可能会遇到degradation（退化）问题，即网络加深了，在没有产生过拟合情况下，准确率却下降了。如图1所示，在合适的网络的基础上增加网络层数，而产生了更大的误差。这表明并不是所有网络那么容易优化的。文中提出的深度残差学习框架可以解决degradation问题。
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/resnet1.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/resnet1.png"></center>
 
 	假设我们期望的网络层关系映射为H(x), 我们让 the stacked nonlinear layers 拟合另一个映射，F(x):= H(x)-x，那么原先的映射就是 F(x)+x。 这里我们假设优化残差映射F(x) 比优化原来的映射 H(x)容易。F(x)+x可以通过shortcut connections 来实现，如下图所示：
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/resnet2.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/resnet2.png"></center>
 
 ### 残差学习
 
@@ -38,31 +38,31 @@ Github: [https://github.com/KaimingHe/deep-residual-networks](https://github.com
 
    Plain Network提出受VGG启发，主要采用3*3卷积，并且有以下两个规则：1）对于相同输出特征图尺寸，网络层则有相同个数的滤波器；2）如果特征图尺寸缩小一半，滤波器个数加倍以保持每层的计算复杂度。通过步长为2的卷积来进行降采样。总共有34个权重层。 该网络与VGG相比，滤波器要少，复杂度要小。Residual Network则主要是在plain network上加入shortcut connections。
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/resnet3.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/resnet3.png"></center>
 
 ### 实验测试结果
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/resnet4.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/resnet4.png"></center>
 
 -----------------------------------------------------------------------------------------
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/resnet5.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/resnet5.png"></center>
 
 -----------------------------------------------------------------------------------------
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/resnet6.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/resnet6.png"></center>
 
 -----------------------------------------------------------------------------------------
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/resnet7.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/resnet7.png"></center>
 
 -----------------------------------------------------------------------------------------
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/resnet8.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/resnet8.png"></center>
 
 -----------------------------------------------------------------------------------------
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/resnet9.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/resnet9.png"></center>
 
 
 

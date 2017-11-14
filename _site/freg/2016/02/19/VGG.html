@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>VGG（ICLR, 2014）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="计算机视觉算法学习笔记">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> ChenJM </div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">cjmcv</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!--<li><a href="/list.html">List</a></li>-->
+      <!--<li><a href="/links.html">Links</a></li>-->
+      <li><a href="/projects.html">Algorithms</a></li>
+      <li><a href="/programs.html">Programs</a></li>
+      <li><a href="/about.html">About Me</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">cjmcv</h1></a><h3>计算机视觉算法学习笔记</h3></li>
+
+    <div>
+      <center><img src="/images/me.jpg" height="195" width="180"></center>
+    </div>
+ 
+    <hr />
+    <li><a href="/projects.html">论文阅读(2015--)</a></li>
+    <li><a href="/bprojects.html">基础算法(2013-2015)</a></li>
+    <li><a href="/about.html">个人简历</a></li>
+    <li><a href="/statement.html">版权声明</a></li>
+    <li><a href="https://github.com/cjmcv"> <font color="#00BFFF"> Github Site </font></a></li>
+    <hr />
+
+
+    <div>
+      <center><img src="/images/weixin.jpg" height="130" width="130"></center>
+    </div>
+    <!--
+    <div id="social-wrapper">
+      <li> <a href=""><i class="fa fa-twitter-square"></i> @twitter</a></li>
+      <li> <a href=""><i class="fa fa-linkedin-square"></i> linkedin</a> </li>
+      <li> <a href=""><i class="fa fa-facebook-square"></i> facebook</a></li>
+      <li> <a href=""><i class="fa fa-github-square"></i> github</a> </li>
+    </div>
+    -->
+  </ul>
+</div>
+
+      <div class="container">
+        <div id="article">
+  <div class="article-title">VGG（ICLR, 2014）</div>
+  <p class="meta">
+    <small>
+      &nbsp;<i class="fa fa-calendar-o"></i> 19 Feb 2016
+    </small>
+  </p> <hr/>
+  <div class="post">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>论文：Simonyan K, Zisserman A. Very Deep Convolutional Networks for Large-Scale Image Recognition[J]. Computer Science, 2014.</p>
+
+<p>算法论文主页：<a href="http://www.robots.ox.ac.uk/~vgg/research/very_deep">http://www.robots.ox.ac.uk/~vgg/research/very_deep</a></p>
+
+<h3 id="section">论文概述</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   论文主要探索了卷积网络的深度对识别准确率的影响，构建了多个网络进行分析。
+</code></pre>
+</div>
+
+<center><img src="/images/pdReg/vgg1.png" /></center>
+
+<h3 id="section-1">数据集</h3>
+
+<p>使用的是ILSVRC-2012数据集（被用于ILSVRC 2012到2014的比赛中）。该数据库的图片包含1000类，分为三部分：训练集（1.3M张）、验证集（50K）、测试集（100K），有两个评价标准：top-1和top-5 error，前者是多类分类错误率，被错误分类的图像所占比例；后者是主要的评价标准，为物体实际类别不在top-5的类别内所占的比例。</p>
+
+<h3 id="section-2">单尺度</h3>
+
+<ol>
+  <li>
+    <p>注意到在没有任何归一化层的模型A中使用local response normalisation (A-LRN network)也并不能起到提升作用，因此也没有在更深的网络（B-E）中使用归一化层。</p>
+  </li>
+  <li>
+    <p>注意到随着卷积层数增加分类误差减少（11层到19层），在这些网络中，层数到19层后错误率达到饱和，但更深的层数可能对更大的数据集有帮助。</p>
+  </li>
+  <li>
+    <p>尽管网络深度一致，但C网络（包含三个1<em>1卷积层）比D网络（整个网络都使用3</em>3的卷积层）效果差，这意味着尽管额外的非线性层能起到辅助作用，但使用不同感受野的卷积提取空间信息也很重要；一个深的网络使用小的卷积滤波器比浅的网络使用大的卷积滤波器效果要好。</p>
+  </li>
+  <li>
+    <p>训练图像尺度的微小变化[256,512]比使用固定大小的效果好不少，尽管在测试时都是使用固定尺度。这证明使用尺度缩放进行训练数据扩增对于多尺度图像检测有一定作用。</p>
+  </li>
+</ol>
+
+<center><img src="/images/pdReg/vgg2.png" /></center>
+
+<h3 id="section-3">多尺度</h3>
+
+<p>表中数据表明在测试时进行scale jittering尺度缩放数据扩增比使用同样的模型而尺度固定的情况效果要好。</p>
+
+<center><img src="/images/pdReg/vgg3.png" /></center>
+
+<h3 id="section-4">多裁切</h3>
+
+<p>multi-corp比dense效果好，且二者有互补的地方。</p>
+
+<center><img src="/images/pdReg/vgg4.png" /></center>
+
+<h3 id="section-5">网络效果比较</h3>
+
+<center><img src="/images/pdReg/vgg5.png" /></center>
+
+  </div>
+</div>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!--<a href="https://twitter.com/share" class="twitter-share-button " data-size="small" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-->
+<ul class="pager">
+
+  <li class="previous"><a href="/freg/2016/02/17/GoogLeNet.html">&larr; Older</a></li>
+
+
+  <li class="next"><a href="/fdetect/2016/03/02/OverFeat.html">Newer &rarr;</a></li>
+
+</ul>
+
+<!--<div id="disqus_thread">
+
+  <script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'diqus-username'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+
+  <a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+  </a>
+
+</div>
+-->
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      <center>
+      &copy; 2017 cjmcv &middot;
+      <a href="https://github.com/cjmcv"> Github Site </a>
+      2017-11-14 21:50:14 +0800
+      </center>
+    </p>
+  </footer>
+</div>
+
+    </div>
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+
+  </body>
+</html>

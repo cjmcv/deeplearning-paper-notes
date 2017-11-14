@@ -1,7 +1,7 @@
 ---
 title: DenseNet（Facebook, CVPR, 2017）
 date: 2017-10-21 19:00:00
-categories: fDetect
+categories: fReg
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
@@ -14,13 +14,13 @@ Github: [https://github.com/liuzhuang13/DenseNet](https://github.com/liuzhuang13
 
        文中提出一网络结构，DenseNet，其设计依据是网络越深则准确率越高，与靠近输入的层和靠近输出的层之间的连接越短则训练越高效。传统的L层卷积网络在层与层之间共有L个连接，而DenseNet（对于一个Dense Block）则会有L(L+1)/2个。其中每一层网络都以前面所有层的特征图进行concat拼接后作为输入，而该层所拥有的特征图都会作为随后所有网络层的输入，则每层都会直接连接到input和loss函数，由loss函数直接对input求偏导，这样设计有很多好处：1、减缓了梯度弥散的问题；2、加强了特征的反向传播过程；3、有助于特征重复利用；4、减少参数数量。
 	   
-<center><img src="{{ site.baseurl }}/images/pdDetect/densenet1.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/densenet1.png"></center>
 	   
-<center><img src="{{ site.baseurl }}/images/pdDetect/densenet2.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/densenet2.png"></center>
 	   
 ### Dense connectivity
 
-1. 在ResNet中，残差结构的输入输出可以表示为<img src="{{ site.baseurl }}/images/pdDetect/densenet3.png">。而DenseNet中则定义为<img src="{{ site.baseurl }}/images/pdDetect/densenet4.png">，其中Hl(.)由BN + ReLU + conv3x3组成。
+1. 在ResNet中，残差结构的输入输出可以表示为<img src="{{ site.baseurl }}/images/pdReg/densenet3.png">。而DenseNet中则定义为<img src="{{ site.baseurl }}/images/pdReg/densenet4.png">，其中Hl(.)由BN + ReLU + conv3x3组成。
 
 2. 一个完整的网络由多个Dense Block组成，如figure2所示，每个block之间用被称为Transition layer的层进行衔接，内包含有conv和Pooling，在衔接的同时可改变特征图的大小.
 
@@ -32,12 +32,12 @@ Github: [https://github.com/liuzhuang13/DenseNet](https://github.com/liuzhuang13
 
 6. 有4中Bottleneck layers这样操作的为DenseNet-B；而有5中，Theta<1的网络称为DenseNet-C。二者都有的称为DenseNet-BC。
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/densenet5.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/densenet5.png"></center>
 
 ### Experiments
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/densenet6.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/densenet6.png"></center>
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/densenet7.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/densenet7.png"></center>
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/densenet8.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/densenet8.png"></center>

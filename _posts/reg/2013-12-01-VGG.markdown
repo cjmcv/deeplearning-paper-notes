@@ -1,7 +1,7 @@
 ---
 title: VGG（ICLR, 2014） 
 date: 2016-02-18 19:30:00
-categories: fDetect
+categories: fReg
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
@@ -14,7 +14,7 @@ categories: fDetect
 
        论文主要探索了卷积网络的深度对识别准确率的影响，构建了多个网络进行分析。
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/vgg1.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/vgg1.png"></center>
 
 ### 数据集
 
@@ -30,20 +30,20 @@ categories: fDetect
 
 4. 训练图像尺度的微小变化[256,512]比使用固定大小的效果好不少，尽管在测试时都是使用固定尺度。这证明使用尺度缩放进行训练数据扩增对于多尺度图像检测有一定作用。
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/vgg2.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/vgg2.png"></center>
 
 ### 多尺度
 
    表中数据表明在测试时进行scale jittering尺度缩放数据扩增比使用同样的模型而尺度固定的情况效果要好。
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/vgg3.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/vgg3.png"></center>
 
 ### 多裁切
 
    multi-corp比dense效果好，且二者有互补的地方。
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/vgg4.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/vgg4.png"></center>
 
 ### 网络效果比较
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/vgg5.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/vgg5.png"></center>

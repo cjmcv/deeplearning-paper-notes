@@ -17,7 +17,7 @@ title: Algorithms
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
             {% if category[0] == 'fDetect'  %}
-            <h1>目标/人脸检测与分类 ({{category | last | size}})</h1>
+            <h1>人脸/目标检测({{category | last | size}})</h1>
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
@@ -90,7 +90,7 @@ title: Algorithms
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
             {% if category[0] == 'fReg'  %}
-            <h1>人脸验证与识别 ({{category | last | size}})</h1>
+            <h1>人脸识别/目标分类 ({{category | last | size}})</h1>
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
@@ -162,7 +162,7 @@ title: Algorithms
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
             {% if category[0] == 'fGan'  %}
-            <h1>生成对抗网络 ({{category | last | size}})</h1>
+            <h1>生成对抗 ({{category | last | size}})</h1>
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}

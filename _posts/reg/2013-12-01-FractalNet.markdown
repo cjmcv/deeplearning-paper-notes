@@ -1,7 +1,7 @@
 ---
 title: FractalNet（2016）
 date: 2017-10-14 19:00:00
-categories: fDetect
+categories: fReg
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
@@ -22,9 +22,9 @@ Github: [https://github.com/gustavla/fractalnet](https://github.com/gustavla/fra
 	   
 ### Fractal Networks
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/fractalnet1.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/fractalnet1.png"></center>
 
-   如图1中左边是fractal架构简单的拓展方式，由原本的形态分裂成两条分支，最后以逐元素相加取平均（element-wise mean）的方式进行联合。设f1为输入输出之间的单一层，则可将结构由<img src="{{ site.baseurl }}/images/pdDetect/fractalnet2.png">，递归拓展成<img src="{{ site.baseurl }}/images/pdDetect/fractalnet3.png">。网络深度可以定位为是输入到输出之间的最长路径上的卷积层数量，则如右边一个block为f4，其中最常路径上卷积层数量为8，即深度为8。实际应用中，图1中的卷积操作也可以更换成其他操作，联合的方式也可以换成其他的。
+   如图1中左边是fractal架构简单的拓展方式，由原本的形态分裂成两条分支，最后以逐元素相加取平均（element-wise mean）的方式进行联合。设f1为输入输出之间的单一层，则可将结构由<img src="{{ site.baseurl }}/images/pdReg/fractalnet2.png">，递归拓展成<img src="{{ site.baseurl }}/images/pdReg/fractalnet3.png">。网络深度可以定位为是输入到输出之间的最长路径上的卷积层数量，则如右边一个block为f4，其中最常路径上卷积层数量为8，即深度为8。实际应用中，图1中的卷积操作也可以更换成其他操作，联合的方式也可以换成其他的。
    
 ### Regularization via Drop-path
 
@@ -36,16 +36,16 @@ Github: [https://github.com/gustavla/fractalnet](https://github.com/gustavla/fra
 
    在论文实验中，作者采用50%的Local和50%的Global采样。而实验结果还显示，数据扩增对如ResNet等网络作用很大，而在使用Drop-path进行正则化后，可以使网络在没有数据扩增的情况下也能达到郊有竞争力的效果。
 
-   <center><img src="{{ site.baseurl }}/images/pdDetect/fractalnet4.png"></center>
+   <center><img src="{{ site.baseurl }}/images/pdReg/fractalnet4.png"></center>
    
-   <center><img src="{{ site.baseurl }}/images/pdDetect/fractalnet5.png"></center>
+   <center><img src="{{ site.baseurl }}/images/pdReg/fractalnet5.png"></center>
    
 ### Experiments
 
-  <center><img src="{{ site.baseurl }}/images/pdDetect/fractalnet6.png"></center>
+  <center><img src="{{ site.baseurl }}/images/pdReg/fractalnet6.png"></center>
   
-  <center><img src="{{ site.baseurl }}/images/pdDetect/fractalnet7.png"></center>
+  <center><img src="{{ site.baseurl }}/images/pdReg/fractalnet7.png"></center>
   
-  <center><img src="{{ site.baseurl }}/images/pdDetect/fractalnet8.png"></center>
+  <center><img src="{{ site.baseurl }}/images/pdReg/fractalnet8.png"></center>
    
    

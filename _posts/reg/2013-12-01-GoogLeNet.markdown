@@ -1,7 +1,7 @@
 ---
 title: GoogLeNet（2014）
 date: 2016-02-16 19:55:00
-categories: fDetect
+categories: fReg
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
@@ -33,13 +33,13 @@ categories: fDetect
 
    这种框架有两个优点，1）可以增加每层网络参数而不会造成计算量暴增；2)可以使同时提取不同尺度的特征。
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/googlenet1.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/googlenet1.png"></center>
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/googlenet2.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/googlenet2.png"></center>
 
 ### GoogLeNet
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/googlenet3.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/googlenet3.png"></center>
 
-<center><img src="{{ site.baseurl }}/images/pdDetect/googlenet4.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdReg/googlenet4.png"></center>
 
