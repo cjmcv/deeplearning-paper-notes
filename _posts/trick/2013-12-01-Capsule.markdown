@@ -1,0 +1,21 @@
+---
+title: Capsule（Hinton, NIPS, 2017）-- (only links)
+date: 2017-11-17 22:00:00
+categories: fTrick
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Sara Sabour,Nicholas Frosst,Geoffrey Hinton. Dynamic Routing Between Capsules
+
+* 全文翻译Hinton那篇备受关注的Capsule论文（AI研习社）：[http://mp.weixin.qq.com/s/Srb9NCTsOGigYJuxFow4eQ](http://mp.weixin.qq.com/s/Srb9NCTsOGigYJuxFow4eQ)
+
+* 浅析Geoffrey Hinton最近提出的Capsule计划（AI研习社）：[https://mp.weixin.qq.com/s/sY4sJ06dUbGb6p5OvRuFuw](https://mp.weixin.qq.com/s/sY4sJ06dUbGb6p5OvRuFuw)
+
+* 摘要介绍（机器之心）：[http://baijiahao.baidu.com/s?id=1582430292372638652&wfr=spider&for=pc](http://baijiahao.baidu.com/s?id=1582430292372638652&wfr=spider&for=pc)
+
+* 如何看待Geoffrey Hinton的言论，深度学习要另起炉灶，彻底抛弃反向传播（知乎）：[https://www.zhihu.com/question/65430434/answer/231225601](https://www.zhihu.com/question/65430434/answer/231225601)
+
+* 如何看待Hinton的论文《Dynamic Routing Between Capsules》（知乎）：[https://www.zhihu.com/question/67287444](https://www.zhihu.com/question/67287444) 
+
+* 【一文读懂Hinton最新Capsules论文】CNN 未来向何处去（新智元）: [https://mp.weixin.qq.com/s/gdke9E1A3eRUzgidp9uOqg](https://mp.weixin.qq.com/s/gdke9E1A3eRUzgidp9uOqg)
