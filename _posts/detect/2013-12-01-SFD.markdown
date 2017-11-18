@@ -1,0 +1,81 @@
+---
+title: SFD（ICCV, 2017）
+date: 2017-11-18 16:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Zhang S, Zhu X, Lei Z, et al. S3FD: Single Shot Scale-invariant Face Detector[J]. 2017.
+
+Github：[https://github.com/sfzhang15/SFD](https://github.com/sfzhang15/SFD)
+
+### 论文算法概述
+
+   一种基于anchors的重点处理尺度问题的人脸检测算法S3FD，在Pascal架构的Titan X上对VGA图像达36FPS。
+   
+   论文贡献：
+
+1. 提出一种不受尺度影响的人脸检测框架有效处理各种尺度的人脸，将anchors铺置大范围的layers上以确保各种尺度的人脸都能提取到足够的特征；
+
+2. 通过一种尺度补偿的anchor匹配策略来提高小人脸的召回率；
+
+3. 通过一种max-out背景标签来减低小人脸的FPR（false positive rate）。
+
+   一般基于anchor的检测算法鲁棒性较高，但对小目标的检测效果却较差。结合图1分析，问题的原因主要有一下几点：
+
+1. Few features：网络到检测层时，步长stride很大，小人脸图像块经过大步长的采样后，只能留下了很少的特征；
+
+2. Mismatch：anchors与感受野大小不匹配，并且对于小人脸来说anchors都太大了；
+
+3. Anchor matching strategy：anchors的尺度是离散的（SFD中采用的是16/32/64/128/256/512），但人脸的尺度是非离散的。因此，那些与anchor尺度相差较大的部分尺度的人脸（outer-face）无法匹配到足够的anchors，如下图c；
+
+4. Background from small anchors：下图d右边检测大人脸，全图铺遍anchors共6个，则产生了1个pos和5个neg。而左边铺遍小anchors共150个去检测小人脸，则产生了1个pos和149个neg。即检测小人脸时，小的anchors会带来大量只框住背景的负样本，正负样本极度不均衡。这是检测小脸。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/sfd1.png"></center>
+	   
+### Scale-equitable framework
+
+   网络结构如下图2所示。Base Convolutional Layers为基于VGG16的conv1_1到pool5，而Extra Convolutional Layers则逐步下采样获取多尺度特征图。基于不同尺度选取6个层作为检测层，每个检测层后面带一个p x 3 x 3 x q的卷积层，p和q分别是输入和输出通道数。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/sfd2.png"></center>
+   
+### Designing scales for anchors
+
+   选取的6个检测层都分别与一个特定尺度的anchor相对应，如table1所示。因此检测的目标是人脸，所以anchor的长宽比为1：1。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/sfd3.png"></center>
+   
+   设计anchor尺度的依据有两个：
+   
+1. Effective receptive field：在CNN中有两种感受野，一种是理论感受野，是指输入区域在理论上会被影响到的区域，但是在理论感受野上并不是每个像素对输出的贡献都是平等的。一般来说，中心部分像素的影响会更大，如图3a所示，中心这部分区域为有效感受野。因此anchor应比理论感受野小很多与有效感受野相匹配，如图3b。
+
+2. Equal-proportion interval principle：同等比例间距原则，如上表1所示，anchor的尺度都设为步长4倍，则以保证每个尺度的anchor在图像上都有相同的密度。因为如步长为4，即图像缩小了4倍，然后对应的anchor放大4倍，可以使不同尺度的人脸都能匹配到差不多数量的anchors。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/sfd4.png"></center>
+
+### Scale compensation anchor matching strategy
+
+   按以往anchor匹配方法会有一个问题：anchor的尺度范围是离散度（一个个尺度大小的集合），而人脸的尺度范围是非离散的，在上面论文概述中有提及。
+   
+   作者这里的处理方式是：1）将重叠度阈值由0.5降低到0.35，使增加整体匹配到的anchor数量；2）将与一人脸的jaccard重叠度高于0.1的所有anchors进行排序，选取top-N（N为成功匹配的anchors的平均数量）。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/sfd5.png"></center>
+
+### Maxout background label
+
+   这里提出的方法处理的是上面论文概述中的第4点问题。将max-out background label应用在conv3_3上，对于每个小anchor，为每个背景标签预测N_m（>1）个评分（正常是N_m=1，即背景为1类；背景加目标共2类），然后最高的一个作为最终评分，再结合目标的1类进行最后的softmax二分类，具体如下图所示。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/sfd6.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/sfd7.png"></center>
+
+### Experiments
+
+   文中几个技巧在widerface验证集上的测试效果，其中F（scale-equitable framework）、S（scale compensation anchor matching strategy）、M（max-out background label）：
+
+   <center><img src="{{ site.baseurl }}/images/pdDetect/sfd8.png"></center>
+   
+   FDDB测试结果：
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/sfd9.png"></center>
