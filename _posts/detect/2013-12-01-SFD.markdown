@@ -22,6 +22,8 @@ Github：[https://github.com/sfzhang15/SFD](https://github.com/sfzhang15/SFD)
 
 3. 通过一种max-out背景标签来减低小人脸的FPR（false positive rate）。
 
+---
+
    一般基于anchor的检测算法鲁棒性较高，但对小目标的检测效果却较差。结合图1分析，问题的原因主要有一下几点：
 
 1. Few features：网络到检测层时，步长stride很大，小人脸图像块经过大步长的采样后，只能留下了很少的特征；
@@ -58,7 +60,11 @@ Github：[https://github.com/sfzhang15/SFD](https://github.com/sfzhang15/SFD)
 
    按以往anchor匹配方法会有一个问题：anchor的尺度范围是离散度（一个个尺度大小的集合），而人脸的尺度范围是非离散的，在上面论文概述中有提及。
    
-   作者这里的处理方式是：1）将重叠度阈值由0.5降低到0.35，使增加整体匹配到的anchor数量；2）将与一人脸的jaccard重叠度高于0.1的所有anchors进行排序，选取top-N（N为成功匹配的anchors的平均数量）。
+   作者这里的处理方式是：
+
+1. 将重叠度阈值由0.5降低到0.35，使增加整体匹配到的anchor数量；
+
+2. 将与一人脸的jaccard重叠度高于0.1的所有anchors进行排序，选取top-N（N为成功匹配的anchors的平均数量）。
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/sfd5.png"></center>
 
