@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>HyperFace（PAMI，2016）</title>
+<title>SFD（ICCV, 2017）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="计算机视觉算法学习笔记">
 <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -79,71 +79,117 @@
 
       <div class="container">
         <div id="article">
-  <div class="article-title">HyperFace（PAMI，2016）</div>
+  <div class="article-title">SFD（ICCV, 2017）</div>
   <p class="meta">
     <small>
-      &nbsp;<i class="fa fa-calendar-o"></i> 09 Sep 2016
+      &nbsp;<i class="fa fa-calendar-o"></i> 19 Nov 2017
     </small>
   </p> <hr/>
   <div class="post">
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-<p>论文：Ranjan R, Patel V M, Chellappa R. HyperFace: A Deep Multi-task Learning Framework for Face Detection, Landmark Localization, Pose Estimation, and Gender Recognition[J]. 2016.</p>
+<p>论文： Zhang S, Zhu X, Lei Z, et al. S3FD: Single Shot Scale-invariant Face Detector[J]. 2017.</p>
+
+<p>Github：<a href="https://github.com/sfzhang15/SFD">https://github.com/sfzhang15/SFD</a></p>
 
 <h3 id="section">论文算法概述</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>   提出使用卷积神经网络同时实现人脸检测、关键点定位、姿态估计和性别识别。浅层特征能包含更好的边缘角点等局部化信息，适合用于特征点定位和姿态估计。而高层特征则适合于物体分类检测等更复杂的任务。因此可以将卷积网络的中间层特征利用起来应对多个任务。而卷积网络中包含多个网络层和很多特征图，信息量大，无法直接有效地应用于多任务中，因此需要一个特征融合的方法，将特征转换到公共子空间中，便于进行线性或非线性融合。文中构建一个单独的fusion-CNN去完成中间特征的融合，而深度网络和fusion网络可以同时进行端到端训练，采用多个loss完成对多个任务的训练监督。
-</code></pre>
-</div>
+<p>一种基于anchors的重点处理尺度问题的人脸检测算法S3FD，在Pascal架构的Titan X上对VGA图像达36FPS。</p>
 
 <p>论文贡献：</p>
 
 <ol>
   <li>
-    <p>提出一种CNN框架，通过融合中间层特征实现人脸检测，关键点定位，姿态估计和性别识别；</p>
+    <p>提出一种不受尺度影响的人脸检测框架有效处理各种尺度的人脸，将anchors铺置大范围的layers上以确保各种尺度的人脸都能提取到足够的特征；</p>
   </li>
   <li>
-    <p>提出两种后处理方法：迭代区域选择和基于关键点的NMS；  3）对比了针对单任务的RCNN和使用文中的中间层特征融合的方式实现多任务RCNN的性能比较；</p>
+    <p>通过一种尺度补偿的anchor匹配策略来提高小人脸的召回率；</p>
+  </li>
+  <li>
+    <p>通过一种max-out背景标签来减低小人脸的FPR（false positive rate）。</p>
   </li>
 </ol>
 
-<center><img src="/images/pdDetect/hyperface1.png" /></center>
+<hr />
 
-<h3 id="hyperface">HyperFace</h3>
+<p>一般基于anchor的检测算法鲁棒性较高，但对小目标的检测效果却较差。结合图1分析，问题的原因主要有一下几点：</p>
 
-<p>三个模块，第一个模块使用selective search从图像中得到候选区域，并缩放到227<em>227输入到网络中；第二个模块是将缩放后的候选区域输入到CNN中判断是否为人脸，如果是人脸，则网络继续提供人脸特征点定位、姿态估计和性别识别；第三个模块是后处理部分，包括候选区域迭代和NMS。
-文中网络设计基于Alexnet，使用一个的网络将max1，conv3和pool5层特征融合。但这些层的特征维度不一致不能直接concate，所以文中在max1和conv3后添加了conva和conv3a来获取维度一致的特征图，然后将其与pool5进行拼接，而拼接后维度较高，使用1</em>1的卷积层去降维（googlenet的做法），再通过一个大的全连接层，后由多个独立的小全连接层分别应对各个任务。</p>
-
-<ul>
+<ol>
   <li>
-    <p>人脸检测：采用selective search获取候选区域，与标签重叠超过0.5的当作正样本，小于0.35的为负样本，使用softmaxloss进行训练；</p>
+    <p>Few features：网络到检测层时，步长stride很大，小人脸图像块经过大步长的采样后，只能留下了很少的特征；</p>
   </li>
   <li>
-    <p>关键点定位：使用aflw（有部分点误标，有部分点不可见而未标），重叠大于0.35的当作正样本，坐标点被归一化后输入训练，采用EuclideanLoss；</p>
+    <p>Mismatch：anchors与感受野大小不匹配，并且对于小人脸来说anchors都太大了；</p>
   </li>
   <li>
-    <p>关键点可见性预测：用于预测某关键点是否可见，重叠达0.35为正样本，采用EuclideanLoss；</p>
+    <p>Anchor matching strategy：anchors的尺度是离散的（SFD中采用的是16/32/64/128/256/512），但人脸的尺度是非离散的。因此，那些与anchor尺度相差较大的部分尺度的人脸（outer-face）无法匹配到足够的anchors，如下图c；</p>
   </li>
   <li>
-    <p>姿态估计：估计roll，pitch，yaw，，重叠达0.5为正样本，采用EuclideanLoss；</p>
+    <p>Background from small anchors：下图d右边检测大人脸，全图铺遍anchors共6个，则产生了1个pos和5个neg。而左边铺遍小anchors共150个去检测小人脸，则产生了1个pos和149个neg。即检测小人脸时，小的anchors会带来大量只框住背景的负样本，正负样本极度不均衡。这是检测小脸。</p>
+  </li>
+</ol>
+
+<center><img src="/images/pdDetect/sfd1.png" /></center>
+
+<h3 id="scale-equitable-framework">Scale-equitable framework</h3>
+
+<p>网络结构如下图2所示。Base Convolutional Layers为基于VGG16的conv1_1到pool5，而Extra Convolutional Layers则逐步下采样获取多尺度特征图。基于不同尺度选取6个层作为检测层，每个检测层后面带一个p x 3 x 3 x q的卷积层，p和q分别是输入和输出通道数。</p>
+
+<center><img src="/images/pdDetect/sfd2.png" /></center>
+
+<h3 id="designing-scales-for-anchors">Designing scales for anchors</h3>
+
+<p>选取的6个检测层都分别与一个特定尺度的anchor相对应，如table1所示。因此检测的目标是人脸，所以anchor的长宽比为1：1。</p>
+
+<center><img src="/images/pdDetect/sfd3.png" /></center>
+
+<p>设计anchor尺度的依据有两个：</p>
+
+<ol>
+  <li>
+    <p>Effective receptive field：在CNN中有两种感受野，一种是理论感受野，是指输入区域在理论上会被影响到的区域，但是在理论感受野上并不是每个像素对输出的贡献都是平等的。一般来说，中心部分像素的影响会更大，如图3a所示，中心这部分区域为有效感受野。因此anchor应比理论感受野小很多与有效感受野相匹配，如图3b。</p>
   </li>
   <li>
-    <p>性别识别：二分类，重叠达0.5为正样本，采用softmaxloss；</p>
+    <p>Equal-proportion interval principle：同等比例间距原则，如上表1所示，anchor的尺度都设为步长4倍，则以保证每个尺度的anchor在图像上都有相同的密度。因为如步长为4，即图像缩小了4倍，然后对应的anchor放大4倍，可以使不同尺度的人脸都能匹配到差不多数量的anchors。</p>
   </li>
-</ul>
+</ol>
 
-<p>整体的loss为5个loss的加权和: aD = 1; aL = 5; aV = 0.5; aP = 5; aG = 2;</p>
+<center><img src="/images/pdDetect/sfd4.png" /></center>
 
-<h3 id="iterative-region-proposals-irp">Iterative Region Proposals (IRP)</h3>
+<h3 id="scale-compensation-anchor-matching-strategy">Scale compensation anchor matching strategy</h3>
 
-<p>利用每次的关键点定位得到一个新的候选框，输入到网络中得到一个置信度更高的框和更准的关键点，不断迭代；</p>
+<p>按以往anchor匹配方法会有一个问题：anchor的尺度范围是离散度（一个个尺度大小的集合），而人脸的尺度范围是非离散的，在上面论文概述中有提及。</p>
 
-<center><img src="/images/pdDetect/hyperface2.png" /></center>
+<p>作者这里的处理方式是：</p>
 
-<h3 id="landmarks-based-non-maximum-suppression-lnms">Landmarks-based Non-Maximum Suppression (LNMS)</h3>
+<ol>
+  <li>
+    <p>将重叠度阈值由0.5降低到0.35，使增加整体匹配到的anchor数量；</p>
+  </li>
+  <li>
+    <p>将与一人脸的jaccard重叠度高于0.1的所有anchors进行排序，选取top-N（N为成功匹配的anchors的平均数量）。</p>
+  </li>
+</ol>
 
-<center><img src="/images/pdDetect/hyperface3.png" /></center>
+<center><img src="/images/pdDetect/sfd5.png" /></center>
 
+<h3 id="maxout-background-label">Maxout background label</h3>
+
+<p>这里提出的方法处理的是上面论文概述中的第4点问题。将max-out background label应用在conv3_3上，对于每个小anchor，为每个背景标签预测N_m（&gt;1）个评分（正常是N_m=1，即背景为1类；背景加目标共2类），然后最高的一个作为最终评分，再结合目标的1类进行最后的softmax二分类，具体如下图所示。</p>
+
+<center><img src="/images/pdDetect/sfd6.png" /></center>
+
+<center><img src="/images/pdDetect/sfd7.png" /></center>
+
+<h3 id="experiments">Experiments</h3>
+
+<p>文中几个技巧在widerface验证集上的测试效果，其中F（scale-equitable framework）、S（scale compensation anchor matching strategy）、M（max-out background label）：</p>
+
+<center><img src="/images/pdDetect/sfd8.png" /></center>
+
+<p>FDDB测试结果：</p>
+
+<center><img src="/images/pdDetect/sfd9.png" /></center>
 
   </div>
 </div>
@@ -153,10 +199,8 @@
 -->
 <ul class="pager">
 
-  <li class="previous"><a href="/freg/2016/08/22/SparseConvNets.html">&larr; Older</a></li>
+  <li class="previous"><a href="/ftrick/2017/11/18/Capsule.html">&larr; Older</a></li>
 
-
-  <li class="next"><a href="/freg/2016/09/11/ResNet.html">Newer &rarr;</a></li>
 
 </ul>
 

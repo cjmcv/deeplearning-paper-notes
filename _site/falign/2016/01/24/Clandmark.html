@@ -106,7 +106,7 @@
     <p>关键点检测器训练：由于是线性参数化，评分结果也是线性的，需要训练一个线性分类器，使用全监督的tructured output SVM (SOSVM)。使用Bundle Methods for Regularized Risk Minimization (BMRM)算法进行求解。</p>
   </li>
   <li>
-    <p>粗到细的搜索策略：训练了两个分类器，（粗）一个输入图像为80<em>80，关键点的patchsize为13</em>13，用于限制人脸检测与得到脸部检测子； （细）检测器被使用160<em>160的图片，150</em>150的patchsize。具体如下图2所示。</p>
+    <p>粗到细的搜索策略：训练了两个分类器，（粗）一个输入图像为80 x 80，关键点的patchsize为13 x 13，用于限制人脸检测与得到脸部检测子； （细）检测器被使用160 x 160的图片，150 x 150的patchsize。具体如下图2所示。</p>
   </li>
   <li>
     <p>用kalman滤波器稳定人脸检测：前面定义的基于静态图像的处检测器，为了可扩展到视频流处理，我们需要解决一些人脸检测器可能存在的问题。特别地，使用了应用于商业的Waldboost face detector。然后使用kalman滤波器去估计人脸检测框。</p>
@@ -172,7 +172,7 @@
       <center>
       &copy; 2017 cjmcv &middot;
       <a href="https://github.com/cjmcv"> Github Site </a>
-      2017-11-18 16:37:06 +0800
+      2017-11-21 23:07:28 +0800
       </center>
     </p>
   </footer>
