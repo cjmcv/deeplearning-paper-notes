@@ -1,0 +1,41 @@
+---
+title: SSH（ICCV, 2017）
+date: 2017-11-26 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Najibi M, Samangouei P, Chellappa R, et al. SSH: Single Stage Headless Face Detector[J]. 2017.
+
+Github：[https://github.com/mahyarnajibi/SSH](https://github.com/mahyarnajibi/SSH)
+
+### 论文算法概述
+
+       提出一个one stage的人脸检测算法SSH，不需要依赖图像金字塔来处理多尺度问题，且能有效结合上下文信息。
+	   
+### General Architecture
+
+   整体结构如图2所示，是一个全卷积神经网络，检测模块被添加到步长分别为8、16和32的特征图上，为M1、M2和M3，分别对应检测小、中、大的人脸，在网络一次前向中完成所有尺度人脸的检测。其中检测模块包含有全卷积的二类分类器和回归器。使用RPN类似的方式构建anchors，在每个滑动窗口位置上会k个anchor，具有与窗口相同的中心和不同大小，长宽比为1（作者在实验中添加多个不同的长宽比并没有太大作用）。而检测模块如图3所示，包含了一个简单的上下文模块（context module）去增加有效的感受野，context module的输出channels数量在M1中设为128，在M2和M3中设为256。
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/ssh1.png"></center>
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/ssh2.png"></center>
+
+### Context Module
+
+   在two stage检测器中，联合上下文信息常用的方式是增大候选框的大小。而SSH这里使用一个简单的卷积网络实现，而增大卷积核则相当于在two stage检测器中增大候选框大小，可选用5x5和7x7卷积核。但为了减少网络参数，作者使用连续的3x3卷积去替换更大的卷积核。结构如下图4所示。
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/ssh3.png"></center>
+   
+### Experiments
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/ssh4.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/ssh5.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/ssh6.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/ssh7.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/ssh8.png"></center>
