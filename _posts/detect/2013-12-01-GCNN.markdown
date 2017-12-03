@@ -1,0 +1,50 @@
+---
+title: G-CNN（CVPR,2016）
+date: 2017-12-03 20:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Najibi M, Rastegari M, Davis L S. G-CNN: an Iterative Grid Based Object Detector[J]. 2015:2369-2377.
+
+### 论文算法概述
+
+       一种不依赖proposal算法的基于多尺度栅格的物体检测算法，该算法由常规的多尺度的栅格开始（一个固定的多尺度的boxes空间金字塔，即有多个不同尺度的栅格，图中只画出一个栅格），迭代更新栅格中的方框，每次迭代都会将其推向目标区域并进行分类。将物体检测问题看成是一个在空间中所有可能的候选框的迭代搜索过程。
+       Faster RCNN在object proposal阶段会生成2K个候选框，而GCNN中栅格共只有180个方框，且去掉了object proposal的生成阶段。网络基本结构如下图2所示，主干可以是任何的CNN网络，如alexnet、VGG，随后接一个ROI池化层，到FC接上回归和分类器。
+
+	   <center><img src="{{ site.baseurl }}/images/pdDetect/gcnn1.png"></center>
+	   
+	   <center><img src="{{ site.baseurl }}/images/pdDetect/gcnn2.png"></center>
+	   
+### Loss function
+
+   GCNN是一个迭代的算法，因此loss函数的定义不仅要考虑训练样本还要考虑迭代步骤。令B表示一个方框（x,y,w,h），Bi为第i个训练框。1 <= s <= S_train为第s步迭代。<img src="{{ site.baseurl }}/images/pdDetect/gcnn3.png">即为第i个训练框在第s步迭代中所在的位置。在训练第一步时，以0.2的IOU作为阈值，为每个方格指定一个IOU最大的ground truth bounding boxes作为其迭代目标。公式如下：<img src="{{ site.baseurl }}/images/pdDetect/gcnn4.png">，其中G为每个GT。而该指定在训练第一步时执行，后面都不再改动。在S_train步中从初始框位置回归到指定框的位置。
+   
+   因为将这初始的训练框回归到在给它指定的GT的位置上是高度非线性的，作者使用分阶段的方式处理这个问题。在第s步中回归的路径就是当前框的位置到指定GT的位置，逐步前进，每步公式如下：
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/gcnn5.png"></center>
+   
+   令<img src="{{ site.baseurl }}/images/pdDetect/gcnn6.png">为对其指定目标框的相对位置的四维输出参数；l_i是目标框的类别；L_reg表示回归损失函数，文中采用smooth L1 loss）；I(.)为指示函数，当里面条件满足时输出1，否则为0；B_BG表示所有背景框的集合。则G-CNN的loss函数定义如下：
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/gcnn7.png"></center>
+   
+   在训练时，每步s的方框可以根据当前网络的输出进行更新：<img src="{{ site.baseurl }}/images/pdDetect/gcnn8.png">，其中的<img src="{{ site.baseurl }}/images/pdDetect/gcnn9.png">将其当前输出的相对位移和尺度从原先定义的参数空间映射到B中，但这样训练时的前向路径需要不断评估，效率低。作者使用<img src="{{ site.baseurl }}/images/pdDetect/gcnn10.png">替代更新公式。
+   
+### Optimization
+
+   下图Algorithm1是在每步G-CNN迭代中为每个bounding box生成训练样本TrainTuples的方法
+
+    <center><img src="{{ site.baseurl }}/images/pdDetect/gcnn11.png"></center>
+	
+### GCNN Test Network
+
+   在测试时，如训练一样使用空间金字塔网格去初始化bounding box，在S_test次迭代中完成。然而像SPP-Net和Fast R-CNN一样，不需要在每次迭代中计算所有层，所以这里将网络分成global和regression两部分，如下图3所示。Global net包含网络的所有卷积层，regression net包含全连阶层和回归权重。输入到global net的是图像，针对每张图像只计算一次前向路径。而检测的循环如下图Algorithm2所示，循环中只计算regression network，以global net最后一层的输出作为输入。
+	
+   <center><img src="{{ site.baseurl }}/images/pdDetect/gcnn12.png"></center>
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/gcnn13.png"></center>
+   
+### Experiments
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/gcnn14.png"></center>
