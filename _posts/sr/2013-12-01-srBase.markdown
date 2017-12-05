@@ -26,8 +26,21 @@ categories: fSr
 
 ### 测试指标
 
-1. PSNR:
+* PSNR: Peak Signal to Noise Ratio，峰值信噪比.
 
-2. SSIM:
+<center><img src="{{ site.baseurl }}/images/pdSr/sr2.png"></center>
+
+--------
+
+* SSIM: structural similarity index，结构相似性.
+
+<center><img src="{{ site.baseurl }}/images/pdSr/sr3.png"></center>
+
+
+-------
+
+* MOS: mean-opinion-score，平均主观意见分
+
+-------
 
 <center><img src="{{ site.baseurl }}/images/pdSr/sr1.png"></center>

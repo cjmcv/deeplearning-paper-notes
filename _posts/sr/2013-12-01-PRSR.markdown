@@ -12,7 +12,7 @@ categories: fSr
 
        提出一种像素递归的超分辨率重构模型，为图像合成逼真的细节的同时提高其分辨率。一张低分辨率图像可能会对应多种可能的高分辨率，因此使用一个像素独立的条件模型来对超分辨率过程进行建模通常会导致细节被平滑。相反该模型基于一个低分辨率输入，通过对高分辨率图像像素的统计依赖（statistical dependencies）的合适建模，能够表示出一个多模态的条件分布（multimodal conditional distribution）。采用PixelCNN框架来定义在自然图像上的强先验（strong prior），并联合一个深度条件卷积网络（deep conditioning convolutional network）来优化这个先验。人类评估表明由该模型得到的输出样本比强L2回归基线更接近真实照片。
 
-	   整体模型包含有条件网络（conditioning network）和先验网络（conditioning network）两部分，其中条件网络将低分辨率图像分布映射到到分辨率图像，由深层次的ResNet实现；先验模型则对高分辨率细节建模使输出更接近现实，由PixelCNN实现。
+	   整体模型包含有条件网络（conditioning network）和先验网络（conditioning network）两部分，其中条件网络将低分辨率图像分布映射到高分辨率图像，由深层次的ResNet实现；先验模型则对高分辨率细节建模使输出更接近现实，由PixelCNN实现。
 
 	   注：该算法论文中不以PSNR和SSIM为评价标准，以混淆人眼判断为目的，关注视觉质量，算法SRGAN也一样。
 
