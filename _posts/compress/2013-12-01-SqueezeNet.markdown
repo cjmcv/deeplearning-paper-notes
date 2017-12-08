@@ -15,6 +15,7 @@ Github：[https://github.com/DeepScale/SqueezeNet](https://github.com/DeepScale/
 ### 论文算法概述
 
        提出SqueezeNet，比alexnet的参数少50倍，但在imagenet上具有与alexnet相近的准确率。而论文的主要目标是找到能保持准确率的参数更少的CNN结构。
+       优化结构，未考虑速度。
 	   
 ### Architectural Design Strategies
 

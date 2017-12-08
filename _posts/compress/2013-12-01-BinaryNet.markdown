@@ -13,6 +13,7 @@ Github：[https://github.com/MatthieuCourbariaux/BinaryNet](https://github.com/M
 ### 论文算法概述
 
        BinaryNet的权重和激活值均为二值化值，通过以1bit的异或非（xnor）运算将大多数的乘法运算替换掉，牺牲少许精度使内存消耗大大减少。
+       压缩权重，也考虑速度。
 	   
 ### Sign function
 

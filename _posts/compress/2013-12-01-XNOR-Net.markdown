@@ -13,6 +13,7 @@ Github: [https://github.com/allenai/XNOR-Net](https://github.com/allenai/XNOR-Ne
 ### 论文算法概述
 
        在论文中以加快运算速度为目的，牺牲少许准确率为代价，提出了两个简化网络：Binary-Weight-Networks 和XNOR-Networks。其中Binary-Weight-Networks中，滤波器参数被二值化，节省了32倍的内存空间。在XNOR-Networks中，滤波器和卷积层的输入都被二值化。其中XNOR-Networks的卷积操作以根本上的二值操作进行近似，使其比普通的卷积操作快58倍并节省32倍内存。
+       压缩权重，也考虑速度。
 
 <center><img src="{{ site.baseurl }}/images/pdCompress/xnornet1.png"></center>
 

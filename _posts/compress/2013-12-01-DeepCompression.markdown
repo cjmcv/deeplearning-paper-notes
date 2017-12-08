@@ -13,6 +13,7 @@ Github：[https://github.com/songhan/Deep-Compression-AlexNet](https://github.co
 ### 论文算法概述
 
        提出Deep Compression用于网络压缩，共包含压缩三个阶段，分别是剪枝Pruning，只留下网络的重要连接而把冗余的连接去掉；量化Quantization，可以使多个连接共享同样的权重，仅需要保存实际有效的权重及其索引即可；霍夫曼编码Huffman Coding，利用有效权重的有偏分布进行编码。整体可使模型减小35到49倍的大小而不影响其准确率。
+       压缩权重，未考虑速度。
 	   
 <center><img src="{{ site.baseurl }}/images/pdCompress/deepcompression1.png"></center>
 

@@ -15,6 +15,7 @@ github: [https://github.com/pby5/MobileNet_Caffe](https://github.com/pby5/Mobile
 ### 论文算法概述
 
        MobileNets基于流线型结构，使用depthwise separable convolution（出自《Xception: Deep learning with depthwise separable convolutions》）构建而成的深度神经网络，并引入两个简单的全局超参数去平衡速度和精度。构建小的高效的模型是常被关注的问题，常见的处理方法可分为两类，压缩预训练模型或直接训练小模型，很多论文中主要关注模型大小，参数变少了，但前向时间却变长了。而MobileNets主要关注速度问题，同时兼顾模型大小。
+       优化结构，也考虑速度。
 	   
 ### Depthwise Separable Convolution
 
