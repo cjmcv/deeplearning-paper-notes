@@ -1,0 +1,55 @@
+---
+title: SAFD（SenseTime, 2017）
+date: 2017-12-17 16:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Scale-Aware Face Detection
+
+### 论文算法概述
+
+       在人脸检测任务中，如下图所示，单尺度的检测器需要使用图像金字塔上进行多尺度的检测来覆盖大的尺度范围，但在金字塔中只有少数尺度下含有有效人脸（绿色箭头处），在其他尺度上（红色箭头）的计算都是浪费，该论文主要就是针对该情况减少计算量。提出了将人脸检测问题分成尺度估计和单尺度检测两个子问题，同时引入了用于生成细粒度范围候选框的SPN（Scale Proposal Network）。
+	   
+<center><img src="{{ site.baseurl }}/images/pdDetect/safd1.png"></center>
+
+       整体检测流程如下图所示，首先输入图像会被采样到一个很小的尺寸，然后前向通过SPN去获取尺度直方图。这制度直方图对图像中人脸可能的尺度大小进行编码，但并不包含位置信息，这SPN需要很少的计算量。接着根据尺度直方图来对输入图像采样，使所有图像中所有人脸都落到RPN的可覆盖的范围里。最后单独对重采样的图像集进行人脸检测，后合并得到最终结果。
+	   
+<center><img src="{{ site.baseurl }}/images/pdDetect/safd2.png"></center>  
+ 
+### Scale Proposal Network (SPN)
+
+   Scale Proposal Network是一个全卷积神经网络，在最后一层卷积层后面带有一个全局极大值池化层，用于生成一个固定长度的直方图向量，而不管输入图像大小和人脸位置。直方图向量的每个元素表示人脸的大小会在这个特征范围内的概率，在训练时只需要图片层级的监督即可。网络结构如下图所示。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/safd3.png"></center>  
+
+   SPN以下采样的图像作为输入，输出尺度响应的热力图（w x h x n），在全局极大值池化后将热力图转变为1 x 1 x n的表示尺度和概率的直方图向量，使用sigmoid将直方图每个元素归一化到[0,1]以表示概率。该直方图具体定义如下，即直方图的第i个bin对应着人脸的大小在<img src="{{ site.baseurl }}/images/pdDetect/safd4.png">范围内。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/safd5.png"></center> 
+   
+   在这种结构下，全局极大值池化起着很重要的整合作用，去掉位置信息，消除了在标准RPN中出现的位置约束，并从所有位置上提取出每个直方图bin的最大响应。在RPN训练时，如果其输出在图像上映射的位置与物体中心相近时，分类热力图上对应位置的响应会较强。然而在SPN中，一个人脸的尺度估计响应可以是在热力图的任意位置，忽略掉位置信息有助于网络更专注去选择学习更强的特征表示。
+   
+### Scalig strategy generation
+
+   如果估计出来的尺度直方图的bin数量过多，则会存在加多噪声。同时一个人脸通常会对其对应尺度的bin及其相邻的bin起到影响，因此无法直接用阈值划分出高响应的proposals。为从直方图中提取有用信号，这里先以检测器覆盖尺度范围的一半作为滑动窗口的长度，用该窗口进行moving average方式的平滑降噪。然后使用一维NMS去提取峰值，而NMS的窗口大小设置为略小于检测器的覆盖范围大小，这样就不会漏掉有用的信号。如下图所示。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/safd6.png"></center> 
+
+### Single-scale RPN
+
+   只有一个anchor，并且覆盖较窄的人脸尺度范围。
+
+### Ground truth preparation
+
+* Definition of bounding box：因为手动标人脸框有一定主观性，所以这里采用5个人脸关键点（双眼、鼻子、双嘴角）作为辅助，如下式，左边的xy为框中心，s为边长（人脸框为正方形），o是所有样本共享的偏移量offset。  
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/safd7.png"></center> 
+
+* Ground truth generation：最直观的方式是将直方图看成是多个二类分类器，由对应的bin对每个人脸设标签为0或1。但这样容易受噪声影响，因此以人脸大小s定义高斯函数：<img src="{{ site.baseurl }}/images/pdDetect/safd8.png">。对于第i个bin的目标值从f(x)中采样得到<img src="{{ site.baseurl }}/images/pdDetect/safd9.png">，起到平滑作用，其高斯函数中的标准差取决于GT的误差分布和检测器窗口的大小。文中实验设为0.4。当图像出现多个人脸时，GT直方图是通过每个独立的人脸GT直方图（高斯分布）对应元素求极大值得到。
+
+### Experiments
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/safd10.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/safd11.png"></center>
