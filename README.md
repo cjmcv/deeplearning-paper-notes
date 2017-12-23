@@ -8,7 +8,7 @@
 
 ## 论文阅读
 ### 人脸/目标检测
-* 2017.7-2017.12: [SAFD](https://cjmcv.github.io/fdetect/2017/12/17/SAFD.html) [Light-Head RCNN](https://cjmcv.github.io/fdetect/2017/12/06/Light-Head-RCNN.html) [G-CNN](https://cjmcv.github.io/fdetect/2017/12/03/GCNN.html) [SSH](https://cjmcv.github.io/fdetect/2017/11/26/SSH.html) [SDF](https://cjmcv.github.io/fdetect/2017/11/18/SFD.html) [Focal Loss](https://cjmcv.github.io/fdetect/2017/11/04/FocalLoss.html) [FaceBoxes](https://cjmcv.github.io/fdetect/2017/10/28/FaceBoxes.html) [ScaleFace](https://cjmcv.github.io/fdetect/2017/10/16/ScaleFace.html) [MultiPath](https://cjmcv.github.io/fdetect/2017/10/15/MultiPath.html) [PVANet](https://cjmcv.github.io/fdetect/2017/10/15/PVANet.html) [HyperNet](https://cjmcv.github.io/fdetect/2017/10/13/HyperNet.html)
+* 2017.7-2017.12: | [SAFD](https://cjmcv.github.io/fdetect/2017/12/17/SAFD.html) | [Light-Head RCNN](https://cjmcv.github.io/fdetect/2017/12/06/Light-Head-RCNN.html) | [G-CNN](https://cjmcv.github.io/fdetect/2017/12/03/GCNN.html) | [SSH](https://cjmcv.github.io/fdetect/2017/11/26/SSH.html) | [SDF](https://cjmcv.github.io/fdetect/2017/11/18/SFD.html) | [Focal Loss](https://cjmcv.github.io/fdetect/2017/11/04/FocalLoss.html) | [FaceBoxes](https://cjmcv.github.io/fdetect/2017/10/28/FaceBoxes.html) | [ScaleFace](https://cjmcv.github.io/fdetect/2017/10/16/ScaleFace.html) | [MultiPath](https://cjmcv.github.io/fdetect/2017/10/15/MultiPath.html) | [PVANet](https://cjmcv.github.io/fdetect/2017/10/15/PVANet.html) | [HyperNet](https://cjmcv.github.io/fdetect/2017/10/13/HyperNet.html)
 * 2017.1-2017.6:
 * 2016.7-2016.12:
 * 2016.1-2016.6:
