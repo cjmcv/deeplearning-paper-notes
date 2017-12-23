@@ -3,7 +3,7 @@
 * 论文阅读(2015-)：包括关注过的视觉算法相关论文阅读笔记。
 * 基础算法(2013-2015)：包含大一到大三接触的机器学习/模式识别/图像处理的基础算法笔记。
 
-=========
+---------
 
 ## 论文阅读
 ### 人脸/目标检测
@@ -31,7 +31,7 @@
 * 2015.1-2015.6: || [DeepID](https://cjmcv.github.io/freg/2015/06/29/DeepID.html) || [AlexNet](https://cjmcv.github.io/freg/2015/06/20/AlexNet.html) ||
 
 ### 人脸对齐
-* 2016.7-2016.12: || [MDM](https://cjmcv.github.io/falign/2016/08/16/MDM.html) || [MTCNN](https://cjmcv.github.io/fdetect/falign/2016/10/01/MTCNN.html) || [DRDA](https://cjmcv.github.io/falign/2016/08/06/DRDA.html) || [CJCRF](https://cjmcv.github.io/falign/2016/08/02/CJCRF.html) || [OpenFace](https://cjmcv.github.io/falign/2016/06/12/OpenFace.html) 
+* 2016.7-2016.12: || [MDM](https://cjmcv.github.io/falign/2016/08/16/MDM.html) || [MTCNN](https://cjmcv.github.io/fdetect/falign/2016/10/01/MTCNN.html) || [DRDA](https://cjmcv.github.io/falign/2016/08/06/DRDA.html) || [CJCRF](https://cjmcv.github.io/falign/2016/08/02/CJCRF.html) || [OpenFace](https://cjmcv.github.io/falign/2016/06/12/OpenFace.html) ||
 
 * 2016.1-2016.6: || [CFSS](https://cjmcv.github.io/falign/2016/01/26/CFSS.html) || [CLandmark](https://cjmcv.github.io/falign/2016/01/23/Clandmark.html) || 
 
@@ -60,10 +60,10 @@
 ### 未分类部分
 * || [Capsule](https://cjmcv.github.io/ftrick/2017/11/17/Capsule.html) || [BN](https://cjmcv.github.io/ftrick/2016/11/06/BN.html) || [ZFNet](https://cjmcv.github.io/ftrick/2016/09/10/ZFNET.html) ||
 
-==================
+-------------
 
 ## 基础算法
-* 2013-2015: [98篇](https://cjmcv.github.io/bprojects.html)
+* 2013-2015: || [笔记98篇](https://cjmcv.github.io/bprojects.html) ||
 
 
 
