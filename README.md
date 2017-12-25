@@ -18,7 +18,7 @@
 * 2015.1-2015.6: || [Selective-Search](https://cjmcv.github.io/fdetect/2015/12/05/Selective-Search.html) || [DPM](https://cjmcv.github.io/fdetect/2015/03/12/DPM.html) ||
 
 ### 人脸识别/目标分类
-* 2017.7-2017.12: || [ResNeXt](https://cjmcv.github.io/freg/2017/12/15/ResNeXt.html) || [IGC](https://cjmcv.github.io/freg/2017/12/10/IGC.html) || [DenseNet](https://cjmcv.github.io/freg/2017/10/21/DenseNet.html) || [FractalNet](https://cjmcv.github.io/freg/2017/10/14/FractalNet.html) || 
+* 2017.7-2017.12: || [DPN](https://cjmcv.github.io/freg/2017/12/24/DPN.html) || [ResNeXt](https://cjmcv.github.io/freg/2017/12/15/ResNeXt.html) || [IGC](https://cjmcv.github.io/freg/2017/12/10/IGC.html) || [DenseNet](https://cjmcv.github.io/freg/2017/10/21/DenseNet.html) || [FractalNet](https://cjmcv.github.io/freg/2017/10/14/FractalNet.html) || 
 
 * 2017.1-2017.6: || [SphereFace](https://cjmcv.github.io/freg/2017/05/28/SphereFace.html) || [NormFace](https://cjmcv.github.io/freg/2017/05/21/NormFace.html) || 
 
