@@ -47,7 +47,7 @@
 
 * 2016.1-2016.6: || [FCN](https://cjmcv.github.io/fmask/2016/03/15/FCN.html) || 
 
-### 目标分割
+### 网络压缩
 * 2017.7-2017.12: || [Deep-Compression](https://cjmcv.github.io/fcompress/2017/11/12/DeepCompression.html) || [SqueezeNet](https://cjmcv.github.io/fcompress/2017/08/12/SqueezeNet.html) || 
 
 * 2017.1-2017.6: || [XNOR-Net](https://cjmcv.github.io/fcompress/2017/06/03/XNOR-Net.html) || [BinaryNet](https://cjmcv.github.io/fcompress/2017/06/01/BinaryNet.html) || [MobileNets](https://cjmcv.github.io/fcompress/2017/04/28/MobileNets.html) || 

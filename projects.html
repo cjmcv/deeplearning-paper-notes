@@ -32,7 +32,31 @@ title: Algorithms
     </div>
   </div>
 
-   <div class="container">   <!--- 2 -->
+  <div class="container">  <!--- 2 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+	  <!--<img src="{{ site.baseurl }}/images/pdDetect/pDetect.jpg">-->
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fReg'  %}
+            <h1>人脸识别/目标分类 ({{category | last | size}})</h1>
+            <div class="post">
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+	  {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <div class="container">   <!--- 3 -->
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
@@ -57,7 +81,7 @@ title: Algorithms
     </div>
   </div>
 
-  <div class="container">  <!--- 3 -->  
+  <div class="container">  <!--- 4 -->  
     <div class="project-box">
       <div class="row">
         <div class="col-md-3 project-image">
@@ -75,30 +99,6 @@ title: Algorithms
 	          </ul>
             {% endif %}
 	      {% endfor %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">  <!--- 4 -->
-    <div class="project-box">
-      <div class="row">
-        <div class="col-md-3 project-image">
-	  <!--<img src="{{ site.baseurl }}/images/pdDetect/pDetect.jpg">-->
-        </div>
-        <div class="col-md-9 project-post">
-          {% for category in site.categories %}
-            {% if category[0] == 'fReg'  %}
-            <h1>人脸识别/目标分类 ({{category | last | size}})</h1>
-            <div class="post">
-	          <ul class="arc-list">
-	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
-	            {% endfor %}
-	          </ul>
-            {% endif %}
-	  {% endfor %}
           </div>
         </div>
       </div>
