@@ -1,0 +1,49 @@
+---
+title: DSOD（ICCV, 2017）
+date: 2018-01-01 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Shen Z, Liu Z, Li J, et al. DSOD: Learning Deeply Supervised Object Detectors from Scratch[J]. 2017.
+
+Github：[https://github.com/szq0214/DSOD](https://github.com/szq0214/DSOD)
+
+### 论文算法概述
+
+       基于SSD的检测框架结合DenseNet，提出一个可以从头开始训练并能达到state-of-the-art的物体检测器DSOD。目前的检测模型大多都依赖于分类任务的预训练模型，主要原因是检测任务的损失函数相对分类任务较复杂，且检测样本较少。而使用预训练模型又会有以下三个问题：1、Limited structure design space，预训练模型结构已固定，较难修改调整；2、Learning bias，分类任务和检测任务的损失函数与类别分布都不一样，作者认为这会导致优化空间不一致，则会使偏置项会到达局部最优；3、 Domain mismatch，模型微调可以减缓由不同类别分布导致的差距，但差别过大时不一定可以迁移到新模型数据上，如ImageNet到差别较大的深度图像或医疗图像。DSOD有四个设计原则：1、Proposal-free；2、Deep Supervision；3、Stem Block；4、Dense Prediction Structure。是一个多尺度的不需要生成proposal的检测框架。
+	   
+<center><img src="{{ site.baseurl }}/images/pdDetect/dsod1.png"></center>
+	
+<center><img src="{{ site.baseurl }}/images/pdDetect/dsod2.png"></center>
+	
+### Proposal-free
+
+   检测模型可大体分成三类：1、如RCNN和Fast RCNN的需要额外的检测器（如selective search）辅助；2、如Faster RCNN和RFCN的集成RPN用于得到相对较少的proposals；3、如YOLO和SSD的单次前向且不需要额外生成proposal的检测方法，将物体检测直接处理成回归问题。作者发现只用第三种才能在没有预训练模型的情况下训练收敛，认为这是因为在另外两类模型中使用的ROI Pooling导致的，ROI Pooling从每个region proposal中生成特征向量，阻碍了梯度的方向传播。所以采用了SSD框架。
+   
+### Deep Supervision
+
+   核心思想是用集成的目标函数直接监督浅层的网络层，而不是仅仅监督最后的输出层，可减轻梯度弥散问题。这里采用DenseNet的方式来达到深度监督的效果，因为一个dense block中，前面的每一层都与当前层相连接，这样浅层也能通过skip connections无阻碍地获得来自网络顶层的目标函数的监督。
+
+### Stem Block
+
+   由3个3×3的卷积层连接一个2×2的极大值池化层组成，比原始在DenseNet中设计的7x7 stride2卷积接3x3 stride2极大值池化的效果要好，可减少原始输入图像的信息损失。
+	
+### Dense Prediction Structure
+
+   SSD中设计的预测层是一种非対称沙漏状的结构，以300x300的图像输入，使用了6种尺度的特征图进行预测。第一级尺度的特征图取自主干子网络的中间层，在各个尺度中具有最大的分辨率(38 x 38)，主要是为了处理图像中的小物体。在两个相邻尺度特征图之间使用了带bottleneck结构（以1x1卷积取减少特征图数量，后接3x3卷积层）的普通过渡层（plain transition layer）。
+
+   SSD中的plain结构中，每个尺度都直接由前面相邻尺度进行变换而来。这里作者提出使用dense结构进行预测，因为dense结构融合了多尺度信息。为简单起见，将每个尺度限制为输出相同通道数。在DSOD中，每个尺度（除了第一级）的一半的特征图都从前一个尺度上用连续的卷积学习得到，而另一半则从相邻的高分辨率特征图直接降采样得到。用于降采样的block包含有2x2 stride2的极大值池化，紧接着1x1 stride1卷积。其中池化处理的是分辨率，而1x1卷积使为了减少50%的通道数，而池化放在卷积前面是出于计算量的考虑。这下采样的block实际上使每个尺度都从前面尺度上获得多分辨率特征图，这与在DenseNets中引入的密集层的层连接是相同的。这里对于每个尺度都仅学习一半的新特征图，并复用前面的一半。具体结构看概述中的图1。这种dense prediction结构比plain结构的准确率要高，并且参数更少。
+
+### Experiments
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/dsod3.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/dsod4.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/dsod5.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/dsod6.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/dsod7.png"></center>
