@@ -7,6 +7,8 @@
 
 ## 论文阅读
 ### 人脸/目标检测
+* 2018.1-2018.6: || [DSOD](https://cjmcv.github.io/fdetect/2018/01/01/DSOD.html) ||
+
 * 2017.7-2017.12: || [SAFD](https://cjmcv.github.io/fdetect/2017/12/17/SAFD.html) || [Light-Head-RCNN](https://cjmcv.github.io/fdetect/2017/12/06/Light-Head-RCNN.html) || [G-CNN](https://cjmcv.github.io/fdetect/2017/12/03/GCNN.html) || [SSH](https://cjmcv.github.io/fdetect/2017/11/26/SSH.html) || [SDF](https://cjmcv.github.io/fdetect/2017/11/18/SFD.html) || [Focal-Loss](https://cjmcv.github.io/fdetect/2017/11/04/FocalLoss.html) || [FaceBoxes](https://cjmcv.github.io/fdetect/2017/10/28/FaceBoxes.html) || [ScaleFace](https://cjmcv.github.io/fdetect/2017/10/16/ScaleFace.html) || [MultiPath](https://cjmcv.github.io/fdetect/2017/10/15/MultiPath.html) || [PVANet](https://cjmcv.github.io/fdetect/2017/10/15/PVANet.html) || [HyperNet](https://cjmcv.github.io/fdetect/2017/10/13/HyperNet.html) ||
 
 * 2017.1-2017.6: || [LNMS](https://cjmcv.github.io/fdetect/2017/05/19/LNMS.html) || [A-Fast-RCNN](https://cjmcv.github.io/fdetect/fgan/2017/04/30/AFastRCNN.html) || [OHEM](https://cjmcv.github.io/fdetect/2017/04/29/OHEM.html) || [FPN](https://cjmcv.github.io/fdetect/2017/03/26/FPN.html) || [Mask-RCNN](https://cjmcv.github.io/fdetect/fmask/2017/03/25/MaskRCNN.html) || [UnitBox](https://cjmcv.github.io/fdetect/2017/02/12/UnitBox.html) || [FaceCraft](https://cjmcv.github.io/fdetect/2017/01/22/FaceCraft.html) || [DeepIR](https://cjmcv.github.io/fdetect/2017/01/15/DeepIR.html) || [YOLOv2](https://cjmcv.github.io/fdetect/2017/01/02/YOLOv2.html) ||
