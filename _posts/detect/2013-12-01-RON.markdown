@@ -1,0 +1,61 @@
+---
+title: RON（CVPR, 2017）
+date: 2018-03-20 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Kong T, Sun F, Yao A, et al. RON: Reverse Connection with Objectness Prior Networks for Object Detection[C]// IEEE Conference on Computer Vision and Pattern Recognition. IEEE, 2017:5244-5252.
+
+Github：[https://github.com/taokong/RON](https://github.com/taokong/RON)
+
+### 论文算法概述
+
+       RON，一个端到端的全卷积网络，重点关注多尺度物体检测和难例挖掘两个问题。文中设计了reverse connection促使前面的网络层具有更多的语义信息，利用物体先验引导物体的检测搜索，用多任务loss来优化整个网络。性能PASCAL VOC 2007，81.3% mAP；VOC 2012，80.7% mAP；MS COCO，27.4% mAP。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/ron1.png"></center>
+	   
+### Reverse Connection
+
+   对于多尺度检测，region-based的物体检测网络通常会融合多个CNN层到一个特征图，然后基于该特征图用子网络逐区域去检测物体。因为所有物体都基于这个固定特征图去检测，使得优化变得复杂。像SSD则在多个CNN层上进行检测，然而这样前面层的语义信息就会受到限制，从而影响这些层的检测效果，这也是SSD在检测小物体的性能会比检测大物体差很多的原因。
+
+   文中提出的reverse connection能使前面的特征图具有更多的语义信息，结构如下图。首先将一个反卷积层应用在reverse fusion map（标记为rf-map）n+1上，再将一个卷积层接到主干的层n上使确保输入具有同样的维度。然后这两个相关的特征图使用element-wise相加进行合并。这 reverse fusion map 7是主干层7的卷积输出(with 512 channels by 33 kernels) 。每个reverse connection block 都会由这样相同的方式生成，如Figure 2所示。总共有4个具有不同尺度的reverse fusion map。与使用单一网络层进行物体检测的方法相比，多尺度特征表达对所有尺度的物体检测更有效，更重要的是因为文中的reverse connection是可训练的，所以前面层的语义信息会得到较明显的加强。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/ron2.png"></center>
+
+### Reference Boxes
+
+   取自一个网络中不同层的特征图会有不同大小的感受野，而文中的reverse connection可以生成多个不同尺度的特征图。我们可以设计boxes的分布，使特定特征图位置可以被学习到作为特定尺度目标的网络响应。定义Smin为最小尺度，而尺度Sk为boxes在每个特征图k的尺度，<img src="{{ site.baseurl }}/images/pdDetect/ron3.png">。并对default boxes使用多个不同的长宽比例{1/3,1/2,1,2,3}，那么对于每个特征图位置总共就有2个尺度和5个长宽比。Smin为输入大小的1/10（即为32对应输入图像为320x320的模型）。
+   
+### Objectness Prior
+
+   上面考虑了很多不同尺度和长宽比的候选框，但只有少数会框住目标，换句话说就是正负样本严重不均衡。region-based的方法使用RPN来处理这个问题，但region proposals相对于default boxes会额外引入平移变化。所以在Fast RCNN中会使用region-wise networks，这样就引入了重复的计算。而相反，我们加入了目标先验去引导目标的搜索，而不需要生成新的region proposals。具体地就是添加一个3x3x2的卷积层，随后接一个softmax去指出在每个box里面存在的目标。目标先验图的通道数是10，即在每个位置上会有10个default boxes。如图1显示的是由一张图像生成的多尺度的目标先验。为了可视化，目标先验图由通道的维度上取均值，可以看到这目标先验图中可以明显地反映出一个目标的存在。因此目标的搜索范围可以得到极大的缩小，而不同尺度的物体将会响应到它们各自对应的特征图上。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/ron4.png"></center>
+	
+### Detection and Bounding Box Regression
+
+   与目标先验模块不同，检测模块需要将regions分成K+1类，具体如下图5所示。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/ron5.png"></center>
+
+### Combining Objectness Prior with Detection
+
+   在网络的训练和测试阶段都会使用到目标先验。在训练时，先给每个由上面Reference Boxes中得到的候选区域一个二值类别标签，如果该区域覆盖着目标，则再赋予一个类别标签。对于每个ground truth box，首先对于每个GT找到与之有最大jaccard重叠度的候选框，然后将对每个候选框以jaccard重叠度超过0.5为阈值去匹配GT。这样能保证每个GT box都会有至少一个region box与它相对应。而对于重叠度小于0.3候选框的给予负标签。这样每个候选框就有两个标签了，一个为是否目标，一个为目标类别。在训练阶段，网络会基于目标先验去动态更新目标标签。对测试阶段的每个mini-batch，网络会同时进行目标先验和类别检测，而在反向传播时，网络首先会生成目标先验，然后对于检测，样本的是否为目标的分数需要高于预先设定的阈值才进入计算。反向传播中额外的计算在于样本的选择上，当选择了合适的阈值（文中的是0.03）后，只有少数样本会被选择进行反向计算。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/ron6.png"></center>
+
+### Training
+
+   对于目标先验，所有的正样本都会用于训练，而负样本则随机抽取一部分，使正负样本比例为1:3；对于检测，首先通过目标先验的评分来减少样本数量，然后也同样选择全部正样本，随机抽取负样本使比例为1:3。
+   
+### Inference
+
+   在分类置信度定义为目标先验评分乘上基于目标先验的类别评分：<img src="{{ site.baseurl }}/images/pdDetect/ron7.png">。再通过bounding box的回归输出去调整方框位置，最后使用NMS得到最终结果。
+   
+### Experiments
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/ron8.png"></center>
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/ron9.png"></center>
