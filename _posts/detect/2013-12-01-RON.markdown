@@ -12,7 +12,7 @@ Github：[https://github.com/taokong/RON](https://github.com/taokong/RON)
 
 ### 论文算法概述
 
-       RON，一个端到端的全卷积网络，重点关注多尺度物体检测和难例挖掘两个问题。文中设计了reverse connection促使前面的网络层具有更多的语义信息，利用物体先验引导物体的检测搜索，用多任务loss来优化整个网络。性能PASCAL VOC 2007，81.3% mAP；VOC 2012，80.7% mAP；MS COCO，27.4% mAP。
+       RON，一个端到端的全卷积网络，重点关注多尺度物体检测和难例挖掘两个问题。文中设计了reverse connection使前面的网络层具有更多的语义信息，利用物体先验引导物体的检测搜索，用多任务loss来优化整个网络。实验结果：VOC07为81.3% mAP，VOC12为80.7% mAP，MS COCO为27.4% mAP。
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/ron1.png"></center>
 	   
