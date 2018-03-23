@@ -7,7 +7,7 @@
 
 ## 论文阅读
 ### 人脸/目标检测
-* 2018.01-2018.06: || [DSOD](https://cjmcv.github.io/fdetect/2018/01/01/DSOD.html) || [RON](https://cjmcv.github.io/fdetect/2018/03/20/RON.html)
+* 2018.01-2018.06: || [DSOD](https://cjmcv.github.io/fdetect/2018/01/01/DSOD.html) || [RON](https://cjmcv.github.io/fdetect/2018/03/20/RON.html) || [CoupleNet](https://cjmcv.github.io/fdetect/2018/03/22/CoupleNet.html) ||
 
 * 2017.07-2017.12: || [SAFD](https://cjmcv.github.io/fdetect/2017/12/17/SAFD.html) || [Light-Head-RCNN](https://cjmcv.github.io/fdetect/2017/12/06/Light-Head-RCNN.html) || [G-CNN](https://cjmcv.github.io/fdetect/2017/12/03/GCNN.html) || [SSH](https://cjmcv.github.io/fdetect/2017/11/26/SSH.html) || [SDF](https://cjmcv.github.io/fdetect/2017/11/18/SFD.html) || [Focal-Loss](https://cjmcv.github.io/fdetect/2017/11/04/FocalLoss.html) || [FaceBoxes](https://cjmcv.github.io/fdetect/2017/10/28/FaceBoxes.html) || [ScaleFace](https://cjmcv.github.io/fdetect/2017/10/16/ScaleFace.html) || [MultiPath](https://cjmcv.github.io/fdetect/2017/10/15/MultiPath.html) || [PVANet](https://cjmcv.github.io/fdetect/2017/10/15/PVANet.html) || [HyperNet](https://cjmcv.github.io/fdetect/2017/10/13/HyperNet.html) ||
 
