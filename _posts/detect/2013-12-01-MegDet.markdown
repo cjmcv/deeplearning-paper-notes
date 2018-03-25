@@ -1,0 +1,17 @@
+---
+title: MegDet（face++, 2017）-- (only links)
+date: 2018-03-25 22:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Peng C, Xiao T, Li Z, et al. MegDet: A Large Mini-Batch Object Detector[J]. 2017.
+
+原作者解读：[http://www.sohu.com/a/209995026_610300](http://www.sohu.com/a/209995026_610300)
+
+### 论文算法概述
+
+       论文以mini-batch size为主要研究对象，提出一种大mini-batch的目标检测器(MegDet)，使训练可以采用更大的mini-batch，明显提高训练速度。基于ResNet-50，使用128个GPU在4小时内完成COCO的训练，并在COCO2017上达52.5% map（1st）。
+	   
+<center><img src="{{ site.baseurl }}/images/pdDetect/megdet1.png"></center>
