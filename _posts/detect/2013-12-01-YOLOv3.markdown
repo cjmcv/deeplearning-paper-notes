@@ -1,0 +1,66 @@
+---
+title: YOLOv3（2018）
+date: 2018-03-29 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： YOLOv3: An Incremental Improvement
+
+Github: [https://pjreddie.com/yolo/](https://pjreddie.com/yolo/)
+
+### 论文算法概述
+
+       YOLO的升级版，准确率与SSD和RetinaNet相近，而速度快3倍。
+	   
+<center><img src="{{ site.baseurl }}/images/pdDetect/yolov3_1.png"></center>
+	   
+### Bounding Box Prediction
+
+   随YOLO9000，使用维度聚类（dimension clusters）作为anchor boxes去预测目标框。该网络为每个目标框预测4个坐标值(tx, ty, tw, th)，如果单元格是从图像左上角偏移(cx, cy)的，并设目标框的宽高为pw/ph，那么预测结果对应为：
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/yolov3_2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/yolov3_3.png"></center>
+
+   在训练时，使用的是平方误差损失的总和，梯度就是GT值减去预测值。
+
+   YOLOv3对每个目标框预测评分时使用的是logistic regression。如果prior box与一个GT box的重叠度高于其他任何的prior box，则赋予标签1。而与GT重叠度并非最优但也已超于设定阈值的prior box，则直接忽略，做法与Faster RCNN一样，作者实验定阈值为0.5。而做法与Faster RCNN不一样的是，这里只为每个GT目标分配一个prior box。如果一个bounding box prior为被分配，则会忽略，不参与loss的计算。
+
+### Class Prediction
+
+   每个框都使用多标签分类来预测可能包含的类。这里不使用softmax，因为作者认为这对于高性能并非是必要的。而简单改用独立的逻辑分类器，在训练时使用二值的交叉熵损失做分类预测。对一些更复杂的任务，一个目标可能会有多个标签，而使用softmax则是假定目标有且只有一个标签，并不合适。
+   
+### Predictions Across Scales
+
+   YOLOv3从三个不同尺度上检测目标，这里从这些尺度上提取特征使用了类似与FPN的概念。从基本特征提取器上添加多个卷积层，在最后预测得到一个3维张量，含目标框坐标、是否为目标以及分类类别。在作者的COCO实验中，在每个尺度上预测三个方框，即对4个目标框偏移量、1个目标性预测和80个类别预测，其张量维度是N x N x [3 x ( 4 + 1 + 80 ) ]。
+
+   将从前面两层得到的特征图上采样2倍，同时也将更前面的层上的特征图使用逐位相加的方式与上采样的特征图进行合并。这种方法使我们可以从上采样特征上得到更有意义的语义信息和从前面层特征上获得更细粒度的信息。然后再添加一些卷积层去处理这合并的特征图，最后再预测一个类似的张量。
+
+   使用K均值聚类来决定bounding box priors，这里选择了9个聚类和3个尺度，跨尺度地进行聚类。在COCO数据集上，聚类成的9个簇心分别为：(10x13); (16x30); (33x23); (30x61); (62x45); (59x119); (116x90); (156x198); (373x326)。
+
+### Feature Extractor
+
+   <center><img src="{{ site.baseurl }}/images/pdDetect/yolov3_4.png"></center>
+   
+   <center><img src="{{ site.baseurl }}/images/pdDetect/yolov3_5.png"></center>
+   
+### Training
+
+   在全图上训练，没有做难例挖掘。使用了多尺度训练、数据扩增、BN等一些普通的技巧。
+   
+### How We Do
+
+   <center><img src="{{ site.baseurl }}/images/pdDetect/yolov3_6.png"></center>
+
+### Things We Tried That Didn’t Work
+
+1. Anchor box x, y offset predictions：尝试使用普通的anchor box预测机制，即使用线性激活函数来预测x, y的偏移量作为box宽或高的倍数。发现这样做会降低模型的稳定性，效果不佳。
+
+2. Linear x, y predictions instead of logistic：尝试使用一个线性激活函数替换逻辑激活函数，直接预测x, y的偏移量。发现这样做mAP会下降几个点。
+
+3. Focal loss：尝试使用focal loss，但结果mAP下降了2个点。这可能是因为YOLOv3本身已经可以很好地处理focal loss要处理的问题，因为它有单独的objectness predictions和conditional class predictions。因此对于大部分样本来说类别预测中没有loss？或者是其他？无法完全确定。
+
+4. Dual IOU thresholds and truth assignment：在Faster RCNN训练中使用了两个IOU阈值，如果一个预测结果与GT的重叠率高于0.7的认为是正样本，在0.3到0.7之间的忽略，在0.3以下的认为是负样本。作者尝试了类似的策略，但并未得到较好的结果。
+
