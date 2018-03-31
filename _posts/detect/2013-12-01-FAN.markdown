@@ -1,0 +1,53 @@
+---
+title: FAN（Face++, 2017）
+date: 2018-03-31 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Wang J, Yuan Y, Yu G. Face Attention Network: An Effective Face Detector for the Occluded Faces[J]. 2017.
+
+### 论文算法概述
+
+       主要针对人脸检测中的人脸遮挡问题提出了FAN，可看成是，提高了人脸检测在遮挡情况下的召回率而不损耗速度。更具体地是提出一种anchor-level attention，可以很好地处理人脸检测中的遮挡问题，结合anchor分配策略和数据扩增技巧情况下，能在WiderFace和MAFA等公开数据集上取得最佳效果。
+	   
+### Base Framework
+
+   主要卷积网络在不同的特征层具有不同的语义信息和空间分辨率。浅层通常具有高分辨率，有利于小物体的定位，但语义信息少，不利于分类问题。而深层网络则相反，含有较多的语义信息，但空间分辨率低。对于这个问题，像FPN中就提出了分而治之的原则，用一个U型结构去同时兼顾语义信息和空间分辨率，不同尺度的物体被划分开，由不同的层的特征层去处理。
+
+   根据这个原则，RetinaNet采用FPN+ResNet去生成特征金字塔，并拼接一个分类网络和一个回归网络，构成一个one-stage检测器达到当时最优效果。这里参考RetinaNet的主要网络结构并用于人脸检测任务，里面的分类子网络采用4个3x3卷积层，每个卷积层带256个滤波器，后接着一个3x3带KxA个滤波器的卷积层，其中K表示分类类别数，A表示每个位置上anchor的数量，那么这里对于人脸检测，K=1使用sigmoid激活函数，而A在实验中设为6。在这个子网络里的所有卷积层在全部金字塔层上都共享参数，做法与原始的RetinaNet一样。而回归子网络以带线性激活函数的4A卷积滤波器结尾，其他地方与分类子网络一致。整体结构如图2所示，其中画的三层金字塔只是为了解释，实际使用不一定是三层。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/fan1.png"></center>
+
+### Attention Network
+
+   主要有三个设计原则：1、处理在不同特征层的不同尺度的人脸；2、使人脸区域的特征更显著；3、生成更多被遮挡的人脸，用于训练。
+
+1. <strong>Anchor Assign Strategy</strong>：在FAN中有5个检测器层，每个均对应一个指定的尺度anchor。另外anchor的长宽比例设为1和1.5，因为大多数正脸都接近正方形，而侧脸可以考虑为是1.5的长方形。此外，作者也统计了WiderFace训练集中的人脸大小，超过80%人脸的大小从16到406个像素。那些很小的人脸没有足够的分辨率，可能不适于包含在训练集内，所以这里在金字塔上设定anchors的面积里从16x16到406x406。设anchor尺度的步长为2的1/3次方，这样确保了每个GT box都有anchor与之IOU超过0.6。另外anchor与GT box的IOU最高且超过0.5时才会被分配，而最高却低于0.4的设为背景，介于两者之间的不用与训练。
+
+2. <strong>Attention Function</strong>：为了处理遮挡问题，基于上面提到的网络结构提出一种anchor级别的注意力机制（anchor-level attention）。使用了一个类似于分段的一个分支，如图6所示。这attention监督信息通过填充GT box来获得，同时如图4所示，监督热力图与当前层被指定到anchors的GT人脸相关联。这些分层级的attention map与特征图相结合，具体是将attention maps进行指数运算后与特征图进行点乘。这样可以保持更多上下文信息，同时增强了检测信息。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/fan2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/fan3.png"></center>
+
+3. <strong>Loss function</strong>：采用多任务loss去联合优化模型：
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/fan4.png"></center>
+
+### Experiments
+
+   主要采用的数据集是WiderFace和MAFA。
+
+   WiderFace包含有32, 203张图片，有393, 703个标注了的各种各样的人脸，158, 989张被选择作为训练集，39, 496作为验证集，剩下的为测试集。这里验证集和测试集分为 ’easy’, ’medium’, ’hard’三个子集，表示着检测的难度。因为尺度、姿态和遮挡的问题，WiderFace数据集是最具挑战性的人脸数据集之一。这里的FAN只是在这里的训练集上进行，使用验证集和测试集进行评估。Ablation studies是在验证集上进行的。（Ablation studies：为了研究模型中所提出的一些结构是否有效而设计的实验）。
+
+   MAFA包含有30, 811张图片，有35, 806个从网上收集的遮挡的人脸。这是一个对遮挡人脸检测的测试基准。此外，该数据集被分成遮挡和未遮挡的两个子集。这里实验中两个子集都用来做评估。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/fan5.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/fan6.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/fan7.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/fan8.png"></center>
