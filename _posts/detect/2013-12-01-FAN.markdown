@@ -10,7 +10,7 @@ categories: fDetect
 
 ### 论文算法概述
 
-       主要针对人脸检测中的人脸遮挡问题提出了FAN，可看成是，提高了人脸检测在遮挡情况下的召回率而不损耗速度。更具体地是提出一种anchor-level attention，可以很好地处理人脸检测中的遮挡问题，结合anchor分配策略和数据扩增技巧情况下，能在WiderFace和MAFA等公开数据集上取得最佳效果。
+       主要针对人脸检测中的人脸遮挡问题提出了FAN，提高了人脸检测在遮挡情况下的召回率而不损耗速度。更具体地是提出一种anchor-level attention，可以很好地处理人脸检测中的遮挡问题，结合anchor分配策略和数据扩增技巧情况下，能在WiderFace和MAFA等公开数据集上取得最佳效果。
 	   
 ### Base Framework
 
@@ -24,15 +24,15 @@ categories: fDetect
 
    主要有三个设计原则：1、处理在不同特征层的不同尺度的人脸；2、使人脸区域的特征更显著；3、生成更多被遮挡的人脸，用于训练。
 
-1. <strong>Anchor Assign Strategy</strong>：在FAN中有5个检测器层，每个均对应一个指定的尺度anchor。另外anchor的长宽比例设为1和1.5，因为大多数正脸都接近正方形，而侧脸可以考虑为是1.5的长方形。此外，作者也统计了WiderFace训练集中的人脸大小，超过80%人脸的大小从16到406个像素。那些很小的人脸没有足够的分辨率，可能不适于包含在训练集内，所以这里在金字塔上设定anchors的面积里从16x16到406x406。设anchor尺度的步长为2的1/3次方，这样确保了每个GT box都有anchor与之IOU超过0.6。另外anchor与GT box的IOU最高且超过0.5时才会被分配，而最高却低于0.4的设为背景，介于两者之间的不用与训练。
+* <strong>Anchor Assign Strategy</strong>：在FAN中有5个检测器层，每个均对应一个指定的尺度anchor。另外anchor的长宽比例设为1和1.5，因为大多数正脸都接近正方形，而侧脸可以考虑为是1.5的长方形。此外，作者也统计了WiderFace训练集中的人脸大小，超过80%人脸的大小从16到406个像素。那些很小的人脸没有足够的分辨率，可能不适于包含在训练集内，所以这里在金字塔上设定anchors的面积里从16x16到406x406。设anchor尺度的步长为2的1/3次方，这样确保了每个GT box都有anchor与之IOU超过0.6。另外anchor与GT box的IOU最高且超过0.5时才会被分配，而最高却低于0.4的设为背景，介于两者之间的不用与训练。
 
-2. <strong>Attention Function</strong>：为了处理遮挡问题，基于上面提到的网络结构提出一种anchor级别的注意力机制（anchor-level attention）。使用了一个类似于分段的一个分支，如图6所示。这attention监督信息通过填充GT box来获得，同时如图4所示，监督热力图与当前层被指定到anchors的GT人脸相关联。这些分层级的attention map与特征图相结合，具体是将attention maps进行指数运算后与特征图进行点乘。这样可以保持更多上下文信息，同时增强了检测信息。
+* <strong>Attention Function</strong>：为了处理遮挡问题，基于上面提到的网络结构提出一种anchor级别的注意力机制（anchor-level attention）。使用了一个类似于分段的一个分支，如图6所示。这attention监督信息通过填充GT box来获得，同时如图4所示，监督热力图与当前层被指定到anchors的GT人脸相关联。这些分层级的attention map与特征图相结合，具体是将attention maps进行指数运算后与特征图进行点乘。这样可以保持更多上下文信息，同时增强了检测信息。
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/fan2.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/fan3.png"></center>
 
-3. <strong>Loss function</strong>：采用多任务loss去联合优化模型：
+* <strong>Loss function</strong>：采用多任务loss去联合优化模型：
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/fan4.png"></center>
 
