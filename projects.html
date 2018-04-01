@@ -25,7 +25,7 @@ title: Algorithms
 	            {% endfor %}
 	          </ul>
             {% endif %}
-	  {% endfor %}
+	      {% endfor %}
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@ title: Algorithms
 	            {% endfor %}
 	          </ul>
             {% endif %}
-	  {% endfor %}
+	      {% endfor %}
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@ title: Algorithms
 	            {% endfor %}
 	          </ul>
             {% endif %}
-	  {% endfor %}
+	      {% endfor %}
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@ title: Algorithms
 	            {% endfor %}
 	          </ul>
             {% endif %}
-	  {% endfor %}
+	     {% endfor %}
           </div>
         </div>
       </div>
@@ -146,7 +146,7 @@ title: Algorithms
 	            {% endfor %}
 	          </ul>
             {% endif %}
-	  {% endfor %}
+	      {% endfor %}
           </div>
         </div>
       </div>
@@ -170,7 +170,7 @@ title: Algorithms
 	            {% endfor %}
 	          </ul>
             {% endif %}
-	  {% endfor %}
+	      {% endfor %}
           </div>
         </div>
       </div>
@@ -186,7 +186,7 @@ title: Algorithms
         <div class="col-md-9 project-post">
           {% for category in site.categories %}
             {% if category[0] == 'fTrick'  %}
-            <h1>未分类部分(深度学习) ({{category | last | size}})</h1>
+            <h1>未分类算法 ({{category | last | size}})</h1>
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
@@ -194,12 +194,36 @@ title: Algorithms
 	            {% endfor %}
 	          </ul>
             {% endif %}
-	  {% endfor %}
+	      {% endfor %}
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="container">    <!--- 4 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+          <!--<img src="{{ site.baseurl }}/images/pdAtt/pAtt.jpg">-->
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fDataset'  %}
+            <h1>数据集 ({{category | last | size}})</h1>
+            <div class="post">
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+            {% endif %}
+		  {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 </div>
 </div>

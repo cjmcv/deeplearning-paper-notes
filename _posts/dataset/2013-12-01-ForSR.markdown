@@ -1,7 +1,7 @@
 ---
-title: Train/Test DataSet
+title: For SR 
 date: 2016-12-23 20:00:00
-categories: fSr
+categories: fDataset
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
@@ -28,14 +28,13 @@ categories: fSr
 
 * PSNR: Peak Signal to Noise Ratio，峰值信噪比.
 
-<center><img src="{{ site.baseurl }}/images/pdSr/sr2.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdDataset/sr2.png"></center>
 
 --------
 
 * SSIM: structural similarity index，结构相似性.
 
-<center><img src="{{ site.baseurl }}/images/pdSr/sr3.png"></center>
-
+<center><img src="{{ site.baseurl }}/images/pdDataset/sr3.png"></center>
 
 -------
 
@@ -43,4 +42,4 @@ categories: fSr
 
 -------
 
-<center><img src="{{ site.baseurl }}/images/pdSr/sr1.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdDataset/sr1.png"></center>

@@ -59,8 +59,11 @@
 
 * 2016.07-2016.12: || [SRGAN](https://cjmcv.github.io/fgan/fsr/2016/12/26/SRGAN.html) || [GLN](https://cjmcv.github.io/fsr/fgan/2016/12/15/GLN.html) || [GAN](https://cjmcv.github.io/fgan/2016/11/08/GAN.html) || 
 
-### 未分类部分
+### 未分类算法
 * || [Capsule](https://cjmcv.github.io/ftrick/2017/11/17/Capsule.html) || [BN](https://cjmcv.github.io/ftrick/2016/11/06/BN.html) || [ZFNet](https://cjmcv.github.io/ftrick/2016/09/10/ZFNET.html) ||
+
+### 数据集
+* || [For SR](https://cjmcv.github.io/fDataset/2016/12/23/ForSR.html) ||
 
 -------------
 
