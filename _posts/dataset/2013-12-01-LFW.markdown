@@ -1,5 +1,5 @@
 ---
-title: [(face) verification] - LFW
+title: (face)verification - LFW
 date: 2018-04-02 19:00:00
 categories: fTrick
 ---

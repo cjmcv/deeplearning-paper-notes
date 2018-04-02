@@ -1,5 +1,5 @@
 ---
-title: [(SR)]Collection
+title: (SR)Collection
 date: 2016-12-23 20:00:00
 categories: fDataset
 ---
