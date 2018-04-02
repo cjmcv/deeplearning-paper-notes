@@ -1,0 +1,77 @@
+---
+title: [(face) verification] - LFW
+date: 2018-04-02 19:00:00
+categories: fDataset
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+地址：[http://vis-www.cs.umass.edu/lfw/](http://vis-www.cs.umass.edu/lfw/)
+
+### 简介
+
+       无约束自然场景人脸识别数据集，内含超过13,233张收集自互联网的人脸照片，共5,749人，其中1680人含有两张或以上的人脸图片，每张人脸图像都有其唯一的姓名和序号标签加以区分。
+
+	   LFW图片中含有4个不同的子集，包括原始图片集和三个采用不同对齐方式的对齐图片集。通测试时用的都是自己对齐的图片。
+
+### 训练/测试方式
+
+   大概情况如图所示：
+  
+<center><img src="{{ site.baseurl }}/images/pdDataset/lfw1.png"></center>
+
+   而LFW人数少，大多都只用来做测试。如图中view2，在pairs.txt中有随机生成的6000对，其中3000对是同属一个人，另外3000对不同的人。
+
+   具体的pairs.txt如下,第一行的10表示10个子集（每个子集600对），300表示300匹配图片（同一身份的对），即总共有10个子集，每个子集中的前300对是同一身份的。而第二行的Abel_Pacheco 1 4 表示这个文件夹的Abel_Pacheco_0001.jpg 和Abel_Pacheco_0004.jpg。
+
+///////////////////////////////////////
+10	300
+Abel_Pacheco	1	4
+Akhmed_Zakayev	1	3
+Akhmed_Zakayev	2	3
+Amber_Tamblyn	1	2
+Anders_Fogh_Rasmussen	1	3
+Anders_Fogh_Rasmussen	1	4
+///////////////////////////////////////
+
+### LFW结果分类
+
+1. Unsupervised：无监督；
+
+2. Image-Restricted, No Outside Data：图像受限，无外部数据；
+
+3. Unrestricted, No Outside Data：无限制，无外部数据；
+
+4. Image-Restricted, Label-Free Outside Data：图像受限，无标签的外部数据；
+
+5. Unrestricted, Label-Free Outside Data：无限制，无标签的外部数据；
+
+6. Unrestricted, Labeled Outside Data：无限制，标记的外部数据（我们测试大多属这种情况，利用外部数据训练，然后用LFW进行测试）；
+
+7. Human Performance：人为判断。
+
+### 刷榜测试规则
+
+   在LFW中已发现有部分标签是错误的，为了避免混淆，已发现的错误标签并未进行更正。而在测试的时候，若无特别声明的情况下，按LFW给出的标签而准。即不另外纠正错误，网络输出结果与给出的标签不一致即为错误，无论原本标签是否有错，因为榜单上以往的结果都是在未纠正标签的情况下测的数据。
+   
+<center><img src="{{ site.baseurl }}/images/pdDataset/lfw2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/lfw3.png"></center>
+
+   准确率：accuracy = ( TP + TN ) / ( P + N )，即准确率 accuracy = ( 正确判断正对的数量 + 正确判断负对的数量) / 6000。
+
+* ROC横坐标为FPR ( false positive rate ) = FP / ( FP + TN ) = 实际为负却预测为正 / 实际负对的数量 = 误识率。
+
+* ROC纵坐标为TPR ( true positive rate ) = TP / ( TP + FN ) = 实际为正也预测为正 / 实际正对的数量。
+
+* 误识率（FAR，False Accept Rate）：FP / ( FP + TN ) = 实际为负却预测为正的 / 实际负对的数量。
+
+* 拒识率（FRR，False Reject Rate）：FN / ( TP + FN ) = 实际为正却预测为负的 / 实际正对的数量。
+
+### 近期榜单数据
+
+   第6项（无限制，标记的外部数据）的近期榜单情况如下图。可看到，准确率已基本达到极限，所以目前LFW已无太大的刷榜意义。
+   
+<center><img src="{{ site.baseurl }}/images/pdDataset/lfw4.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/lfw5.png"></center>
