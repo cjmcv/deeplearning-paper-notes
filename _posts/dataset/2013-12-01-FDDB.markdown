@@ -1,0 +1,69 @@
+---
+title: (Face-Detection) - FDDB
+date: 2016-10-01 19:00:00
+categories: fDataset
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+地址：[http://vis-www.cs.umass.edu/fddb/](http://vis-www.cs.umass.edu/fddb/)
+
+### 简介
+
+       FDDB(Face Detection Data Set and Benchmark)，无约束人脸检测测试数据集，主要来源是Faces in the Wild [http://tamaraberg.com/faceDataset/index.html] 人脸数据集，采集于新闻网站。通过去重和椭圆拟合后得到最终的FDDB数据集。
+
+1. 共2845张图像，含5171个人脸;
+
+2. 人脸图像情况多样化，含遮挡、多角度、低分辨率和失焦等。
+
+3. 标注区域为椭圆形；
+
+4. 包含灰度和彩色图像。
+
+### 人脸标注
+
+   人脸区域剔除规则：1、高或宽小于20个像素的剔除；2、人脸的双眼（或眼镜）被遮挡的剔除；3、对于模棱两可的模糊/遮挡/远离摄像头等情况，以人为判断为主，通过多个人对改图的标注情况进行统计后再作出划分。
+
+   标注区域：
+  
+<center><img src="{{ site.baseurl }}/images/pdDataset/fddb1.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/fddb2.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/fddb3.png"></center>
+
+   标签数据格式：
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/fddb4.png"></center>
+
+### 评估标准
+
+   设d为检测输出，l为标签，则重叠度定义为<img src="{{ site.baseurl }}/images/pdDataset/fddb5.png">，匹配规则为<img src="{{ site.baseurl }}/images/pdDataset/fddb6.png">，每个标签只允许一个检测框与之相对应，重复检测视为错误检测。
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/fddb7.png"></center>
+
+   有两种打分制度，分别为离散分数（Discrete Score）和连续分数（Continuous Score）：
+   
+<center><img src="{{ site.baseurl }}/images/pdDataset/fddb8.png"></center>
+   
+### 结果权衡指标
+
+* 检测准确率P = 检测到的真人脸数/所有检测到的算法认为是人脸的数目，对应误检。
+
+* 检测召回率R = 检测到的真人脸数/测试图片上的所有人脸的数目，对应漏检。
+
+* ROC横坐标为FP ( false positive) = FP = 实际为负却预测为正 = 误检数。
+
+* ROC纵坐标为TPR ( true positive rate ) = TP / ( TP + FN ) = 实际为人脸也检测到是人脸 / 实际人脸数量。
+
+### 近期榜单数据
+
+* 离散，在FP=150时：FaceBoxes为0.926707；DeepIR为0.947592，PyramidBox为0.937343；（PyramidBox于2018年3月由百度提出）
+
+* 离散，在FP=2000时：FaceBoxes为0.969832；mtcnn为0.9504，PyramidBox为0.993618；
+
+* 连续，在FP=150时：FaceBoxes为0.802633；DeepIR为0.831841，PyramidBox为0.821754；
+
+* 连续，在FP=2000时：FaceBoxes为0.836065；PyramidBox为0.865304；
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/fddb9.png"></center>
