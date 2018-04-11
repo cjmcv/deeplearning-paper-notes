@@ -23,10 +23,10 @@ title: Algorithms
 	            {% for post in category.last %}
 	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
 	            {% endfor %}
-	          </ul>
+	          </ul>  
+			</div>
             {% endif %}
 	      {% endfor %}
-          </div>
         </div>
       </div>
     </div>
@@ -45,12 +45,12 @@ title: Algorithms
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
 	            {% endfor %}
-	          </ul>
+	          </ul>  
+			</div>
             {% endif %}
 	      {% endfor %}
-          </div>
         </div>
       </div>
     </div>
@@ -70,12 +70,12 @@ title: Algorithms
               <!---<h2>{{ category | first }}</h2>-->
 	          <ul class="arc-list">
 	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
 	            {% endfor %}
 	          </ul>
+			</div>
             {% endif %}
 	      {% endfor %}
-          </div>
         </div>
       </div>
     </div>
@@ -94,12 +94,12 @@ title: Algorithms
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
 	            {% endfor %}
-	          </ul>
+	          </ul>     
+			</div>
             {% endif %}
 	      {% endfor %}
-          </div>
         </div>
       </div>
     </div>
@@ -118,12 +118,12 @@ title: Algorithms
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
 	            {% endfor %}
 	          </ul>
+			</div>
             {% endif %}
-	     {% endfor %}
-          </div>
+	      {% endfor %}
         </div>
       </div>
     </div>
@@ -142,12 +142,12 @@ title: Algorithms
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
 	            {% endfor %}
-	          </ul>
+	          </ul>  
+			</div>
             {% endif %}
 	      {% endfor %}
-          </div>
         </div>
       </div>
     </div>
@@ -166,12 +166,12 @@ title: Algorithms
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
 	            {% endfor %}
 	          </ul>
-            {% endif %}
+			</div>
+			{% endif %}
 	      {% endfor %}
-          </div>
         </div>
       </div>
     </div>
@@ -190,12 +190,12 @@ title: Algorithms
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
 	            {% endfor %}
-	          </ul>
+	          </ul>	
+			</div>
             {% endif %}
 	      {% endfor %}
-          </div>
         </div>
       </div>
     </div>
@@ -214,7 +214,7 @@ title: Algorithms
             <div class="post">
 	          <ul class="arc-list">
 	            {% for post in category.last %}
-	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url }}">{{ post.title }}</a></li>
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
 	            {% endfor %}
 	          </ul>
             </div>			  
