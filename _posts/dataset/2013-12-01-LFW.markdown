@@ -60,6 +60,8 @@ categories: fDataset
 
 * 拒识率（FRR，False Reject Rate）：FN / ( TP + FN ) = 实际为正却预测为负的 / 实际正对的数量。
 
+   链接：[https://stackoverflow.com/questions/30503766/how-can-i-calculate-the-failed-acceptance-rate-and-false-recognition-rate](https://stackoverflow.com/questions/30503766/how-can-i-calculate-the-failed-acceptance-rate-and-false-recognition-rate) 、[https://blog.csdn.net/colourful_sky/article/details/72830640](https://blog.csdn.net/colourful_sky/article/details/72830640)
+   
 ### 近期榜单数据
 
    第6项（无限制，标记的外部数据）的近期榜单情况如下图。可看到，准确率已基本达到极限，所以目前LFW已无太大的刷榜意义。
