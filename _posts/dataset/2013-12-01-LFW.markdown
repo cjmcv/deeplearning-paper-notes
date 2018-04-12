@@ -50,15 +50,15 @@ categories: fDataset
 
 <center><img src="{{ site.baseurl }}/images/pdDataset/lfw3.png"></center>
 
-   准确率：accuracy = ( TP + TN ) / ( P + N )，即准确率 accuracy = ( 正确判断正对的数量 + 正确判断负对的数量) / 6000。
+   准确率：accuracy = ( TP + TN ) / ( P + N )，即准确率 accuracy = ( 正确判断正对的数量 + 正确判断负对的数量) / 所有测试数量 = 所有正确的判定数量 / 应该要正确判定的数量（即全部）。
 
-* ROC横坐标为FPR ( false positive rate ) = FP / ( FP + TN ) = 实际为负却预测为正 / 实际负对的数量 = 误识率。
+* ROC横坐标为FPR ( false positive rate ) = FP / ( FP + TN ) = 实际为负却预测为正 / 实际负对的数量 = 误识率，假正率，即实际是假的但判为真，那么应以假的数量为分母，当所有假的都判为真，则为1。
 
-* ROC纵坐标为TPR ( true positive rate ) = TP / ( TP + FN ) = 实际为正也预测为正 / 实际正对的数量。
+* ROC纵坐标为TPR ( true positive rate ) = TP / ( TP + FN ) = 实际为正也预测为正 / 实际正对的数量 = 真正率，即实际是真也判为真，那么应以真的数量为分母，当所有真都判为真时，则为1。
 
-* 误识率（FAR，False Accept Rate）：FP / ( FP + TN ) = 实际为负却预测为正的 / 实际负对的数量。
+* 误识率（FAR，False Accept Rate）：FP / ( FP + TN ) = 实际为负却预测为正的 / 实际负对的数量 = 错误接收率，即误识别率。
 
-* 拒识率（FRR，False Reject Rate）：FN / ( TP + FN ) = 实际为正却预测为负的 / 实际正对的数量。
+* 拒识率（FRR，False Reject Rate）：FN / ( TP + FN ) = 实际为正却预测为负的 / 实际正对的数量 = 拒绝接收率，即实际应该接收的但未接受，应以所有实际应该接受的数量为分母，当所有应该接受的都为接受时，则为1。
 
    链接：[https://stackoverflow.com/questions/30503766/how-can-i-calculate-the-failed-acceptance-rate-and-false-recognition-rate](https://stackoverflow.com/questions/30503766/how-can-i-calculate-the-failed-acceptance-rate-and-false-recognition-rate) 、[https://blog.csdn.net/colourful_sky/article/details/72830640](https://blog.csdn.net/colourful_sky/article/details/72830640)
    
