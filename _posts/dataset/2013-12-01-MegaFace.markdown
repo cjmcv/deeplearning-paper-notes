@@ -1,0 +1,77 @@
+---
+title: (Face-Verification-Identification) - MegaFace
+date: 2016-10-01 19:00:00
+categories: fDataset
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文：Kemelmachershlizerman I, Seitz S M, Miller D, et al. The MegaFace Benchmark: 1 Million Faces for Recognition at Scale[J]. 2015:4873-4882.
+
+地址：[http://megaface.cs.washington.edu/](http://megaface.cs.washington.edu/)
+
+### 简介
+
+       最新的人脸识别算法在以往的主要测试基准LFW上已经达到了接近完美的结果，对新算法的进一步提升已没有太大的参考价值，所以提出了一个百万级的测试基准MegaFace（LFW中只有1.3W图片 / 5K个人）。里面人脸验证和人脸识别都有评估，在多姿态和跨年龄下，同时根据训练集的大小（图片数和个人数）来评估算法的性能。MegaFace的图片是在由雅虎放出的含1亿图片的Flickr数据集的基础上进一步提取和处理得到的。
+
+* 干扰样本集：100w张图片，69w个人，为Megaface数据集的主体部分。
+
+* 训练集：采用MF2训练集，取自Flickr（雅虎数据集），含470w张图片，67w个人，平均每个人有7张图片（最少3张，最多2469张）。用于challenge2。
+
+* 测试集分两个：采用FaceScrub Celebrities和FGNet Age-invariant non-celebrities。
+
+* 挑战项分两个：Challenge 1是在任意数据库上进行训练，然后在100w干扰图片下进行测试；Challenge 2是在给定的470w图片67w人的MF2训练集上进行训练后测试。
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/megaface1.png"></center>
+
+### Identification
+
+   1：n闭集人脸识别，即给定一个probe图像和一个至少包含一个有相同身份的图像的gallery，遍历gallery中所有图像，由算法基于与probe的相似度进行排序。而probe集包含有N个人，里面的每个人都有M张图像。
+
+   对每个人，逐一把M张图像中的一张抽出来放入到gallery的干扰集中，然后把其余的M-1张作为probe进行测试。结果以累积特征匹配(CMC, Cumulative Match Characteristics）呈现出来，CMC即从probe集合中被抽取放到gallery中的那张图像，在测试时被任意probe以rank=K成功挑选出来的概率。
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/megaface2.png"></center>
+
+   性能以ROC曲线来评估，共有三个指标：rank-N、识别率、干扰图像数量。如图7，展示了不同ranks的结果。rank-1表示正确匹配的结果在整个数据集上取得最高分，rank-10即正确匹配结果的评分排在前10位。a、b、c图是在FaceScrub上的测试结果，d、e、f则对应FGNET。可以看到随着gallery的增加，准确率会下降，而当干扰图像集达到一百万的规模时，逐渐趋于平稳。在FGNET中的测试，还可以看到一个很明显的现象，那就是除了FaceNet能保持与在FaceScrub测试集接近的性能外，几乎所有算法的性能都下降很多。
+
+   MegaFace竞赛中主要看的是rank-1，以识别率为纵坐标，以干扰图像数量为横坐标，分别算出在10, 100, 1000, 10000, 100000, 1000000个干扰图像下的识别率，作出ROC曲线，如下官网的截图。而官网表格上的识别率则表示的是在一百万干扰图片下的rank-1识别率。
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/megaface3.png"></center>
+
+   而在项目的动态人脸识别中，测识别率测试的是开集，但实际每个测试人员在库内都会有一张照片。主体流程大致相同（将目标图片与在库内匹配搜索，找到rank-1的底库图像），但一般还需额外设定一个阈值，rank-1的相似度要超过阈值才统计到识别率内，rank-1若未超过阈值则认为是拒识。（识别率：正确识别个数/应该要正确识别的个数=正确识别个数/全部；拒识率：应识别却未识别/应识别的个数）。同时误识率也需要测试，测试人员在库内均无照片，流程一致，找rank-1，若有超过阈值的为误识。（误识率：应不识别的却识别了/应不识别的个数，因为测试人员在库内均无照片，所以为误识个数/总个数）。
+
+* 注：闭集 - 已知此人在该数据集中；开集 - 不知道此人在不在这个数据集中；probe - 要识别的目标，由FaceScrub和FGNet提供；gallery - 图像集，这里含干扰图像集和一张probe，其中干扰图像集由Megaface提供；MegaFace中比对采用的是L2 distance。
+
+### Verification
+
+   1：1人脸验证，即给定一对图像，由算法去判断这两张图像内是否同一个人。为评估人脸验证算法，计算probe数据集和Megaface干扰数据集的所有图像对，总有有40亿个负对。结果以ROC曲线呈现出来，能在FP误报（falsely accepting non-match pairs）和FN拒识（falsely rejecting match pairs）之间权衡。LFW中测试的就是人脸验证，与在Megaface使用10个干扰图像的情况相等。
+
+   性能以ROC曲线来评估，横坐标为FPR（误识率），纵坐标为TPR。需要注意的是，LFW这样的小库对算法评估时，因为数据量太少，FAR一般只能看到1%-5%，难以评判的顶尖算法，所以对于Megaface这样的大库则FAR要看到十万分之一（10-5）或百万分之一（10-6）上才有意义。而如下图a、b结果可以看到，对于干扰图片的数量在达到一定量级时对ROC曲线并没有太大影响，也可以预估到在百万张干扰图图片下，结果也一样。
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/megaface4.png"></center>
+
+### Probe set
+
+   MegaFace主要是用来生成含大量干扰图像的gallery，而对于probe数据集，则采用了FaceScrub和FG-NET aging数据集。
+
+* FaceScrub数据集中包含10w图像530个人，其中有55,742张265个男性和52,076张265个女性。为了提高效率，算法评估中只随机选取其中每人含图像超过50张的80人（40男40女），并每人中随机选50张图像，进行测试。
+
+* FG-NET数据集中包含975张图像82个人，其中的一些人的图像的年龄跨度超过40年。主要用于评估算法在年龄跨度大的情况下的识别性能。正对的数量。
+
+### 近期榜单数据
+
+   测试项目分两个：Challenge 1是在任意数据库上进行训练，Challenge 2是在给定的470w图片67w人的MF2训练集上进行训练。每个Challenge下分两个测试集：FaceScrub和FGNet。每个测试集下分4个测试项目，其中Identification Rate vs. Distractors Size、Identification Rate vs. Rank、Verification三项为两个测试集的共同测试项目，还有第四项在FaceScrub中的是Pose Invariance，在FGNet中的是Age Invariance。通常我们最关注的是FaceScrub和FGNet在Identification Rate vs. Distractors Size这个项目中的结果。
+
+   以下显示的结果都是Identification Rate vs. Distractors Size这一项的，输出的识别率是在一百万distractors下的rank-1结果。 
+
+* Challenge 1：
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/megaface5.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/megaface6.png"></center>
+
+* Challenge 2：
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/megaface7.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDataset/megaface8.png"></center>
