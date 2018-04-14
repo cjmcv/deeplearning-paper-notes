@@ -63,7 +63,7 @@
 * || [Capsule](https://cjmcv.github.io/deeplearning-paper-notes/ftrick/2017/11/17/Capsule.html) || [BN](https://cjmcv.github.io/deeplearning-paper-notes/ftrick/2016/11/06/BN.html) || [ZFNet](https://cjmcv.github.io/deeplearning-paper-notes/ftrick/2016/09/10/ZFNET.html) ||
 
 ### 数据集
-* || [For-SR](https://cjmcv.github.io/deeplearning-paper-notes/fdataset/2016/10/01/ForSR.html) || [LFW](https://cjmcv.github.io/deeplearning-paper-notes/fdataset/2016/10/01/LFW.html) || [FDDB](https://cjmcv.github.io/deeplearning-paper-notes/fdataset/2016/10/01/FDDB.html) ||
+* || [For-SR](https://cjmcv.github.io/deeplearning-paper-notes/fdataset/2016/10/01/ForSR.html) || [LFW](https://cjmcv.github.io/deeplearning-paper-notes/fdataset/2016/10/01/LFW.html) || [FDDB](https://cjmcv.github.io/deeplearning-paper-notes/fdataset/2016/10/01/FDDB.html) || [MegaFace](https://cjmcv.github.io/deeplearning-paper-notes/fdataset/2016/10/01/MegaFace.html) ||
 
 -------------
 
