@@ -20,7 +20,7 @@
 * 2015.01-2015.06: || [Selective-Search](https://cjmcv.github.io/deeplearning-paper-notes/fdetect/2015/12/05/Selective-Search.html) || [DPM](https://cjmcv.github.io/deeplearning-paper-notes/fdetect/2015/03/12/DPM.html) ||
 
 ### 人脸识别/目标分类
-* 2018.01-2018.06: || [Attention](https://cjmcv.github.io/deeplearning-paper-notes/freg/2018/04/22/Attention.html) || [DiracNets](https://cjmcv.github.io/deeplearning-paper-notes/freg/2018/04/24/DiracNets.html) ||
+* 2018.01-2018.06: || [Attention](https://cjmcv.github.io/deeplearning-paper-notes/freg/2018/04/22/Attention.html) || [DiracNets](https://cjmcv.github.io/deeplearning-paper-notes/freg/2018/04/24/DiracNets.html) || [ArcFace](https://cjmcv.github.io/deeplearning-paper-notes/freg/2018/04/27/ArcFace.html) ||
 
 * 2017.07-2017.12: || [DPN](https://cjmcv.github.io/deeplearning-paper-notes/freg/2017/12/24/DPN.html) || [ResNeXt](https://cjmcv.github.io/deeplearning-paper-notes/freg/2017/12/15/ResNeXt.html) || [IGC](https://cjmcv.github.io/deeplearning-paper-notes/freg/2017/12/10/IGC.html) || [DenseNet](https://cjmcv.github.io/deeplearning-paper-notes/freg/2017/10/21/DenseNet.html) || [FractalNet](https://cjmcv.github.io/deeplearning-paper-notes/freg/2017/10/14/FractalNet.html) || 
 
