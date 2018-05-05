@@ -38,6 +38,10 @@ categories: fDataset
 
 * 检测召回率R = 检测到的真人脸数/测试图片上的所有人脸的数目，对应漏检。
 
+   曲线旁边框内列的数值为mAP值，这里只检测人脸，即为该曲线下的面积。
+   
+   note：mAP(mean average precision)，目标检测中衡量识别精度的指标。在多个类别物体检测中，每一个类别都可以根据recall和precision绘制一条曲线，AP就是该曲线下的面积，mAP是多个类别AP的平均值 - [link](https://www.zhihu.com/question/53405779)
+
 ### 近期榜单数据（2018.04.25）
 
 * Scenario-Ext（使用任意额外的训练数据），Faceness：0.704 / 0.573 / 0.273 - Easy / Medium / Hard。
