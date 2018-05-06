@@ -1,0 +1,67 @@
+---
+title: PCN（CVPR, 2018）
+date: 2018-05-06 16:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Shi X, Shan S, Kan M, et al. Real-Time Rotation-Invariant Face Detection with Progressive Calibration Networks[J]. 2018.
+
+Github：[https://github.com/Jack-CV/PCN](https://github.com/Jack-CV/PCN)
+
+### 论文算法概述
+
+   提出Progressive Calibration Networks (PCN)能实现实时且旋转不变的人脸检测。PCN共包含三个阶段，每个阶段不仅判断目标是否人脸，还会校正人脸的旋转方向。对于旋转角度预测，仅在PCN的前两个阶段预测粗略的旋转方向，第三阶段则通过多任务训练的方式联合校正任务、分类任务和边框回归任务来完成最后的准确预测。校正过程被分成了多个渐进的步骤，逐步减小平面旋转角度范围，并在这情况下使用二分类区分是否人脸，PCN可以在360度的平面旋转下准确检测出人脸。
+
+   对于旋转人脸检测，传统的处理策略有三个，分别如下：
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/pcn1.png"></center>
+
+   文中的处理策略：
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/pcn2.png"></center>
+
+   网络结构：
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/pcn3.png"></center>
+   
+### PCN-1 in 1st stage
+
+   对于每个输入窗口x，PCN-1都有三个目标：人脸二分类、边框回归和校正，则定义公式如下：<img src="{{ site.baseurl }}/images/pdDetect/pcn4.png">。其中F1是检测器第一阶段的带有一个小CNN的结构，f为人脸置信度，t为表示预测边框回归的向量，g为方向评分。
+
+   第一个目标是使用softmax做人脸二分类：<img src="{{ site.baseurl }}/images/pdDetect/pcn5.png">，其中如果x是人脸，则y=1，否则y=0。
+
+   第二个目标是回归边框：<img src="{{ site.baseurl }}/images/pdDetect/pcn6.png">，其中t是预测框，另一个则为GT框，而S是smooth L1 loss。边框回归包含以下三项，其中a、b、w表示方框的左上角坐标和宽度，而带星号的变量表示的是GT的，否则是预测的。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/pcn7.png"></center>
+
+   第三个目标则是由该论文提出的，以二分类的方式预测人脸候选框的大概方向：<img src="{{ site.baseurl }}/images/pdDetect/pcn8.png">，其中如果x是下巴朝下正脸，y=1，而如果x为下巴朝上倒立的人脸，则y=0。
+
+   整体来说，第一阶段的PCN-1的目标函数为：<img src="{{ site.baseurl }}/images/pdDetect/pcn9.png">，两个入为平衡因子。那么PCN-1即可用于对所有窗口进行过滤，以获得少量的人脸候选框。对于这些人脸候选框，首先需要以PCN-1的结果更新回归框，然后再根据PCN-1中粗略估计的旋转角度进行旋转校正。其中的角度theta1，在当g>=0.5时，theta1=0度，没有旋转更新的需要，而g<0.5则theta1=180度。那么一次粗略的旋转校正后，其旋转角度范围就由[-180，180]变成[-90，90]了，范围得到缩小。
+
+   在大多数数据集上主要包含正立的人脸，不太适合这里的训练，所以作者旋转的训练样本组成新的训练库。在训练过程过，训练样本分成三个部分：正样本、负样本和疑似样本。其中IOU超过0.7的是正样本，小于0.3的是负样本，在0.4到0.7的是疑似样本。正样本和负样本用于训练人脸二分类，正样本和疑似样本用于边框回归和方向校正。对于正样本和疑似样本，如果它们的平面旋转角度在[-65，65]之间，我们将其定义为正立人脸，如果在[-180，-115]或[115，180]之间的定义为倒立人脸。而旋转角度不在这些范围的将不用于校正的训练。
+
+### PCN-2 in 2st stage
+
+   与PCN-1相似，PCN-2在第二阶段，在PCN-1的基础上进一步做人脸二分类、回归和校正人脸候选框。不同的是在第二阶段中，粗略的方向预测变成了三分类,分别是[-90，-45]、[-45，45]、[45，90]。令g0/g1/g2分别为三分类的评分，设最高分者类别为id，那么当id=0时，旋转校正角度theta2=-90，id=1时theta2=0，id=2时theta2=90。以该角度对候选人脸框进行旋转(-90度、0度或90度)完成校正，那么旋转角度范围就从[-90，90]缩小到[-45，45]了。
+
+   在第二阶段的训练过程中，我们将原始训练样本统一旋转到[-90,90]范围内，并通过训练好的PCN-1过滤困难的负样本。在校正任务中，正样本和疑似样本的旋转范围在[-90,-60],[-30,30],[60,90]分别对应标签0，1，2。而不在这三个范围内的不参与校正任务的训练。
+
+### PCN-3 in 3st stage
+
+   在第二阶段后，所有的人脸候选框都校正到[-45，45]的角度范围内了。因此，第三阶段的PCN-3直接回归具体的旋转角度而不再做粗略的估计了。最后的人脸旋转角度可以以三个阶段的角度结果累计得到。
+
+   在第三阶段的训练过程中，我们将原始图像统一旋转到[-45,45]之间，并通过训练好的PCN-2过滤困难负样本。这校正分支是一个回归任务，有smooth L1 loss进行监督训练。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/pcn10.png"></center>
+
+### Experiments
+ 
+   在实验的训练过程中，样本比例正：负：疑似 = 2：2：1。测试数据集是将原始数据集进行旋转后，再进入测试的。如将原始的FDDB进行-90、90和180度旋转后得到的Multi-Oriented FDDB，在上面进行算法验证。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/pcn11.png"></center>
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/pcn12.png"></center>
+
+
