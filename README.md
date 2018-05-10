@@ -35,7 +35,7 @@
 * 2015.01-2015.06: || [DeepID](https://cjmcv.github.io/deeplearning-paper-notes/freg/2015/06/29/DeepID.html) || [AlexNet](https://cjmcv.github.io/deeplearning-paper-notes/freg/2015/06/20/AlexNet.html) ||
 
 ### 人脸对齐
-* 2016.07-2016.12: || [MDM](https://cjmcv.github.io/deeplearning-paper-notes/falign/2016/08/16/MDM.html) || [MTCNN](https://cjmcv.github.io/deeplearning-paper-notes/fdetect/falign/2016/10/01/MTCNN.html) || [DRDA](https://cjmcv.github.io/deeplearning-paper-notes/falign/2016/08/06/DRDA.html) || [CJCRF](https://cjmcv.github.io/deeplearning-paper-notes/falign/2016/08/02/CJCRF.html) || [OpenFace](https://cjmcv.github.io/deeplearning-paper-notes/falign/2016/06/12/OpenFace.html) ||
+* 2016.07-2016.12: || [MDM](https://cjmcv.github.io/deeplearning-paper-notes/falign/2016/08/16/MDM.html) || [DRDA](https://cjmcv.github.io/deeplearning-paper-notes/falign/2016/08/06/DRDA.html) || [CJCRF](https://cjmcv.github.io/deeplearning-paper-notes/falign/2016/08/02/CJCRF.html) || [OpenFace](https://cjmcv.github.io/deeplearning-paper-notes/falign/2016/06/12/OpenFace.html) ||
 
 * 2016.01-2016.06: || [CFSS](https://cjmcv.github.io/deeplearning-paper-notes/falign/2016/01/26/CFSS.html) || [CLandmark](https://cjmcv.github.io/deeplearning-paper-notes/falign/2016/01/23/Clandmark.html) || 
 
@@ -52,7 +52,7 @@
 * 2016.01-2016.06: || [FCN](https://cjmcv.github.io/deeplearning-paper-notes/fmask/2016/03/15/FCN.html) || 
 
 ### 网络压缩
-* 2018.01-2018.06: || [ShuffleNet](https://cjmcv.github.io/deeplearning-paper-notes/freg/2018/05/08/ShuffleNet.html) || 
+* 2018.01-2018.06: || [ShuffleNet](https://cjmcv.github.io/deeplearning-paper-notes/fcompress/2018/05/08/ShuffleNet.html) || 
 
 * 2017.07-2017.12: || [Deep-Compression](https://cjmcv.github.io/deeplearning-paper-notes/fcompress/2017/11/12/DeepCompression.html) || [SqueezeNet](https://cjmcv.github.io/deeplearning-paper-notes/fcompress/2017/08/12/SqueezeNet.html) || 
 

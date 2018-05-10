@@ -1,24 +1,29 @@
 ---
 title: MTCNN（2016）
 date: 2016-10-01 19:00:00
-categories: fDetect fAlign
+categories: fDetect
 ---
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-代码：[https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html?from=timeline&isappinstalled=1](https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html?from=timeline&isappinstalled=1)
-
 论文：Zhang K, Zhang Z, Li Z, et al. Joint Face Detection and Alignment using Multi-task Cascaded Convolutional Networks[J]. 2016.
+
+代码：[https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html](https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html)
 
 ### 论文算法概述
 
-       使用级联卷积网络的方式同时实现人脸检测和人脸对齐，则该框架整体上有三个任务（是否人脸，人脸方框回归，关键点回归），共使用了三个卷积网络：第一级，使用全卷积神经网络获取候选框及其回归向量，利用回归向量对候选框进行校正并使用非极大值抑制NMS来融合框；第二级，将前面得到的候选框输入到另一个CNN中，也同样进行方框回归和NMS；第三级，与第二级类似，但更注重细节并添加了人脸关键点的回归。
-       在训练时，对于是否人脸的二分类问题，使用cross-entropy loss，而对于方框回归和特征点回归都采用Euclidean loss。同时训练过程中采用了Online Hard sample mining，在前向过程得到每个样本的loss，对minibatch中每个样本的loss进行排序，选取前70%作为困难样本，在反向传播中只传递由困难样本得到的梯度。
-
+       使用级联卷积网络的方式同时实现人脸检测和人脸对齐，则该框架整体上有三个任务（是否人脸，人脸方框回归，关键点回归），共使用了三个卷积网络进行级联：第一级P-Net，使用全卷积神经网络获取候选框及其回归向量，利用回归向量对候选框进行校正并使用非极大值抑制NMS来融合框；第二级RNet，将前面得到的候选框输入到另一个CNN中进行训练，用全连接的方式进行方框回归，也同样做NMS；第三级，与第二级类似，但更注重细节。
+	   
 <center><img src="{{ site.baseurl }}/images/pdDetect/mtcnn1.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/mtcnn2.png"></center>
 
+### 训练
+
+   训练内容主要包含三项：是否为人脸、边框回归、人脸关键点定位。对于是否人脸的二分类问题，使用cross-entropy loss，而对于方框回归和特征点回归都采用Euclidean loss。采用的是三个网络级联的方式，训练时三个网络单独训练，先用原始样本生成PNet的训练样本去训练PNet，完成后用PNet的输出结果生成hard样本供RNet训练，最后类似由RNet生成ONet的训练样本。
+
+   同时训练过程中采用了Online Hard sample mining，在前向过程得到每个样本的loss，对minibatch中每个样本的loss进行排序，选取前70%作为困难样本，在反向传播中只传递由困难样本得到的梯度。
+
+   训练样本分成4部分：人脸正样本(positives)：非人脸负样本(negatives)：部分脸(partfaces)：关键点(landmark) = 1：3：1：2，positives、negatives和partfaces由随机选取的框与GT框的IOU来决定，大于0.65为positives，小于0.3为negatives，0.4到0.65之间的为partfaces。其中positives和negatives参与人脸二分类任务，positives和partfaces参与到边框回归任务。作者在训练时PNet和RNet只处理人脸二分类和边框回归，只有在最后的ONet才额外添加了关键点定位。其中loss的权重占比是人脸分类：边框回归：关键点回归=1：0.5：0.5。
+
 <center><img src="{{ site.baseurl }}/images/pdDetect/mtcnn3.png"></center>
-
-
