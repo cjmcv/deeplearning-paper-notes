@@ -19,12 +19,13 @@ categories: fDetect
 
 ### 使用层次聚类进行选择性搜索步骤
 
-* 1、使用Efficient GraphBased Image Segmentation中的方法来得到region; （P. F. Felzenszwalb and D. P.Huttenlocher. Efﬁcient Graph-Based Image Segmentation. IJCV, 59:167–181, 2004）
-* 2、得到所有region之间两两的相似度;
-* 3、合并最像的两个region;
-* 4、重新计算新合并region与其他region的相似度;
-* 5、重复上述过程直到整张图片都聚合成一个大的region;
-* 6、使用一种随机的计分方式给每个region打分，按照分数进行ranking，取出top k的子集，就是selective search的结果;
+* 1、使用Efficient GraphBased Image Segmentation中的方法来得到区域集R; （P. F. Felzenszwalb and D. P.Huttenlocher. Efﬁcient Graph-Based Image Segmentation. IJCV, 59:167–181, 2004）
+* 2、计算区域集R里每个相邻区域的相似度S={s1,s2,…}；
+* 3、将相似度最高的两个区域其合并为新集，添加进R；
+* 4、从S中移除所有与第三步中有关的子集;
+* 5、重新计算新合并region与其他region的相似度;
+* 6、跳至第3步，直至S为空；
+* 6、使用一种随机的计分方式给每个区域打分，按照分数进行ranking，取出top k的子集，就是selective search的结果;
 
 ### 策略多样化
 
@@ -50,3 +51,19 @@ categories: fDetect
 
 
 而MABO则为将每一类的ABO值求平均。
+
+### 总结
+
+   一种传统的基于区域的目标检测算法，先用图割的方式得到大量区域框，然后通过计算相似度做两两合并，最后随机记分并排序，取前面K个子集作为检测结果。
+  
+PS:
+
+* 图割是将图像用加权图抽象化，用两两像素点的灰度或彩色像素值的相似度做聚类；
+
+* 与基于区域相对的是基于滑动窗口；
+
+* 这里相似度计算主要是颜色和纹理；
+
+* 评价是用平均最高重叠率ABO，即对一个特定类别，每个gt对所有区域框的最高重叠度，然后对所有gt的取平均，而重叠率为交集/并集；
+
+* 随机计分数，论文是直接乘上随机数，或者可以机子采用一些别的策略，如根据区域框的融合次数赋予权重。
