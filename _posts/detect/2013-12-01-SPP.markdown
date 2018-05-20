@@ -14,7 +14,7 @@ categories: fDetect
 
 1. R-CNN中输入的候选窗口需要归一化到一定大小，如图所示裁剪和变换都可能会造成信息丢失导致识别率下降。而SPP-net可以解决这个问题。
    
-   * 分析：一个卷积神经网络一般包含有卷积层和全连接层，其中卷积层不需要固定输入大小并且可以产生各种尺寸的特征图，而SVM、softmax或全连接层则需要固定输入大小。SPP层中可以通过局部空间bins进行池化来保持图像的空间信息，而这些空间bins的大小与图像大小成正比，bins的个数则与图像大小无关。以使用alexnet为例子，将第5层的卷积层后面的池化层pool5使用SPP（空间金字塔池化）代替，在每个空间bin中池化每个滤波器的输出，则SPP的输出为256M维的向量，其中M为空间bin的数量，256为alexnet中conv5的滤波器数量。如结构图所示，划分为4*4、2*2、1*1块，然后每块进行池化，所以SPP层中得到的向量为固定长度(4*4+2*2+1*1)*256，输入到fc6中。
+   * 分析：一个卷积神经网络一般包含有卷积层和全连接层，其中卷积层不需要固定输入大小并且可以产生各种尺寸的特征图，而SVM、softmax或全连接层则需要固定输入大小。SPP层中可以通过局部空间bins进行池化来保持图像的空间信息，而这些空间bins的大小与图像大小成正比，bins的个数则与图像大小无关。以使用alexnet为例子，将第5层的卷积层后面的池化层pool5使用SPP（空间金字塔池化）代替，在每个空间bin中池化每个滤波器的输出，则SPP的输出为256M维的向量，其中M为空间bin的数量，256为alexnet中conv5的滤波器数量。如结构图所示，划分为4 x 4、2 x 2、1 x 1块，然后每块进行池化，所以SPP层中得到的向量为固定长度(4x4+2x2+1x1)x256，输入到fc6中。
 
 
 2. R-CNN在检测图像时使用selective search提取出很多个候选框（2000个），然后每个候选框都各自进行一次前向CNN特征提取与线性SVM分类，因此很耗时。而SPP-net则避免了重复计算卷积特征。
@@ -37,7 +37,7 @@ Here 75 is the offset computed by the bottom-right corner of the receptive field
 
 2. <strong>池化bins的实现:</strong>
   
-   * 设第5层卷积特征图conv5的宽和高分别为w、h，对于每个金字塔有n*n个bins，则第（i，j）个bin需要在的<img src="http://latex.codecogs.com/gif.latex? \left[ {\left\lfloor {\frac{{i - 1}}{n}w} \right\rfloor ,\left\lceil {\frac{i}{n}w} \right\rceil *\left\lfloor {\frac{{i - 1}}{n}h} \right\rfloor ,\left\lceil {\frac{i}{n}h} \right\rceil } \right]" >范围内。
+   * 设第5层卷积特征图conv5的宽和高分别为w、h，对于每个金字塔有n x n个bins，则第（i，j）个bin需要在的<img src="http://latex.codecogs.com/gif.latex? \left[ {\left\lfloor {\frac{{i - 1}}{n}w} \right\rfloor ,\left\lceil {\frac{i}{n}w} \right\rceil *\left\lfloor {\frac{{i - 1}}{n}h} \right\rfloor ,\left\lceil {\frac{i}{n}h} \right\rceil } \right]" >范围内。
 
 3. <strong>候选框大小不一，如何处理均值文件</strong>
 
@@ -51,3 +51,14 @@ Here 75 is the offset computed by the bottom-right corner of the receptive field
 
 3. 与RCNN不同，SPP-Net无法更新SPP层前面的卷积层，因为CNN调优和SVM训练分离，SVM的loss无法传播到卷积层（RCNN也一样）,即意味着只能微调全连接层，而对于很多情况下卷积层也是需要微调的，特别是层次更深的网络。
 
+### 总结
+
+   SPP叫空间金字塔池化，主要是为了处理RCNN中需要将候选框的大小归一化造成的损失，以及每个框单独重复计算的问题。
+   
+   这里前面的操作与RCNN一致，不同点是对输入全图图像做一次CNN前向，然后在根据SS的候选框去切分特征图，得到一个个大小不定的特征图块，将每个特征图块输入到一个SPP层上得到一个固定长度的特征向量，再进入fc层。
+   
+   即把候选框切分图像块改成切分特征图块，用SPP层解决固定长度的问题。
+
+PS:
+
+* 空间金字塔池化，设金字塔有三层，分别对应1x1、2x2和4x4的池化，设输入特征图通道数为256，则1x1池化得到1x1x256d向量，2x2池化得到2x2x256d，4x4池化得到4x4x256d，则最终的特征向量长度为三个数累加，维度固定，与输入特征图大小无关。
