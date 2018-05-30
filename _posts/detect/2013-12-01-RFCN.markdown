@@ -1,5 +1,5 @@
 ---
-title: R-FCN（2016）
+title: R-FCN（NIPS, 2016）
 date: 2016-10-10 19:50:00
 categories: fDetect
 ---
@@ -25,9 +25,9 @@ categories: fDetect
 
 ### 具体方法
 
-   与RCNN相似，包含region proposal和 region classification两步，其中候选框的提取采用RPN（faster rcnn中提出，其本身就是全卷积网络），将RPN和R-FCN之间的特征共享（与faster rcnn中类似）。 给出ROIs后R-FCN框架被设计用于将这些ROI进行分类。在R-FCN中，所有可学习的权重层都是卷积的并且用于整张图像的计算。最后的卷积层中每个类别都得到K^2个位置敏感的评分映射图（position-sensitive score maps）,所以对于C类物体加一类背景有k^2*(C+1)个通道数的输出。这k^2个评分映射图与具有相对位置信息的k*k的空间网格相关联。如k*k=3*3，即有9个映射图（上左，上中，上右，中左...右下）包含有物体类别信息。R-FCN以位置敏感的ROI池化层（position-sensitive RoI layer）结尾，这一层聚集了最后的卷积层的输出并为每个ROI得到对应评分。
+   与RCNN相似，包含region proposal和 region classification两步，其中候选框的提取采用RPN（faster rcnn中提出，其本身就是全卷积网络），将RPN和R-FCN之间的特征共享（与faster rcnn中类似）。 给出ROIs后R-FCN框架被设计用于将这些ROI进行分类。在R-FCN中，所有可学习的权重层都是卷积的并且用于整张图像的计算。最后的卷积层中每个类别都得到K^2个位置敏感的评分映射图（position-sensitive score maps）,所以对于C类物体加一类背景有k^2 x (C+1)个通道数的输出。这k^2个评分映射图与具有相对位置信息的k x k的空间网格相关联。如k x k=3 x 3，即有9个映射图（上左，上中，上右，中左...右下）包含有物体类别信息。R-FCN以位置敏感的ROI池化层（position-sensitive RoI layer）结尾，这一层聚集了最后的卷积层的输出并为每个ROI得到对应评分。
 
-   文中网络的骨架采用ResNet101，并去掉global average和fc分类层，而resnet101的最后一层卷积层是2048维的，所以添加一个1024维的1x1卷积层来降低维度，然后加了k^2(C+1)通道的卷积层来产生评分映射图。即最后的卷积层对每一个类别都产生k^2个评分映射图（图中每个颜色块都含有每一类别对应的评分映射图），对于w*h的ROI，池化得到的bin的大小为（w/k * h/k）。对于第（i,j）个池化单元里数值信息都只对应着第（i,j）映射图：
+   文中网络的骨架采用ResNet101，并去掉global average和fc分类层，而resnet101的最后一层卷积层是2048维的，所以添加一个1024维的1x1卷积层来降低维度，然后加了k^2(C+1)通道的卷积层来产生评分映射图。即最后的卷积层对每一个类别都产生k^2个评分映射图（图中每个颜色块都含有每一类别对应的评分映射图），对于w x h的ROI，池化得到的bin的大小为（w/k x h/k）。对于第（i,j）个池化单元里数值信息都只对应着第（i,j）映射图：
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/rfcn4.png"></center>
 
@@ -38,7 +38,7 @@ categories: fDetect
 
 ### 可视化
 
-   图中可视化了由R-FCN学习得到的k*k=3*3的position-sensitive score maps位置敏感的评分映射图。如图3中，候选框成功框选目标时，该ROI产生的k*k=9个评分映射图，池化后每个映射图得到一个池化bin，即会有3*3个bin，若每个bin的分数都较高则投票（取均值）后分数也较高，则认为是目标。反之，平均分数不高，则为非目标。
+   图中可视化了由R-FCN学习得到的k x k=3 x 3的position-sensitive score maps位置敏感的评分映射图。如图3中，候选框成功框选目标时，该ROI产生的k x k=9个评分映射图，池化后每个映射图得到一个池化bin，即会有3 x 3个bin，若每个bin的分数都较高则投票（取均值）后分数也较高，则认为是目标。反之，平均分数不高，则为非目标。
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/rfcn6.png"></center>
 
@@ -48,4 +48,10 @@ categories: fDetect
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/rfcn8.png"></center>
 
+### 总结
 
+  主要是为了处理ROI池化加全连接使位置信息丢失的问题，提出了对位置敏感的PSROIPooling。先设对位置敏感的评分映射图大小为k，类别数为C，则对特征图接上1x1且通道数为kxkx(C+1)的卷积层去重新排布特征图，截出每个ROI特征图块，各自输入到PSROIPooling中，PSROIPooling即相当于分组的ROI池化，该池化层将特征图分成kxk组，每C+1通道的特征图为一组单独进行ROI池化到固定尺度，论文直接就设成全局池化，输出为1x1x(C+1)。则共有kxk组ROI池化输出，然后将不同的组的输出特征图排布在一起组成一个kxkx(C+1)的新特征图。这样会使上面用于重排特征图用的1x1的kxkx(C+1)个卷积核中，每C+1个卷积核就对应着特征图的一个空间位置(而不是原来的每个卷积核对应一个通道的全部空间)，即带有了位置信息，训练后得到的特征图会对位置敏感。
+
+  最后对这kxk的特征图进行投票，以全局均值池化实现(即kxk大小的均值池化，即相加求平均)，最后得到的是1x1x(C+1)的特征向量，每个元素对应一个类别的评分。，假设整个ROI区域都在目标内，则PSROIPooling特征图的kxk个位置激活程度都很高，那么全局均值池化输出也会很大，假设ROI只有一半在目标内，则kxk特征图中会有一半激活程度高，另一半低，则全局均值池化输出也相对稍低一些。
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/rfcn9.png"></center>
