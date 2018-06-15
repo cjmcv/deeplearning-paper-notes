@@ -12,7 +12,7 @@ categories: fDetect fMask
 
        在Faster RCNN的基础上，添加一个与方框分类回归部分网络平行的用于每个ROI提取mask的分支，可以在检测目标的同时输出对应分割mask，该网络称为Mask RCNN。这生成mask的网络分支可以看成是一个小的应用在每个ROI上的FCN模型，以像素对像素的方式得到掩码图像。
 
-	   Mask RCNN与Faster RCNN另一个较大的改进是，针对ROIPool设计了一个像素对像素的对齐操作，称为ROIAlign。ROIPool有以下影响：1. 将生成mask的准确率从10%提升到50%； 2. 作者发现这该操作是去除mask生成和目标分类耦合性的必要一步：这里为每个类别单独去预测mask，类别由分类的网络分支决定，而没有不同类别之间的竞争关系，即对每个像素做二分类，为单纯的分割问题（实验中效果很好）；但相反，如FCN中是直接对目标生成mask而不管物体类别，则FCN实际上是对每个像素进行多分类，分割与分类的耦合性极强（实验中效果很差）。
+	   Mask RCNN与Faster RCNN另一个较大的改进是，针对ROIPool设计了一个像素对像素的对齐操作，称为ROIAlign。ROIAlign有以下作用：1. 将生成mask的准确率从10%提升到50%； 2. 作者发现这该操作是去除mask生成和目标分类耦合性的必要一步：这里为每个类别单独去预测mask，类别由分类的网络分支决定，而没有不同类别之间的竞争关系，即对每个像素做二分类，为单纯的分割问题（实验中效果很好）；但相反，如FCN中是直接对目标生成mask而不管物体类别，则FCN实际上是对每个像素进行多分类，分割与分类的耦合性极强（实验中效果很差）。
 
 <center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn1.png"></center>
 
@@ -24,20 +24,32 @@ categories: fDetect fMask
 
 ### RoIAlign
 
-   RoiPool是应用于每个Roi提取到的特征图上的基本操作，将ROI的特征转化到一个小的固定尺寸（H x W）的特征图中，设ROI宽高为w-h，则ROIPool核大小为（h/H * w/W），ROI上（y，x）的坐标直接取整映射到输出特征图上的（y/H，x/W）的坐标上，在h-w并不是H-W的整数倍时，这样运算就会涉及到浮点到整数转换的像素位置的精度损失，如横轴上可能会偏移1到W-1个像素。这点损失对分类任务影响不大，因为分类任务对物体平移具有一定不变性。但对于像素位置要求更精确的分割任务，其影响较大。
+   RoiPool是应用于每个Roi提取到的特征图上的基本操作，将ROI的特征转化到一个小的固定尺寸（H x W）的特征图中，设ROI宽高为w-h，则ROIPool核大小为（h/H x w/W），ROI上（y，x）的坐标直接取整映射到输出特征图上的（y/H，x/W）的坐标上，在h-w并不是H-W的整数倍时，这样运算就会涉及到浮点到整数转换的像素位置的精度损失，如横轴上可能会偏移1到W-1个像素。这点损失对分类任务影响不大，因为分类任务对物体平移具有一定不变性。但对于像素位置要求更精确的分割任务，其影响较大。
 
    为了解决这个问题，作者提出了ROIAlign层，对提取的特征与输入正确地对应起来。采用双线性插值的方法，（y，x）到（y/H，x/W）的映射时不取整，整块ROI进行完全均分而不舍弃部分像素，这样每个池化bin就涵盖浮点数个像素，利用双线性插值来凑整计算池化。
 
 <center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn2.png"></center>
 
+   例如，输入ROI的每个像素对应着输出特征图的1/7个像素. 则当选取输入ROI的12个像素时，在输出特征图上则对应 12 x 1/7 ~= 1.71 个像素。对于这种情形，RoIPool 会舍去小数位取整数得2，导致位置的偏差. 但在 RoIAlign中不直接取整，而是使用双线性插值（bilinear interpolation）准确获得 1.71 像素位置的信息。
+
+<center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn3.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn4.png"></center>
+
 ### Network Architecture
 
    下面介绍了两个简单的方案:
 
-<center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn3.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn5.png"></center>
 
 ### 测试结果
 
    在COCO上的表现如下表格所示，ResNet-101-FPN，采用Faster R-CNN的4步训练方法，Nvidia Tesla M40 GPU上运行195ms每帧。
    
-<center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn4.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdMask/maskrcnn6.png"></center>
+
+### 总结
+
+   在Faster RCNN的基础上，添加一个与方框分类回归部分网络平行的用于每个ROI提取mask的分支，可以在检测目标的同时输出对应分割mask。而生成mask的网络分支可以看成是一个小的应用在每个ROI上的FCN模型，以像素对像素的方式得到掩码图像。
+  
+   针对ROI池化中映射像素位置时直接取整而导致的精度问题设计了一个像素对像素的对齐操作，叫ROIAlign。采用双线性插值的方法，（y，x）到（y/H，x/W）的映射时不取整，整块ROI进行完全均分而不舍弃部分像素，这样每个池化bin就涵盖浮点数个像素，利用双线性插值来凑整计算池化。

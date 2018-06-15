@@ -8,6 +8,8 @@ categories: fDetect
 
 论文： Lin T Y, Dollár P, Girshick R, et al. Feature Pyramid Networks for Object Detection[J]. 2016.
 
+Github: [https://github.com/unsky/FPN](https://github.com/unsky/FPN)
+
 ### 论文算法概述
 
        对于多尺度物体识别，图像金字塔在手动设计特征的算法中会经常用到，如DPM需要一个较密集的图像金字塔来达到较好的识别效果，如图a。而最近大量手动设计的特征被卷积特征所取代，卷积网络具有表达更高层次语义的能力，对尺度变换鲁棒性更强，在单尺度输入上即可取得较好效果，如图b。而要取得更好的效果，卷积模型也还是需要图像金字塔的辅助，但在卷积模型上应用图像金字塔会有严重内存和时间消耗的问题。所以SSD中，提出了构建多尺度特征图，即相当于特征图金字塔来代替图像金字塔，一次前向计算即可获得全部特征图，相比图像金字塔没有太多的时间和空间的消耗，如图c。因为浅层的特征图对应的low-level feature会影响识别效果，所以SSD中为了利用high-level feature而舍弃使用具有高分辨率的低层特征图，但高层特征图都是低分辨率的，对检测小目标影响较大。
@@ -15,6 +17,8 @@ categories: fDetect
 	   所以作者提出了FPN，利用一种自上而下带有侧向连接的结构去构建在各个尺度上的高级语义特征图（high-level semantic feature maps），如figure3。输入单尺度任意大小图像，输出多个level的特征图，为全卷积结构。该结构涉及到a bottom-up pathway, a top-down pathway, and lateral connections。在Mask RCNN中有使用到。
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/fpn1.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/fpn7.png"></center>
 
 ### Bottom-up pathway
 
@@ -52,6 +56,8 @@ categories: fDetect
    
    <center><img src="{{ site.baseurl }}/images/pdDetect/fpn6.png"></center>
    
+### 总结
 
+   特征金字塔网络，如SSD用的就是特征图金字塔来处理多尺度目标检测的问题，而FPN则进一步添加了一个自顶向下和侧向连接的结构来融合高低层次的特征。高层通过上采样来使维度与低层相同，并与低层通过1x1降维后的特征图以逐位相加合并得到新特征图。这样新特征图就同时具备了高层的特征表达能力和低层的分辨率。
 
 
