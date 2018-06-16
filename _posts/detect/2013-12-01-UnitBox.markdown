@@ -1,5 +1,5 @@
 ---
-title: UnitBox（ACM MM, face++, 2016）
+title: UnitBox（Face++, ACM MM, 2016）
 date: 2017-02-12 19:00:00
 categories: fDetect
 ---
@@ -26,7 +26,7 @@ categories: fDetect
    
 <center><img src="{{ site.baseurl }}/images/pdDetect/unitbox3.png"></center>
 
-   其中~x!=1，表示像素(i,j)落入了有效的物体框内，x(t,b,l,r)均为相对该像素点的距离，则X是预测框面积，~X为GT框面积，Ih和Iw是I的交叉区域的高和宽。IOU的取值范围在0到1，而L是以IOU为输入的必要的交叉熵损失，我们可以知道IoU是采样自伯努利分布（Bernoulli distribution的一种随机变量，p(IoU=1)=1，且交叉熵损失为<img src="{{ site.baseurl }}/images/pdDetect/unitbox4.png">。与L2 Loss相比，IoU Loss将边框是为一个整体，因此预测结果会比L2 Loss的更精确；而且IoU Loss的定义自然地将IoU归一化到了[0,1]而不论方框的尺度大小，这样可以使网络进行多尺度训练单尺度测试。
+   其中~x!=1，表示像素(i,j)落入了有效的物体框内，x(t,b,l,r)均为相对该像素点的距离，则X是预测框面积，~X为GT框面积，Ih和Iw是I的交叉区域的高和宽。IOU的取值范围在0到1，而L是以IOU为输入的必要的交叉熵损失，我们可以知道IoU是采样自伯努利分布（Bernoulli distribution的一种随机变量，p(IoU=1)=1，且交叉熵损失为<img src="{{ site.baseurl }}/images/pdDetect/unitbox4.png">。与L2 Loss相比，IoU Loss将边框视为一个整体，因此预测结果会比L2 Loss的更精确；而且IoU Loss的定义自然地将IoU归一化到了[0,1]而不论方框的尺度大小，这样可以使网络进行多尺度训练单尺度测试。
    
 ### IoU Loss Layer: Backward
 
@@ -43,3 +43,9 @@ categories: fDetect
    测试时以人脸检测为例，首先在阈值化的热力图上使用椭圆去拟合人脸。而人脸的椭圆较粗糙不足以定位物体，则在这基础上选择这些人脸椭圆的中心点像素，根据这些被选择的像素提取出相应的边界框。
 
    <center><img src="{{ site.baseurl }}/images/pdDetect/unitbox6.png"></center>
+
+### 总结
+
+   认为L2 Loss用于边框回归的两个缺点：1、把边框4个坐标点看成独立的变量进行回归，但实际上四个坐标点是高度相关的。2、L2 Loss是非归一化的，所以对大框的惩罚会更大，会导致网络更关注大目标。
+   
+   提出用IOU Loss去处理，公式是L=-ln(IoU)=-pln(IoU)-(1-p)(1-IoU),"IoU是采样自伯努利分布p(IoU=1)=1"。以IOU为目标，整个框视为一个整体，又将IOU归一化到[0,1]，则与框大小无关，使网络可多尺度训练单尺度检测。
