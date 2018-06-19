@@ -1,5 +1,5 @@
 ---
-title: SPP-Net（ECCV，2014）
+title: SPP-Net（Microsoft, ECCV, 2014）
 date: 2016-02-05 20:00:00
 categories: fDetect
 ---

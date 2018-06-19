@@ -1,5 +1,5 @@
 ---
-title: Faster-RCNN（NIPS，2015）
+title: Faster-RCNN（Microsoft, NIPS，2015）
 date: 2016-01-06 19:50:00
 categories: fDetect
 ---

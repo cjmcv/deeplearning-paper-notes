@@ -1,5 +1,5 @@
 ---
-title: R-FCN（NIPS, 2016）
+title: R-FCN（FAIR, NIPS, 2016）
 date: 2016-10-10 19:50:00
 categories: fDetect
 ---

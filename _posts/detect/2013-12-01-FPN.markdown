@@ -1,5 +1,5 @@
 ---
-title: FPN（CVPR, 2017）
+title: FPN（FAIR, CVPR, 2017）
 date: 2017-03-26 19:00:00
 categories: fDetect
 ---

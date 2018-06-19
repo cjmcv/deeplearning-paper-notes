@@ -1,5 +1,5 @@
 ---
-title: OHEM（CVPR, 2016）
+title: OHEM（FAIR, CVPR, 2016）
 date: 2017-04-29 19:00:00
 categories: fDetect
 ---
@@ -13,7 +13,6 @@ Github:[https://github.com/abhi2610/ohem](https://github.com/abhi2610/ohem)
 ### 论文算法概述
 
        提出了一种新的bootstrapping方法，称为OHEM，基于SGD修改而来，用于训练深度卷积的检测模型。适用于在该检测任务中拥有着几千个候选样本，但每次SGD的mini-batch都仅包含有一张或两张图像（较少）时的情况。候选样本是从分布中二次采样得到的，具有多样性和高损失的特征。因为只使用到了候选样本中一个的很小的子集，所以梯度计算在该方法下仍能高效运行。
-	   
 	   文中作者将OHEM应用到Fast RCNN检测算法上，有一下几个优点：1、去掉了大部分region-based ConvNets都普遍需要的先验条件和超参数； 2、提高了mAP； 3、当训练集较大和较复杂时，该方法能提高其效率。
 	   
 ### Online hard example mining
@@ -29,3 +28,9 @@ Github:[https://github.com/abhi2610/ohem](https://github.com/abhi2610/ohem)
    为了解决该问题，文中提出的框架如图2所示。主要包含有两个一样的ROI network，其中一个是只读的，即只为所有ROIs的前向运算分配空间，而忽略反向传播的部分。对于一个SGD迭代，给定卷积特征图，只读的ROI 网络进行前向传播并计算出所有ROIs的loss（图2绿色部分）。然后 hard RoI采样模块上面提到的方法挑选hard ROIs，作为普通ROI网络（可读可写，图2b所示）的输入，网络的前向和反向计算都只处理hard ROIs。
    
 <center><img src="{{ site.baseurl }}/images/pdDetect/ohem1.png"></center>
+
+### 总结
+
+   实现方式一：修改loss层，先为每个ROI计算loss，然后对loss排序，选取loss较大的一部分，其余的loss置0。但由于框架的限制，这种方式仍需为每个ROI分配空间，且每个ROI都将参与反向传播，尽管部分ROI的loss已置0。
+
+   实现方式二：设置两个一样的ROI网络，令其中一个只读，即只参与前向传播和计算所有ROI的loss，而不参与反向传播。在对loss排序后，将选取的hard ROIs作为另一个ROI网络的输入，由该普通的ROI网络进行反向传播训练。
