@@ -1,5 +1,5 @@
 ---
-title: PVANet（2016）
+title: PVANet（Intel, 2016）
 date: 2017-10-15 20:00:00
 categories: fDetect
 ---
@@ -14,25 +14,23 @@ Github: [https://github.com/sanghoon/pva-faster-rcnn](https://github.com/sanghoo
 
 ### 论文算法概述
 
-       以“less channels with more layers”为设计原则提出一种轻量级而又较深的网络PVANET，该网络内加入了concatenated ReLU, Inception, 和HyperNet等结构在里面。
-	   
+       以“less channels with more layers”为设计原则提出一种轻量级而又较深的网络PVANET，该网络内加入了Concatenated ReLU, Inception, 和HyperNet等结构在里面。
        速度：750ms/image (1.3FPS) on Intel i7-6700K CPU with a single core; 46ms/image (21.7FPS) on NVIDIA Titan X GPU。
-
        准确率：83.8% mAP on VOC-2007; 82.5% mAP on VOC-2012 (2nd place)。
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/pvanet1.png"></center>
 	   
 ### 实现
 
-   1. 在网络的前期使用CReLU减少一半的计算量，结构如图所示，Negation表示直接对conv的输出按元素乘以-1，Scale / Shift用于使negated部分的输出适当的调整：
+* 在网络的前期使用CReLU(Concatenated ReLU，CReLU的作者发现低层卷积核是成对出现的，且参数互为相反数，因此作者减小输出特征图个数为原始一半，另一半直接取相反数得到，再将两部分特征图连接，从而减少了卷积核数目)减少一半的计算量，结构如图所示，Negation表示直接对conv的输出按元素乘以-1，Scale / Shift用于使negated部分的输出适当的调整：
    
-   <center><img src="{{ site.baseurl }}/images/pdDetect/pvanet2.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdDetect/pvanet2.png"></center>
    
-   2. Inception应用到余下的特征提取层中，1x1卷积用于保留前面层的感受野大小，使检测小物体可以较为精确；而对于检测大物体需要有足够大的感受野，原结构对应的有较大感受野的5x5卷积，也可以由3x3卷积堆叠的方式代替：
+* Inception应用到余下的特征提取层中，1x1卷积用于保留前面层的感受野大小，使检测小物体可以较为精确；而对于检测大物体需要有足够大的感受野，原结构对应的有较大感受野的5x5卷积，也可以由3x3卷积堆叠的方式代替：
    
-   <center><img src="{{ site.baseurl }}/images/pdDetect/pvanet3.png"></center>
+<center><img src="{{ site.baseurl }}/images/pdDetect/pvanet3.png"></center>
    
-   3. 使用hypernet的类似做法，如上网络结构图，将conv3_4、conv4_4和conv5_4进行连接。
+* 使用hypernet的类似做法，如上网络结构图，将conv3_4、conv4_4和conv5_4进行拼接。
    
 ### 网络结构参数
 
@@ -41,3 +39,7 @@ Github: [https://github.com/sanghoon/pva-faster-rcnn](https://github.com/sanghoo
 ### 实验
 
    <center><img src="{{ site.baseurl }}/images/pdDetect/pvanet5.png"></center>
+
+### 总结
+   
+   基于Faster RCNN的改进版本，主干网络部分使用了C.ReLU（减少卷积核数量）, Inception（多感受野组合以适应多尺度）和HyperNet（多层特征融合）等模块，proposal的生成使用了RPN，proposal使用ROI池化固定特征图大小。

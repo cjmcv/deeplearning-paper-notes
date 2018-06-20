@@ -44,3 +44,8 @@ categories: fDetect
    
    <center><img src="{{ site.baseurl }}/images/pdDetect/hypernet7.png"></center>
    
+### 总结
+
+   Faster RCNN的变种，使用一个预训练模型的卷积层提取整张图像的特征图，保持输入图像的长宽比例，并将短的一边缩放至600像素。然后低层采用极大值池化，高层采用反卷积将多层的输出特征图采样至同一维度，再用LRN归一化以防止部分特征图被抑制，拼接后使用ROI池化将特征压缩至统一空间。
+
+   而对于proposal生成，替换了RPN，设计了一个轻量级的卷积网络，ROI池化结果作为输入，类似于YOLO中分块的方式，生成约30K个region proposal。后用0.7的NMS留下约1K个，在训练时取前200。
