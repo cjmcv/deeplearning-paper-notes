@@ -45,4 +45,10 @@ categories: fDetect
   在FDDB中，200 false positives时达到94.55%召回率，而2000 false positives时为96.00%。
    
 <center><img src="{{ site.baseurl }}/images/pdDetect/scaleface7.png"></center>
+
+### 总结
+
+   针对大尺度范围的人脸检测问题，将一个大的尺度范围分成多个小范围，各个小尺度范围的人脸通过特定的网络结构进行各自建模，然后合并到一个网络的进行端到端训练。以类似特征金字塔的方式取不同层对不同的尺度做处理，如主干网络从底往上有从res2x到res5x共4个block，则res2x和res3x的特征输出联合处理小人脸，res3x和res4x的特征输出联合处理中人脸，同理res4x和res5x处理大人脸。每个尺度范围都有一个对应的检测分支，由Fast RCNN和RPN组成。最后会将所有检测分支的输出汇总为结果。
+
+   注意训练样本也要做尺度划分，且划分后每个集的训练样本互斥，每个分支只处理自己对应的范围而忽略其他的。
    

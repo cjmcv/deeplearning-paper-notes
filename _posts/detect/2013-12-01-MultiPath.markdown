@@ -1,5 +1,5 @@
 ---
-title: MultiPath（Facebook, 2016）
+title: MultiPath（FAIR, 2016）
 date: 2017-10-15 22:00:00
 categories: fDetect
 ---
@@ -24,7 +24,7 @@ categories: fDetect
    
 ### Integral Loss
 
-   Fast R-CNN的loss函数如下：<img src="{{ site.baseurl }}/images/pdDetect/multipath2.png">。在训练时，其IOU阈值设为0.5，即proposal与ground true box的IOU大于50，则为正，计算loss两项；否则为负，并直接忽略回归部分的loss项。但其分类部分的loss（Lcls）对于IOU在50以上的均同等对待，这样并不合理，理应是IOU越高者分数越高。所以作者对分类部分loss作出了修改：<img src="{{ site.baseurl }}/images/pdDetect/multipath3.png">，其中的ku的u对应的是IOU的阈值，在实际计算中，将这连续积分近似成du=5的累加，公式如下：<img src="{{ site.baseurl }}/images/pdDetect/multipath4.png">。作者使用的参数是n=6，阈值为{50，55，60，...，75}。
+   Fast R-CNN的loss函数如下：<img src="{{ site.baseurl }}/images/pdDetect/multipath2.png">。在训练时，其IOU阈值设为50，即proposal与ground true box的IOU大于50，则为正，计算loss两项；否则为负，并直接忽略回归部分的loss项。但其分类部分的loss（Lcls）对于IOU在50以上的均同等对待，这样并不合理，理应是IOU越高者分数越高。所以作者对分类部分loss作出了修改：<img src="{{ site.baseurl }}/images/pdDetect/multipath3.png">，其中的ku的u对应的是IOU的阈值，在实际计算中，将这连续积分近似成du=5的累加，公式如下：<img src="{{ site.baseurl }}/images/pdDetect/multipath4.png">。作者使用的参数是n=6，阈值为{50，55，60，...，75}。
    
 ### Experiments
 
@@ -37,3 +37,13 @@ categories: fDetect
    <center><img src="{{ site.baseurl }}/images/pdDetect/multipath8.png"></center>
    
    <center><img src="{{ site.baseurl }}/images/pdDetect/multipath9.png"></center>
+
+### 总结
+
+   对Fast R-CNN做了以下三点修改：
+   
+1. Skip connections，用于融合多层的特征信息，如conv3会直接跳着连接到后面的网络（ROI池化层），并只提供1倍的裁剪区域图像，而conv4也类似，但会提供1x、1.5x和2x的裁剪图像；
+
+2. Foveal structure，扩展裁剪，用于发掘在各分辨率下物体的上下文信息；
+
+3. Integral loss，设定多个IOU阈值划分，分别计算得分然后求平均，使IOU越高者分类分数越高（原先的是小于阈值的为负，大于的为正，而大于的目标对分类任务贡献一致，同等对待），用于提高检测效果。
