@@ -1,5 +1,5 @@
 ---
-title: FaceBoxes（2017）
+title: FaceBoxes（IJCB, 2017）
 date: 2017-10-28 19:00:00
 categories: fDetect
 ---
@@ -10,7 +10,11 @@ categories: fDetect
 
 ### 论文算法概述
 
-       提出一种能在CPU上实时运行的人脸检测模型FaceBoxes。该论文主要有四点贡献：1、设计出Rapidly Digested Convolutional Layers (RDCL)，使检测在CPU上能达到实时；2、引入Multiple Scale Convolutional Layers (MSCL)，通过扩大感受野并将anchors分散到不同的层上去，用以处理不同尺度的人脸；3、提出一种新的anchor稠密话策略，用以提高小人脸检测的召回率；4、该模型在多个数据库上能取得较好效果。
+       提出一种能在CPU上实时运行的人脸检测模型FaceBoxes。该论文主要有四点贡献：
+	   1、设计出Rapidly Digested Convolutional Layers (RDCL)，使检测在CPU上能达到实时；
+	   2、引入Multiple Scale Convolutional Layers (MSCL)，通过扩大感受野并将anchors分散到不同的层上去，用以处理不同尺度的人脸；
+	   3、提出一种新的anchor稠密话策略，用以提高小人脸检测的召回率；
+	   4、该模型在多个数据库上能取得较好效果。
 	   
 <center><img src="{{ site.baseurl }}/images/pdDetect/faceboxes1.png"></center>
 	   
@@ -40,12 +44,20 @@ RPN一种类别不可知的物体检测算法，在Faster RCNN中用于region pr
 
 ### Anchor densification strategy
 
-   anchor设为1：1的正方形，其大小也如图1所示。默认Anchor的覆盖间隔与对应层的滑动步长一致，例如conv3_2的滑动步长是64，而其anchor为256x256，即在输入图像上每64个像素就套上一个256x256的anchor。定义anchor的覆盖密度为：A_density = A_scale / A_interval，A_scale是anchor的尺度，A_interval是覆盖间距。这里对应着Inception3、conv3_2和conv4_2的默认anchor的间距分别为32，32，32，64和128，那么对应的密度则为1，2，4，4和4。这就使每个适度上的anchor密度不均衡，特别是小尺度对应的anchor过于稀疏，会导致对于小脸检测的召回率不高。所以作者提出一种新的anchor稠化策略，这里将32x32的anchor增加4倍，64x64的增加2倍，使达到均衡。如图3所示。
-	
+   anchor设为1：1的正方形，其大小也如图1所示。默认Anchor的覆盖间隔与对应层的滑动步长一致，例如conv3_2的滑动步长是64，而其anchor为256x256，即在输入图像上每64个像素就套上一个256x256的anchor。定义anchor的覆盖密度为：A_density = A_scale / A_interval，A_scale是anchor的尺度，A_interval是覆盖间距。这里对应着Inception3、conv3_2和conv4_2的默认anchor的间距分别为32，32，32，64和128，那么对应的密度则为1，2，4，4和4。这就使每个尺度上的anchor密度不均衡，特别是小尺度对应的anchor过于稀疏，会导致对于小脸检测的召回率不高。所以作者提出一种新的anchor稠化策略，这里将32x32的anchor增加4倍，64x64的增加2倍，使达到均衡。如图3所示。
+
 <center><img src="{{ site.baseurl }}/images/pdDetect/faceboxes2.png"></center>
-	
+
 ### Experiments
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/faceboxes3.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/faceboxes4.png"></center>
+
+### 总结
+
+1. 使用了CReLU去减少计算量；
+
+2. 对RPN进行了调整，将anchor与多个层关联，并采用Inception结构以增加感受野种类，后直接输出最终的检测结果（原始的RPN只用于提取proposal，作者认为RPN中anchor只跟最后一层卷积相关联，特征图分辨率、特征表达能力和感受野都较为单一，若其结果直接作为最终结果则无法满足多尺度人脸的检测。）
+
+3. 因为结合了多层网络，每层尺度不同，则anchor的覆盖密度不同，则采用一种anchor稠化策略，调整anchor的步长来平衡每层的anchor，如这里将32x32的anchor增加4倍，64x64的增加2倍。
