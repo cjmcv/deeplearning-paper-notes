@@ -1,5 +1,5 @@
 ---
-title: Focal Loss（facebook, 2017）
+title: Focal Loss（FAIR, 2017）
 date: 2017-11-04 19:00:00
 categories: fDetect
 ---
@@ -11,17 +11,15 @@ categories: fDetect
 推荐博客：[https://zhuanlan.zhihu.com/p/28873248](https://zhuanlan.zhihu.com/p/28873248)
 
 ### 论文算法概述
-
-   物体检测主要有两大类：
-1. two-stage检测器，如Faster RCNN，需要region proposal作为前提，准确率高但速度慢。
-2. one-stage检测器，如YOLO、SSD，简单快速但准确率相对较低；
-
+  
+   物体检测主要有两大类：1、two-stage检测器，如Faster RCNN，需要region proposal作为前提，准确率高但速度慢； 2、one-stage检测器，如YOLO、SSD，简单快速但准确率相对较低；	
+   
    作者认为one-stage检测器准确率低是因为其在训练时前景和背景两类样本极度不均衡导致的。对于two-stage检测器基于region proposal，如Selective Search、EdgeBoxes、DeepMask、RPN等会将大大减少候选目标（约至1~2k），排除掉大部分的背景样本，同时在second stage中，例如固定前景背景比例（1：3）、使用online hard example mining（OHEM）都能使前景背景比例容易控制。相反，对于one-stage检测器通过全图直接生成大量候选目标（~100k），虽然也可以采用类似的启发式采样方法，但极易被分类的背景样本仍占主导，会导致训练低效，以往一般会使用bootstrapping或hard example mining解决该问题。
 
-   为了更好处理该问题，作者提出的解决方案是使用focal loss代替标准的cross entropy loss，该loss其实是一个dynamically scaled cross entropy loss，其中在正确类别的置信度提高同时，缩放因子会衰减至0，即会逐渐减少容易样的贡献，专注于少量的困难样本。能使one-stage检测器在有较快速度的前提下具有超过当前所有two-stage检测器的准确率。作者还设计了一个使用该loss的one-stage检测器，RetinaNet进行实验。
-	   
+   为了更好处理该问题，作者提出的解决方案是使用focal loss代替标准的cross entropy loss，该loss其实是一个dynamically scaled cross entropy loss，其中在正确类别的置信度提高同时，缩放因子会衰减至0，即会逐渐减少容易样本的贡献，专注于少量的困难样本。能使one-stage检测器在有较快速度的前提下具有超过当前所有two-stage检测器的准确率。作者还设计了一个使用该loss的one-stage检测器，RetinaNet进行实验。
+   
 <center><img src="{{ site.baseurl }}/images/pdDetect/focalloss1.png"></center>
-	   
+
 ### Focal Loss定义
 
    交叉熵CE损失用于二分类的公式为：<img src="{{ site.baseurl }}/images/pdDetect/focalloss2.png">，其性能如图1最上面蓝线所示，当样本均衡时，效果较好，但容易样本过多时，那些小的loss仍会压制困难样本的训练。对于交叉熵损失中类别不均衡的问题一般的做法是引入一个权重因子alpha，以alpha作为类别1的系数，1-alpha则会另一类系数，公式为<img src="{{ site.baseurl }}/images/pdDetect/focalloss3.png">。在实践中，alpha可以通过调转类别的频率进行设置，也可以当成超参数由交叉验证进行设置。
@@ -53,3 +51,9 @@ categories: fDetect
 <center><img src="{{ site.baseurl }}/images/pdDetect/focalloss8.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/focalloss9.png"></center>
+
+### 总结
+ 
+1. 针对单阶检测器的正负样本极度不均衡的问题（二阶检测器一般会通过选择处理第一阶段的proposal或并对第二阶段做有偏采样构建minibatch），提出一种动态缩放的交叉熵损失去替换标准的交叉熵损失，添加一个针对类别的系数，在正确类别的置信度提高同时，该类别的系数会慢慢衰减至0，以突出另一个类别的训练达到平衡样本的效果。
+
+2. 再添加一个针对样本的权重因子，样本越容易区分则因子越小，对损失大小起到调整作用，减少容易样本的贡献，专注于少量的困难样本。
