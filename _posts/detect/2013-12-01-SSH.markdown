@@ -39,3 +39,7 @@ Github：[https://github.com/mahyarnajibi/SSH](https://github.com/mahyarnajibi/S
 <center><img src="{{ site.baseurl }}/images/pdDetect/ssh7.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/ssh8.png"></center>
+
+### 总结
+
+   取不同层级分别搭不同的网络分支以处理不同尺度的人脸，并在每个分支上接一个上下文模型以利用上下文信息。而主要创新点是提出这个上下文模块：起两个分支，一个以连续的卷积来代替更大的卷积核来达到类似于扩大候选框的效果，与另一个分支的原始的（单级卷积，即未扩大候选框的）进行拼接以起到联合上下文信息的作用。

@@ -32,7 +32,7 @@ Github：[https://github.com/sfzhang15/SFD](https://github.com/sfzhang15/SFD)
 
 3. Anchor matching strategy：anchors的尺度是离散的（SFD中采用的是16/32/64/128/256/512），但人脸的尺度是非离散的。因此，那些与anchor尺度相差较大的部分尺度的人脸（outer-face）无法匹配到足够的anchors，如下图c；
 
-4. Background from small anchors：下图d右边检测大人脸，全图铺遍anchors共6个，则产生了1个pos和5个neg。而左边铺遍小anchors共150个去检测小人脸，则产生了1个pos和149个neg。即检测小人脸时，小的anchors会带来大量只框住背景的负样本，正负样本极度不均衡。这是检测小脸。
+4. Background from small anchors：下图d右边检测大人脸，全图铺遍anchors共6个，则产生了1个pos和5个neg。而左边铺遍小anchors共150个去检测小人脸，则产生了1个pos和149个neg。即检测小人脸时，小的anchors会带来大量只框住背景的负样本，正负样本极度不均衡。
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/sfd1.png"></center>
 	   
@@ -70,7 +70,7 @@ Github：[https://github.com/sfzhang15/SFD](https://github.com/sfzhang15/SFD)
 
 ### Maxout background label
 
-   这里提出的方法处理的是上面论文概述中的第4点问题。将max-out background label应用在conv3_3上，对于每个小anchor，为每个背景标签预测N_m（>1）个评分（正常是N_m=1，即背景为1类；背景加目标共2类），然后最高的一个作为最终评分，再结合目标的1类进行最后的softmax二分类，具体如下图所示。
+   这里提出的方法处理的是上面论文概述中的第4点，即正负样本不均衡的问题。将max-out background label应用在conv3_3上，对于每个对应背景的小anchor，作者在分类中使用预测分数最高的anchor进行梯度的回传（如图在score_pred中从N个背景anchor中只取一个参与训练，前景anchor不变），大大的减少了正负样本不平衡的现象。具体如下图所示：
    
 <center><img src="{{ site.baseurl }}/images/pdDetect/sfd6.png"></center>
 
@@ -85,3 +85,13 @@ Github：[https://github.com/sfzhang15/SFD](https://github.com/sfzhang15/SFD)
    FDDB测试结果：
    
    <center><img src="{{ site.baseurl }}/images/pdDetect/sfd9.png"></center>
+   
+### 总结
+
+网络结构上与FaceBoxes/SSD相似，为多尺度检测主要优化了anchor部分:
+
+1. 取多个不同尺度的层作为检测层的单阶检测器，而每个检测层对应一个尺度的anchor。
+
+2. 将重叠度阈值降低以增加anchor数量，再对特定人脸对应的anchor按重叠度进行排序选一定数量参与训练。这样可以缓解anchor的尺度范围离散的问题。
+
+3. 使用了Maxout background label来处理正负anchor不均衡的问题，即多个背景anchor中只取一个评分最大的参与训练（与前景anchor一起）。
