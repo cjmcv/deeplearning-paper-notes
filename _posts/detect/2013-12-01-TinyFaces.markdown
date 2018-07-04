@@ -6,9 +6,9 @@ categories: fDetect
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-主页(要翻墙)：[https://www.cs.cmu.edu/˜peiyunh/tiny](https://www.cs.cmu.edu/˜peiyunh/tiny)
-
 论文：Hu P, Ramanan D. Finding Tiny Faces[J]. 2016.
+
+Github：[https://github.com/peiyunh/tiny](https://github.com/peiyunh/tiny)
 
 ### 论文算法概述
 

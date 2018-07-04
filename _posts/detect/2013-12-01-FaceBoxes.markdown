@@ -8,6 +8,8 @@ categories: fDetect
 
 论文： Zhang S, Zhu X, Lei Z, et al. FaceBoxes: A CPU Real-time Face Detector with High Accuracy[J]. 2017.
 
+Github: [https://github.com/zeusees/FaceBoxes](https://github.com/zeusees/FaceBoxes)
+
 ### 论文算法概述
 
        提出一种能在CPU上实时运行的人脸检测模型FaceBoxes。该论文主要有四点贡献：

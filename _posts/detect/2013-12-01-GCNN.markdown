@@ -25,7 +25,7 @@ categories: fDetect
    
    <center><img src="{{ site.baseurl }}/images/pdDetect/gcnn5.png"></center>
    
-   令<img src="{{ site.baseurl }}/images/pdDetect/gcnn6.png">为对其指定目标框的相对位置的四维输出参数；l_i是目标框的类别；L_reg表示回归损失函数，文中采用smooth L1 loss）；I(.)为指示函数，当里面条件满足时输出1，否则为0；B_BG表示所有背景框的集合。则G-CNN的loss函数定义如下：
+   令<img src="{{ site.baseurl }}/images/pdDetect/gcnn6.png">为对其指定目标框的相对位置的四维输出参数，l_i是目标框的类别，L_reg表示回归损失函数，文中采用smooth L1 loss。I(.)为指示函数，当里面条件满足时输出1，否则为0；B_BG表示所有背景框的集合。则G-CNN的loss函数定义如下：
    
    <center><img src="{{ site.baseurl }}/images/pdDetect/gcnn7.png"></center>
    
@@ -48,3 +48,8 @@ categories: fDetect
 ### Experiments
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/gcnn14.png"></center>
+
+### 总结
+
+   一种不依赖proposal的基于多尺度栅格金字塔迭代的目标检测器。格子内图像通过卷积网络，使用ROI池化后计入全连接层进行分类回归，通过回归信息更新方框，完成一次迭代，并循环至收敛。而测试的时候也类似，不同点是先将全图通过卷积进行特征提取，然后用栅格金字塔去初始化，再迭代回归，即一张图像只需做一次卷积的特征提取。与YOLO类似，但处理了YOLO中关于大小物体检测和精度低等问题，主要特点在于：1、栅格采用了金字塔；2、回归迭代多次。
+   
