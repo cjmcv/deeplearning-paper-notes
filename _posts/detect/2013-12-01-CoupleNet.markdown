@@ -47,3 +47,7 @@ Github：[https://github.com/tshizys/CoupleNet](https://github.com/tshizys/Coupl
 <center><img src="{{ site.baseurl }}/images/pdDetect/couplenet7.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/couplenet8.png"></center>
+
+### 总结
+
+   针对R-FCN中，采用对位置信息敏感的评分图而导致全局结构信息丢失的问题进行改进。具体是给R-FCN在用RPN提取完ROI后，在处理每个ROI时加多了一个ROI池化分支，用于处理全局上下文信息，与原始R-FCN中的PSROI池化并列，PSROI池化和ROI池化做归一化与合并输出。
