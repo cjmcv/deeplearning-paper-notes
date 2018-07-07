@@ -47,3 +47,7 @@ Github：[https://github.com/szq0214/DSOD](https://github.com/szq0214/DSOD)
 <center><img src="{{ site.baseurl }}/images/pdDetect/dsod6.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/dsod7.png"></center>
+
+### 总结
+
+   基于SSD结合DenseNet，在SSD中是直接取多个层各自检测，DSOD同样是取了多个不同的层，但各个层在接检测器之前，相邻两层会做一个信息融合（上一层池化加1x1卷积降维与下一层合并，通道数各占一半，即有一半是直接降采样得到的，因此参数比原来的少）。整体相对于SSD主要是多了一个跨层的信息融合操作，利用了上下文信息，有助于多尺度检测，且减少了参数。

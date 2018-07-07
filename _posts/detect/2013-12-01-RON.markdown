@@ -59,3 +59,11 @@ Github：[https://github.com/taokong/RON](https://github.com/taokong/RON)
 <center><img src="{{ site.baseurl }}/images/pdDetect/ron8.png"></center>
    
 <center><img src="{{ site.baseurl }}/images/pdDetect/ron9.png"></center>
+
+### 总结
+
+   部分网络结构与DSOD类似（多层预测加跨层特征融合）。RON中的R是Reverse Connection反向连接，O是Objectness Prior目标先验。
+   
+   反向连接是为了让网络具有更多的语义信息，具体是将下层的特征图通过反卷积扩大分辨率后与上层特征图合并，达到跨层特征融合的目的。
+   
+   目标先验以引导目标搜索，减小搜索空间且不需要生成新的proposla。在选取的多层网络的特征图上，每层对应生成一个分辨率一致的通道数为10的目标先验图（10个default box对应10个通道）。由该先验图来判断所有区域是否覆盖着目标。
