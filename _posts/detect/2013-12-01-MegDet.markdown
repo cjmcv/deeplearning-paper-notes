@@ -1,5 +1,5 @@
 ---
-title: MegDet（face++, 2017）-- (only links)
+title: MegDet（Face++, 2017）
 date: 2018-03-25 22:00:00
 categories: fDetect
 ---
@@ -12,6 +12,14 @@ categories: fDetect
 
 ### 论文算法概述
 
-       论文以mini-batch size为主要研究对象，提出一种大mini-batch的目标检测器(MegDet)，使训练可以采用更大的mini-batch，明显提高训练速度。基于ResNet-50，使用128个GPU在4小时内完成COCO的训练，并在COCO2017上达52.5% map（1st）。
+   论文以mini-batch size为主要研究对象，提出一种大mini-batch的目标检测器(MegDet)，使训练可以采用更大的mini-batch，明显提高训练速度。基于ResNet-50，使用128个GPU在4小时内完成COCO的训练，并在COCO2017上达52.5% map（1st）。
+
+   算法方面主要是FPN加上下文模块，但增大batch size的主要是因为计算平台：
 	   
+1. 通过英伟达的NCCL实现多卡BN：先通过单卡自主统计BN的参数，再将参数发送到单张卡上进行合并，最后再把BN的结果同步到其他卡上，以进行下一步的训练。
+
+2. 次线性记忆技术：在现有训练方法中，为了计算Conv2中参数（W2, b2）的梯度，人们一般需要保存Conv2的输出结果；但实际上，Conv2的输出结果可以根据Conv1的结果来动态计算，这样Conv2的输出结果就不需要保存，显存消耗也能进一步下降。
+
+3. 对大batch size的学习率调整策略：“逐步预热”，让模型逐渐适应较大的学习率。当训练到一定阶段的时候，我们设定了三个下降阶段：在前两个阶段，我们直接将学习率除以10，最后再将学习率减半。
+
 <center><img src="{{ site.baseurl }}/images/pdDetect/megdet1.png"></center>
