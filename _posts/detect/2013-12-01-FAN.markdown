@@ -51,3 +51,9 @@ categories: fDetect
 <center><img src="{{ site.baseurl }}/images/pdDetect/fan7.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/fan8.png"></center>
+
+### 总结
+
+   主要针对人脸检测中的遮挡问题，提出了一种anchro级别的注意力机制。参照RetinaNet（Focal Loss）的网络结构，主干采用了FPN提取U型的特征金字塔，金字塔设5层，每层对应一个带指定尺度anchor的检测器层。对于每个检测器，会有额外引出一条分支来提取人脸热力图（attention map），而监督的标签以GT框填充来获得（可结合FCN分割图像的思路，只是这里的热力图分辨率与原图不一致）。最后将人脸热力图进行指数运算后与原特征图进行点乘，输入分类和回归两条分支上。使最终的分类回归任务聚焦在热力图标出的区域上。
+   
+   其中设某层设定的anchor数量为A，那么该层分类分支输出的是WxHxA，表示在WxH的空间上，每个点A通道中哪些anchor对应有人脸目标存在。而该层的回归分支则输出WxHx4A。
