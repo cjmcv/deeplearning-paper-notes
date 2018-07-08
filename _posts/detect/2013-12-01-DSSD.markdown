@@ -10,7 +10,7 @@ categories: fDetect
 
 ### 论文算法概述
 
-       主要通过引入额外的上下文信息去优化SSD，结构如下图1所示。实验结果：VOC07为81.5%mAP，VOC12为80.0% ，MS COCO为33.3%。
+       SSD中各层之间的信息没有充分交互，且底层大分辨率特征图的特征表达能力弱，使小目标检测效果不好。主要通过引入额外的上下文信息去进行优化，结构如下图1所示。实验结果：VOC07为81.5%mAP，VOC12为80.0% ，MS COCO为33.3%。
 	   
 <center><img src="{{ site.baseurl }}/images/pdDetect/dssd1.png"></center>
 	   
@@ -43,3 +43,9 @@ categories: fDetect
 <center><img src="{{ site.baseurl }}/images/pdDetect/dssd5.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/dssd6.png"></center>
+
+### 总结
+
+   在SSD的基础上添加的上下文信息，让不同分辨的层之间的特征交互更充分，也提高了主要用于检测小目标的低层高分辨率特征图的特征表达能力,即同时兼顾了高层的语义信息和低层的空间分辨率。
+   
+   具体是在末端添加一系列的反卷积模块，与前面未反卷积部分层一一对应，呈沙漏状，连接情况与FPN类似。前面一层卷积和后面一层反卷积做BN并以点积方式相连接后进入检测器，检测对应尺度的目标。
