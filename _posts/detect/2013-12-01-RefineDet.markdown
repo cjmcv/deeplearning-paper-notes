@@ -1,5 +1,5 @@
 ---
-title: RefineDet（2017）
+title: RefineDet（CVPR, 2018）
 date: 2018-04-30 20:00:00
 categories: fDetect
 ---
@@ -12,7 +12,10 @@ Github：[https://github.com/sfzhang15/RefineDet](https://github.com/sfzhang15/R
 
 ### 论文算法概述
 
-       提出的是一个single-stage检测器，号称达到two-stage检测器的精度和one-stage检测器的效率，名为RefineDet,。该网络包含anchor精炼模块(anchor refinement module, ARM)和目标检测模块(object detection module, ODM)。anchor精炼模块的作用有两点，1）过滤负的anchors以减少分类器的搜索空间；2）粗略调整anchors的位置和大小为随后的回归器提供更好的初始化。而目标检测模块则将精炼后得到的anchors作为输入去提升回归和多标签预测的精度。同时作者还设计了一个transfer connection block(TCB)去转移anchor精炼模块中的特征到目标检测模块去预测位置、大小和类别。该网络在VOC和COCO上达到最优， VOC07为85.8%%mAP，VOC12为86.8% ，MS COCO为41.8%。
+       提出的是一个single-stage检测器，号称达到two-stage检测器的精度和one-stage检测器的效率，名为RefineDet,。该网络包含anchor精炼模块(anchor refinement module, ARM)和目标检测模块(object detection module, ODM)。
+	   anchor精炼模块的作用有两点，1）过滤负的anchors以减少分类器的搜索空间；2）粗略调整anchors的位置和大小为随后的回归器提供更好的初始化。
+	   目标检测模块则将精炼后得到的anchors作为输入去提升回归和多标签预测的精度。
+	   同时作者还设计了一个transfer connection block(TCB)去转移anchor精炼模块中的特征到目标检测模块去预测位置、大小和类别。该网络在VOC和COCO上达到最优， VOC07为85.8%%mAP，VOC12为86.8% ，MS COCO为41.8%。
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/refinedet1.png"></center>
    
@@ -26,7 +29,7 @@ Github：[https://github.com/sfzhang15/RefineDet](https://github.com/sfzhang15/R
 
 * Negative Anchor Filtering：为了早一步排除容易区分的负anchor并减轻样本不均衡的问题，作者设计了一个负anchor过滤机制。在训练阶段，对于一个精炼anchor box，如果它的负类评分高于预先设置的阈值，则在ODM的训练中被排除掉。就是说，在ODM训练时只用了了精炼过的困难的负anchor和精炼过的正anchor。同时在前向推理阶段，如果一个精炼anchor box预测到的负类评分高于阈值，在检测时也同样会被排除掉。
 
-* Loss Functio：包含ARM的和ODM的两部分。
+* Loss Function：包含ARM的和ODM的两部分。
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/refinedet3.png"></center>
 	
@@ -37,3 +40,11 @@ Github：[https://github.com/sfzhang15/RefineDet](https://github.com/sfzhang15/R
 <center><img src="{{ site.baseurl }}/images/pdDetect/refinedet5.png"></center>
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/refinedet6.png"></center>
+
+### 总结
+
+   一个单阶段检测器，分anchor精炼模块（二分类和回归）和目标检测模块（多分类和回归）。
+
+   单模块下结构类似于SSD，取多层做预测；其中精炼模块用以过滤负的anchors以减少搜索范围，并且粗略调整anchors的位置和大小，得到的粗略的anchor信息映射会回各自尺度层上为随后的目标检测模块提供更好的初始化。而目标检测模块则以精炼模块的输出作为输入（也是多层，每层对应取，并单独接分类和回归器，如SSD），进一步得到最终结果。即二分类与多分类级联加两级回归级联。
+
+   两个模块之间是通过一种转移连接模块来连接的，包含有两个模块对应尺度层的连接（用多次卷积），以及从高层特征往底层的连接（跨层信息融合，采用反卷积来同步维度）。
