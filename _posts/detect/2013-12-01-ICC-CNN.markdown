@@ -1,0 +1,53 @@
+---
+title: ICC-CNN（Tencent, SenseTime, ICCV, 2017）
+date: 2018-07-21 19:00:00
+categories: fDetect
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文： Zhang K, Zhang Z, Wang H, et al. Detecting Faces Using Inside Cascaded Contextual CNN[C]// IEEE International Conference on Computer Vision. IEEE, 2017:3190-3198.
+
+Github: [https://github.com/zeusees/FaceBoxes](https://github.com/zeusees/FaceBoxes)
+
+### 论文算法概述
+
+    提出一种内部级联结构以在相同网络不同层上引入人脸分类器。在训练阶段提出数据路由机制，用不同类型的样本去训练不同的层，使更深的层能够更注重难例的处理。另外还引入一个双流的基于上下文的CNN结构，利用身体部分信息去提升人脸检测效果。
+       
+<center><img src="{{ site.baseurl }}/images/pdDetect/icc_cnn1.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/icc_cnn2.png"></center>
+	   
+### Inside Cascaded Structure
+
+   内部级联结构，主要包含有两个模块：Early Rejection Classifier (ERC)和Data Routing (DR) layer。网络里的每个池化层都会连接到一个ERC上去判断每个样本是人脸的概率，而这概率会进入DR去决定哪些样本能够通过，即会排除一部分简单非人脸样本，人脸和剩下的非人脸样本会进入下一层。这就是所谓的内部级联，同一个网络内浅层网络即可排除部分简单负样本，使更深的层能更关注难例，同时也大大减低计算量。
+
+   Early Rejection Classifier：一个小的人脸二分类器，使用softmax来计算是否为人脸的概率。
+
+   Data Routing Layer：DR层获取来自ERC的概率，如果一个样本是人脸的概率小于预先设置的阈值时，该样本会被直接拒绝掉，不会继续做后面的前向运算。
+
+### Two-stream Contextual CNN
+
+   联合人脸和身体区域信息去提升人脸检测效果。如图3所示，人脸区域和身体区域分开各自输入网络中，而身体区域会由上一级网络的人脸检测结果来裁剪得到。
+
+   Body Part Sensitive Learning（BPSL）：而这根据人脸得到的身体区域可能会含有其他各种各样额外的区域，例如遮挡、姿态改变或者甚至身体区域不在图像上。所以作者提出使用一个身体的CNN去对身体部分的外观进行建模，使提取出来的特征对身体区域敏感，能够自适应地辅助人脸检测。这与其他论文中简单扩大人脸区域来涵盖身体区域的做法不同。对于身体部分的定位问题，使用CNN生成身体部分的评分图是很普遍的，因此这里使用身体区域的评分图作为网络的监督信号。这会驱使CNN去学习身体视觉外观相关的滤波器，并能自然地表达出身体的哪部分被遮挡或者是整个身体区域都丢失了。
+
+   在训练的时候，在身体分支的CNN网络的最后一个卷积层后面会接有一个反卷积层来生成多个身体区域的评分图，每个评分图对应着身体区域的一部分，即图3中的17个通道对应17个身体区域，而标签取自COCO，为人体关键点样本。这些评分图都定义为由标注好的身体关节位置附近的高斯分布（那么预测得到的评分图能评估出身体的每个区域及其大致姿态，所以也能表达出身体区域是否存在于图像及哪部分被遮挡了）。对于预测得到的评分图和GT，使用Euclidean loss作为损失函数：<img src="{{ site.baseurl }}/images/pdDetect/icc_cnn3.png">,其中n表示评分图个数（即标注的身体关节点数量），m表示每个评分图的像素个数。人脸区域和身体区域会联合在一起训练，但训练时应有一部分人脸不带身体区域，而这部分将只有人脸的分支网络会被训练到，身体部分网络不起作用。（注意到两部分网络在ERC上会联合，那么当训练样本不带身体区域时，来自身体分支的网络的部分特征为噪声？训练下会迫使整体网络更注重人脸分支的输出）
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/icc_cnn4.png"></center>
+
+### Experiments
+
+   人脸部分正负样本比例为1：3，论文中P-Net所用训练样本从WiderFace中以IOU 0.65和0.3为阈值进行收集，约收集到有4百万训练和1百万验证的样本集，后续两个阶段网络均从上一阶段网络检测器来处理样本（可参考mtcnn）。身体部分则使用mtcnn在COCO上检测，然后通过所有以关键点标注的身体样本生成身体部件评分图作为训练样本，该部分样本数量约占人脸部分数量的25%。
+   
+<center><img src="{{ site.baseurl }}/images/pdDetect/icc_cnn5.png"></center>
+
+<center><img src="{{ site.baseurl }}/images/pdDetect/icc_cnn6.png"></center>
+
+### 总结
+
+基于mtcnn优化，同样是三个网络级联，优化的点主要有两个：
+
+1. 二三级的网络上添加了内部级联结构，即一个网络内不同层之间进行级联，在浅层排除掉部分容易样本，加快检测速度的同时提高深层网络对难例的关注度。
+
+2. 二三级网络上添加了针对身体部分的网络，联合了身体信息到人脸检测任务中。人脸部分和身体部分单独进入自己的网络，身体部分的训练样本会带有人体关键点信息，每个人体关键区域的特征响应对应着特征图的一个通道，叠成一个特征图作为监督信号，网络输出以反卷积与该监督信号用欧式距离相接。
