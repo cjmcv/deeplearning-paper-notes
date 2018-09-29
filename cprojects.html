@@ -1,0 +1,82 @@
+---
+title: Engineering
+---
+
+  <!--<center><font color="blue" size="50px">Engineering</font></center>          -->
+  <center><h1>工程足迹</h1></center>
+  <center>包括代码框架等相关的学习笔记 -- <a href="{{ site.baseurl }}/statement.html">© CopyRight</a></center>
+
+  <center>---------------------------------------------------------------------------</center>
+
+  <div class="container">  <!--- 1 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+	  <!--<img src="{{ site.baseurl }}/images/pdDetect/pDetect.jpg">-->
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fcDLF'  %}
+            <h1>DL框架({{category | last | size}})</h1>
+            <div class="post">
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>  
+			</div>
+            {% endif %}
+	      {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">  <!--- 2 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+	  <!--<img src="{{ site.baseurl }}/images/pdDetect/pDetect.jpg">-->
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fcHPC'  %}
+            <h1>高性能计算 ({{category | last | size}})</h1>
+            <div class="post">
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>  
+			</div>
+            {% endif %}
+	      {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">   <!--- 3 -->
+    <div class="project-box">
+      <div class="row">
+        <div class="col-md-3 project-image">
+          <!--<img src="{{ site.baseurl }}/images/pdAlign/pAlign.jpg">-->
+        </div>
+        <div class="col-md-9 project-post">
+          {% for category in site.categories %}
+            {% if category[0] == 'fcOther'  %}
+            <h1>其他 ({{category | last | size}})</h1>
+            <div class="post">
+              <!---<h2>{{ category | first }}</h2>-->
+	          <ul class="arc-list">
+	            {% for post in category.last %}
+	            <li>{{ post.date | date:"%d/%m/%Y"}}<a href="{{ post.url | absolute_url }}">{{ post.title }}</a></li>
+	            {% endfor %}
+	          </ul>
+			</div>
+            {% endif %}
+	      {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
