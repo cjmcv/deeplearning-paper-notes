@@ -11,8 +11,7 @@ categories: fDetect
 ### 论文算法概述
 
        在faster RCNN上采用了一些策略，如：特征拼接、困难样本挖掘、多尺度训练、模型预训练以及参数调整，来训练人脸，在FDDB上刷新了数据。
-
-	   首先，使用wider face数据集去训练Faster RCNN的CNN网络，然后使用该模型在wider face上进行测试，从而获取困难样本，这些困难样本再次输入到网络中进行第二阶段的训练，这样模型在FDDB上的效果会更好一些。在最后的微调时，使用多尺度训练，并且采用特征拼接的策略去提升模型效果。整个训练过程与faster RCNN一样为端到端训练，候选框由矩形改为椭圆形。       对
+	   首先，使用wider face数据集去训练Faster RCNN的CNN网络，然后使用该模型在wider face上进行测试，从而获取困难样本，这些困难样本再次输入到网络中进行第二阶段的训练，这样模型在FDDB上的效果会更好一些。在最后的微调时，使用多尺度训练，并且采用特征拼接的策略去提升模型效果。整个训练过程与faster RCNN一样为端到端训练，候选框由矩形改为椭圆形。
 
 <center><img src="{{ site.baseurl }}/images/pdDetect/deepir1.png"></center>
 	   

@@ -7,7 +7,9 @@ categories: fDataset
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
 主页：[https://www.msceleb.org/](https://www.msceleb.org/)
+
 数据下载：[https://www.msceleb.org/download/sampleset](https://www.msceleb.org/download/sampleset) 
+
 主页2：[https://www.microsoft.com/en-us/research/project/ms-celeb-1m-challenge-recognizing-one-million-celebrities-real-world/](https://www.microsoft.com/en-us/research/project/ms-celeb-1m-challenge-recognizing-one-million-celebrities-real-world/)
 
 ### 简介
