@@ -1,0 +1,39 @@
+---
+title: Caffe--类间关系梳理
+date: 2017-05-01 19:00:00
+categories: fcDLF
+---
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+论文：Zhu C, Zheng Y, Luu K, et al. CMS-RCNN: Contextual Multi-Scale Region-based CNN for Unconstrained Face Detection[J]. 2016.
+
+### 一、类间关系图（可右键在新标签页中打开，以查看原图）
+
+<center><img src="{{ site.baseurl }}/images/pdDLF/caffe_s1_1.png"></center>
+
+### 二、关键C++类的简介
+
+   整体主干是P2PSync > Solver > Net > Layer > Blob > SyncedMemory。
+
+* Caffe：贯穿整个caffe框架，跟线程绑定，负责设备模式设置、cublas句柄控制、随机数设置等。
+
+* P2PSync：用于多GPU交互训练，在多个本地GPU之间使用map-reduce来同步数据。
+
+* Solver：具体网络训练的最外层类，管理超参数、训练测试网络、loss、权重更新和训练模型的保存读取等。
+
+* Net：管理所有算法层及其连接联系，组成一个网络整体，为一个有向无环图DAG。
+
+* Layer：主要的计算单元，派生出各种具体的算法层。一般包含初始化、前向和反向计算。
+
+* SolverParameter / NetParameter / LayerParameter：外接protobuf::Message，通过解析prototxt文件的参数来填充赋值，分别为Solver、Net和Layer提供关键的初始参数。
+
+* Blob：对Solver、Net和Layer的最基本的计算和数据存取单元，一般的维度是（num, channels, height, width），内部会使用SyncedMemory进行内存管理。
+
+* SyncedMemory：CPU和GPU的内存管理器，主要通过blob来对外提供支持。
+
+* Filler：随机数填充器，用于为blob填充随机数据，随机的方式有若干种算法可选。
+
+* InternalThread：内部线程，主要用于数据预取和多GPU交互等需要开子线程协助的地方。
+
+* BasePrefetchingDataLayer：数据预取数据层，继承于InternalThread和BaseDataLayer（继承于Layer），利用双堵塞队列和多线程的方式从内存预取数据到显存。
