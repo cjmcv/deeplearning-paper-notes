@@ -6,7 +6,9 @@ categories: fcDLF
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-### 一、类间关系图（可右键在新标签页中打开，以查看原图）
+### 一、类间关系图
+
+（可右键在新标签页中打开，以查看原图）
 
 <center><img src="{{ site.baseurl }}/images/pdDLF/caffe_s1_1.png"></center>
 
