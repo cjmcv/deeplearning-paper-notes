@@ -12,21 +12,21 @@ categories: fcDLF
 
 ### 二、源码流程分析
 
-* 先从prototxt文件中通过第三方库protobuf读取solver的参数：
+1)先从prototxt文件中通过第三方库protobuf读取solver的参数：
 
-```c_cpp
+```cpp
   caffe::SolverParameter solver_param;
   caffe::ReadSolverParamsFromTextFileOrDie(FLAGS_solver, &solver_param);
 ```
 
-* 在GPU模式下，当检测到GPU时，获取每个GPU的信息，并将0号GPU设为主GPU：
+2)在GPU模式下，当检测到GPU时，获取每个GPU的信息，并将0号GPU设为主GPU：
 
-```c_cpp
+```cpp
   get_gpus(&gpus);
   if (gpus.size() == 0) {
-    。。。
+    ...
   } else {
-    。。。
+    ...
 #ifndef CPU_ONLY
     cudaDeviceProp device_prop;
     for (int i = 0; i < gpus.size(); ++i) {
@@ -41,9 +41,9 @@ categories: fcDLF
   }
 ```
 
-* 当使用的GPU个数大于1时，会使用P2PSync来管理，否则直接由solver训练：
+3)当使用的GPU个数大于1时，会使用P2PSync来管理，否则直接由solver训练：
 
-```c_cpp
+```cpp
   if (gpus.size() > 1) {
     caffe::P2PSync<float> sync(solver, NULL, solver->param());
     sync.Run(gpus);
@@ -53,9 +53,9 @@ categories: fcDLF
   }
 ```
 
-* 多GPU下使用P2PSync管理训练，P2PSync会构建GPU树，并构建P2P通道：
+4)多GPU下使用P2PSync管理训练，P2PSync会构建GPU树，并构建P2P通道：
 
-```c_cpp
+```cpp
 template<typename Dtype>
 P2PSync<Dtype>::P2PSync(shared_ptr<Solver<Dtype> > root_solver,
                         P2PSync<Dtype>* parent, const SolverParameter& param)
@@ -66,7 +66,7 @@ P2PSync<Dtype>::P2PSync(shared_ptr<Solver<Dtype> > root_solver,
       initial_iter_(root_solver->iter()),
       solver_() {
 #ifndef CPU_ONLY
-  。。。
+  ...
   if (parent == NULL) {
     solver_ = root_solver;
   } else {
@@ -88,7 +88,7 @@ P2PSync<Dtype>::P2PSync(shared_ptr<Solver<Dtype> > root_solver,
       LOG(INFO)<< "GPU " << self << " does not have p2p access to GPU " << peer;
     }
     // Allocate receiving buffer on parent
-    。。。
+    ...
   }
   CUDA_CHECK(cudaSetDevice(initial_device));
 #else
@@ -97,23 +97,23 @@ P2PSync<Dtype>::P2PSync(shared_ptr<Solver<Dtype> > root_solver,
 }
 ```
 
-* 为每一个子GPU创建一个P2PSync对象以共享网络:
+5)为每一个子GPU创建一个P2PSync对象以共享网络:
 
-```c_cpp
+```cpp
 template<typename Dtype>
 void P2PSync<Dtype>::Run(const vector<int>& gpus) {
   vector<shared_ptr<P2PSync<Dtype> > > syncs(gpus.size());
   Prepare(gpus, &syncs);
-  。。。
+  ...
 }
 ```
 
-* 为每个GPU的训练开启子线程，分别调度训练。而当前线程则去调主GPU去处理根solver的训练:
+6)为每个GPU的训练开启子线程，分别调度训练。而当前线程则去调主GPU去处理根solver的训练:
 
-```c_cpp
+```cpp
 template<typename Dtype>
 void P2PSync<Dtype>::Run(const vector<int>& gpus) {
-  。。。
+  ...
   for (int i = 1; i < syncs.size(); ++i) {
     syncs[i]->StartInternalThread();
   }
@@ -126,18 +126,18 @@ void P2PSync<Dtype>::Run(const vector<int>& gpus) {
 // P2PSync的线程入口，调用被分配到solver进行训练
 template<typename Dtype>
 void P2PSync<Dtype>::InternalThreadEntry() {
-  。。。
+  ...
   solver_->Step(solver_->param().max_iter() - initial_iter_);
 }
 ```
 
-* 在每个线程进入到Solve()中即开始训练，每次迭代中在进入前向反向运算前，通过回调函数将训练网络参数同步到子GPU:
+7)在每个线程进入到Solve()中即开始训练，每次迭代中在进入前向反向运算前，通过回调函数将训练网络参数同步到子GPU:
 
-```c_cpp
+```cpp
 callbacks_[i]->on_start();
 ```
 
-```c_cpp
+```cpp
 template<typename Dtype>
 void P2PSync<Dtype>::on_start() {
   。。
@@ -150,7 +150,7 @@ void P2PSync<Dtype>::on_start() {
   for (int i = children_.size() - 1; i >= 0; i--) {
     Dtype* src = data_;
     Dtype* dst = children_[i]->data_;
-    。。。
+    ...
     CUDA_CHECK(cudaMemcpyAsync(dst, src, size_ * sizeof(Dtype),
         cudaMemcpyDeviceToDevice, cudaStreamDefault));
     CUDA_CHECK(cudaStreamSynchronize(cudaStreamDefault));
@@ -159,38 +159,38 @@ void P2PSync<Dtype>::on_start() {
 }
 ```
 
-* 各个子GPU各自训练:
+8)各个子GPU各自训练:
 
-```c_cpp
+```cpp
 for (int i = 0; i < param_.iter_size(); ++i) {
   loss += net_->ForwardBackward();
 }
 ```
 
-* 各子GPU训练结果即梯度汇总到主GPU:
+9)各子GPU训练结果即梯度汇总到主GPU:
 
-```c_cpp
+```cpp
 callbacks_[i]->on_gradients_ready();
 ```
 
-```c_cpp
+{% highlight cpp %}
 template<typename Dtype>
 void P2PSync<Dtype>::on_gradients_ready() {
 #ifndef CPU_ONLY
-  。。。
+  ...
   // Sum children gradients as they appear in the queue
   for (int i = 0; i < children_.size(); ++i) {
     P2PSync<Dtype> *child = queue_.pop();
     Dtype* src = child->parent_grads_;
     Dtype* dst = diff_;
-    。。。
+    ...
     caffe_gpu_add(size_, src, dst, dst);
   }
   // Send gradients to parent
   if (parent_) {
     Dtype* src = diff_;
     Dtype* dst = parent_grads_;
-    。。。
+    ...
     CUDA_CHECK(cudaMemcpyAsync(dst, src, size_ * sizeof(Dtype),  //
         cudaMemcpyDeviceToDevice, cudaStreamDefault));
     CUDA_CHECK(cudaStreamSynchronize(cudaStreamDefault));
@@ -202,15 +202,16 @@ void P2PSync<Dtype>::on_gradients_ready() {
   }
 #endif
 }
-```
+{% endhighlight %}
 
-* 最后调用 ApplyUpdate() 更新网络参数。再进入下一次迭代。
+10)最后调用 ApplyUpdate() 更新网络参数。再进入下一次迭代。
 
 ### 三、多GPU交互训练的核心类P2PSync
 
 P2PSync主要是在多个本地GPU之间使用map-reduce来同步数据，该类继承于GPUParams和Solver的Callback。其中GPUParams是管理存放在GPU端的数据，Callback使solver训练中可以用回调的方式来调用P2PSync相关函数来进行数据同步操作。
 
-```c_cpp
+```cpp
+
 // 在本地gpu之间使用map-reduce同步数据并行
 template<typename Dtype>
 class P2PSync : public GPUParams<Dtype>, public Solver<Dtype>::Callback,
@@ -218,7 +219,7 @@ class P2PSync : public GPUParams<Dtype>, public Solver<Dtype>::Callback,
  public:
   explicit P2PSync(shared_ptr<Solver<Dtype> > root_solver,
                    P2PSync<Dtype>* parent, const SolverParameter& param);
-  。。。
+  ...
   // 运行，树的构建、开线程，开始训练
   void Run(const vector<int>& gpus);
   // 对GPU分组，并构建GPU树
@@ -232,7 +233,7 @@ class P2PSync : public GPUParams<Dtype>, public Solver<Dtype>::Callback,
   // 将子GPU的梯度汇总到主GPU
   void on_gradients_ready();
   // 内部线程入口
-void InternalThreadEntry();
+  void InternalThreadEntry();
 
   P2PSync<Dtype>* parent_;
   vector<P2PSync<Dtype>*> children_;
@@ -245,10 +246,5 @@ void InternalThreadEntry();
   using Params<Dtype>::data_; // Network parameters
   using Params<Dtype>::diff_; // Gradient
 };
-```
 
-```ruby
-require 'redcarpet'
-markdown = Redcarpet.new("Hello World!")
-puts markdown.to_html
 ```
