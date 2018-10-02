@@ -140,7 +140,7 @@ callbacks_[i]->on_start();
 {% highlight cpp %}
 template<typename Dtype>
 void P2PSync<Dtype>::on_start() {
-  。。
+  ...
   // Wait for update from parent
   if (parent_) {
     P2PSync<Dtype> *parent = queue_.pop();
@@ -245,12 +245,4 @@ class P2PSync : public GPUParams<Dtype>, public Solver<Dtype>::Callback,
   using Params<Dtype>::data_; // Network parameters
   using Params<Dtype>::diff_; // Gradient
 };
-
-{% endhighlight %}
-
-{% highlight python %}
-class node:
-    def __init__(self, data, next=None):
-        self.data = data
-        self.next = next
 {% endhighlight %}
