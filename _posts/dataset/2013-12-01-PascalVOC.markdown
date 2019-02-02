@@ -34,7 +34,7 @@ categories: fDataset
 
    整体数据会分有VOC2007和VOC2012两个包，每个包里面有5个大文件夹：Annotations、ImageSets、JPEGImages、SegmentationClass和SegmentationObject。
 
-   JPEGImages：包含了PASCAL VOC所提供的所有的图片信息，包括了训练图片和测试图片，以“年份_编号.jpg”格式命名的。图片的像素尺寸大小不一，但是横向图的尺寸大约在500*375左右，纵向图的尺寸大约在375*500左右，基本不会偏差超过100。
+   JPEGImages：包含了PASCAL VOC所提供的所有的图片信息，包括了训练图片和测试图片，以“年份_编号.jpg”格式命名的。图片的像素尺寸大小不一，但是横向图的尺寸大约在500 x 375左右，纵向图的尺寸大约在375 x 500左右，基本不会偏差超过100。
 
    Annotations：含xml格式的标签信息，每一个xml文件都对应于JPEGImages文件夹中的一张图片，如下所示：
 
